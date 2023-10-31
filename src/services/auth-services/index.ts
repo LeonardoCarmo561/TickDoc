@@ -3,6 +3,7 @@ import { Environmnet, getCSRFToken } from '@/utils'
 
 export async function loginAdminUser(formData: LoginFormData) {
   const result = await fetch(`${Environmnet.URL_BASE}/V2/api/token/`, {
+    method: 'POST',
     body: JSON.stringify(formData),
     credentials: 'include',
     headers: {
