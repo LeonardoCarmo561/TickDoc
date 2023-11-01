@@ -19,17 +19,23 @@ export function AuthProvider(props: AuthProviderProps) {
   const [updatingToken, setUpdatingToken] = useState(true)
   const pathName = usePathname()
 
+  function handleLogout() {
+    setUser(null)
+    window.location.href = '/admin'
+  }
+
   useEffect(() => {
     setUpdatingToken(false)
     refreshToken()
       .then((result) => {
         if (result instanceof Error) {
           if (pathName !== '/admin') {
-            alert('Erro ao atualizar token')
+            alert('Faça login')
+            window.location.href = '/admin'
           }
           setUser(null)
         } else {
-          const tokenData: TokenData = jwtDecode(result.data.access)
+          const tokenData: TokenData = jwtDecode(result.access)
           setUser({
             institutionId: tokenData.institution_id,
             modules: tokenData.modules,
@@ -38,25 +44,19 @@ export function AuthProvider(props: AuthProviderProps) {
             genre: tokenData.gender,
             profilePicture: tokenData.profile_picture,
           })
+          if (pathName === '/admin') {
+            window.location.href = `/${tokenData.modules[0].type}/${tokenData.modules[0].title}/dashboard`
+          }
         }
       })
       .catch(() => alert('Erro desconhecido'))
       .finally(() => setUpdatingToken(false))
   }, [pathName])
 
-  useEffect(() => {
-    if (pathName !== '/admin') {
-      if (!updatingToken && user === null) {
-        alert('Faça login')
-        window.location.href = '/admin'
-      }
-    }
-  }, [updatingToken, user, pathName])
-
   return updatingToken ? (
     <LoadingScreen />
   ) : (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, logout: handleLogout }}>
       {props.children}
     </AuthContext.Provider>
   )

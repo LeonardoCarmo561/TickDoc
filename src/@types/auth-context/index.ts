@@ -5,6 +5,7 @@ import { UserData } from '..'
 export interface AuthContextData {
   user: UserData | null
   setUser: (value: UserData | null) => void
+  logout: () => void
 }
 
 export interface AuthProviderProps {

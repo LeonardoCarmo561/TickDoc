@@ -1,15 +1,23 @@
-import { LoginFormData, RefreshTokenData } from '@/@types'
+import { LoginFormData, RefreshData, RefreshTokenData } from '@/@types'
 import { api } from '../config'
 
-export async function loginAdminUser(formData: LoginFormData) {
-  const result = await api.post('/V2/api/token/', formData)
+export async function loginAdminUser(
+  formData: LoginFormData,
+): Promise<RefreshTokenData | Error> {
+  try {
+    const { data } = await api.post('/V1/api/token/', formData)
 
-  return result.data
+    if (data) return data
+
+    return new Error('Erro ao fazer login')
+  } catch (error) {
+    return new Error((error as { message: string }).message)
+  }
 }
 
-export async function refreshToken(): Promise<RefreshTokenData | Error> {
+export async function refreshToken(): Promise<RefreshData | Error> {
   try {
-    const { data } = await api.post('/V1/api/token/resfresh/')
+    const { data } = await api.post('/V1/api/token/refresh/')
 
     if (data) return data
 

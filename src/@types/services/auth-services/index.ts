@@ -18,10 +18,12 @@ export interface TokenData {
   id: number
 }
 
+export interface RefreshData {
+  refresh: string
+  access: string
+}
+
 export interface RefreshTokenData {
   Success: string
-  data: {
-    refresh: string
-    access: string
-  }
+  data: RefreshData
 }

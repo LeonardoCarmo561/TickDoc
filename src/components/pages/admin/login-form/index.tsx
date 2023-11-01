@@ -1,6 +1,6 @@
 'use client'
 import defaultLogo from '../../../../../public/default_logo.png'
-import { LoginFormData } from '@/@types'
+import { LoginFormData, TokenData } from '@/@types'
 import { Form } from '@/components'
 import { loginAdminUser } from '@/services'
 import { loginFormSchema } from '@/utils'
@@ -11,8 +11,11 @@ import { MdLogin } from 'react-icons/md'
 import { publicIpv4 } from 'public-ip'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useAuthContext } from '@/utils/hooks'
+import { jwtDecode } from 'jwt-decode'
 
 export function AdminLoginForm() {
+  const { user, setUser } = useAuthContext()
   const [publicIp, setPublicIp] = useState('')
 
   const loginUserForm = useForm<LoginFormData>({
@@ -21,13 +24,28 @@ export function AdminLoginForm() {
 
   async function submit(formData: LoginFormData) {
     console.log(formData)
-    try {
-      const result = await loginAdminUser(formData)
-      console.log(result.data)
-    } catch (error) {
-      console.error((error as { message: string }).message)
-    }
+    loginAdminUser(formData).then((result) => {
+      if (result instanceof Error) {
+        alert(result.message)
+      } else {
+        const tokenData: TokenData = jwtDecode(result.data.access)
+        setUser({
+          institutionId: tokenData.institution_id,
+          modules: tokenData.modules,
+          userId: tokenData.id,
+          username: tokenData.username,
+          genre: tokenData.gender,
+          profilePicture: tokenData.profile_picture,
+        })
+      }
+    })
   }
+
+  useEffect(() => {
+    if (user) {
+      window.location.href = `/${user.modules[0].type}/${user.modules[0].title}/dashboard`
+    }
+  }, [user])
 
   const {
     handleSubmit,
