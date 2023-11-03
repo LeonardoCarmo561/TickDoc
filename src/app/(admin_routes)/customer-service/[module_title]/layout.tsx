@@ -1,5 +1,4 @@
 'use client'
-import { Drawer } from '@/components/drawer'
 import { LoadingScreen } from '@/components/loading-screen'
 import { useAuthContext } from '@/utils/hooks'
 import { ReactNode } from 'react'
@@ -27,7 +26,7 @@ export default function CustomerServiceLayout({
   ) {
     alert('Sem acesso ao módulo')
     window.location.href = `/${user.modules[0].type}/${user.modules[0].title}/dashboard`
-  } else return <Drawer>{children}</Drawer>
+  } else return children
 
   return <LoadingScreen />
 }

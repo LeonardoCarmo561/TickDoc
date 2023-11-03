@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  display: flex;
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: dodgerblue;
+  border-radius: 20px;
+}
+
+/*------ Style 1 ------*/
+.color-picker {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100px;
+  height: 50px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border: 2px solid dodgerblue;
+  border-radius: 15px;
+}
+.color-picker::-webkit-color-swatch {
+  border-radius: 50px;
+  border: none;
+}
+.color-picker::-moz-color-swatch {
+  border-radius: 15px;
+  border: none;
+}

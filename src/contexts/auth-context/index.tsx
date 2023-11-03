@@ -7,7 +7,7 @@ import {
   UserData,
 } from '@/@types'
 import { LoadingScreen } from '@/components/loading-screen'
-import { refreshToken } from '@/services'
+import { logout, refreshToken } from '@/services'
 import { jwtDecode } from 'jwt-decode'
 import { usePathname } from 'next/navigation'
 import { createContext, useEffect, useState } from 'react'
@@ -20,6 +20,7 @@ export function AuthProvider(props: AuthProviderProps) {
   const pathName = usePathname()
 
   function handleLogout() {
+    logout()
     setUser(null)
     window.location.href = '/admin'
   }

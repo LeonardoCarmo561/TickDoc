@@ -26,3 +26,15 @@ export async function refreshToken(): Promise<RefreshData | Error> {
     return new Error((error as { message: string }).message)
   }
 }
+
+export async function logout() {
+  try {
+    const { data } = await api.post('/V1/api/logout/')
+
+    if (data) return data
+
+    return new Error('Erro ao fazer logout')
+  } catch (error) {
+    return new Error((error as { message: string }).message)
+  }
+}

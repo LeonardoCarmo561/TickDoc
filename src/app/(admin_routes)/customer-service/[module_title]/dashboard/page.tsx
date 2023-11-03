@@ -1,3 +1,4 @@
+import { ToggleDrawerButton } from '@/components'
 import { Metadata } from 'next'
 
 export function generateMetadata({
@@ -15,8 +16,9 @@ export function generateMetadata({
 
 export default function Dashboard() {
   return (
-    <main>
+    <main className="bg-yellow-500">
       <span>S.A.C Dashboard</span>
+      <ToggleDrawerButton>Clica aqui pra trocar</ToggleDrawerButton>
     </main>
   )
 }
