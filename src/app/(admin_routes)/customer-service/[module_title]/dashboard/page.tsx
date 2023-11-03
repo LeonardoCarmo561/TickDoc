@@ -16,7 +16,7 @@ export function generateMetadata({
 
 export default function Dashboard() {
   return (
-    <main className="bg-yellow-500">
+    <main>
       <span>S.A.C Dashboard</span>
       <ToggleDrawerButton>Clica aqui pra trocar</ToggleDrawerButton>
     </main>
