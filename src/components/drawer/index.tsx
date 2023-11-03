@@ -18,10 +18,10 @@ export function Drawer({
   user: UserData | null
 }) {
   return (
-    <div className="flex flex-1 divide-x-[1px] divide-black dark:divide-white">
+    <div className="flex flex-1 divide-none divide-black sm:divide-x-[1px] dark:divide-white">
       <nav
         id="drawer-area"
-        className="h-screen w-screen overflow-hidden sm:w-56 sm:left-0 hidden sm:block bg-black sm:bg-transparent bg-opacity-0 transition-all absolute sm:relative box-border"
+        className="h-screen inset-0 overflow-hidden sm:w-56 sm:left-0 hidden sm:block bg-black sm:bg-transparent bg-opacity-0 transition-all absolute sm:relative box-border"
       >
         <div
           className="flex divide-y-[1px] divide-black dark:divide-white absolute flex-col w-56 bg-white dark:bg-zinc-900 h-screen box-border transition-all overflow-auto"
