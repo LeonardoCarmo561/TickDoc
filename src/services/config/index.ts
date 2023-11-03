@@ -1,19 +1,29 @@
-import { Environmnet } from '@/utils'
+import { Environment, getCSRFToken } from '@/utils'
 import axios from 'axios'
 import { errorInterceptor, responseInterceptor } from './interceptors'
 
 export const api = axios.create({
-  baseURL: Environmnet.URL_BASE,
-  xsrfCookieName: 'X-CSRFToken',
-  xsrfHeaderName: 'X-CSRFToken',
+  baseURL: Environment.URL_BASE,
   withCredentials: true,
+  xsrfCookieName: 'csrftoken',
+  xsrfHeaderName: 'X-CSRFToken',
+  headers: {
+    common: {
+      'X-CSRFToken': getCSRFToken(),
+    },
+  },
 })
 
 export const externalApi = axios.create({
-  baseURL: Environmnet.URL_BASE,
-  xsrfCookieName: 'X-CSRFToken',
-  xsrfHeaderName: 'X-CSRFToken',
-  withCredentials: false,
+  baseURL: Environment.URL_BASE,
+  withCredentials: true,
+  xsrfCookieName: 'csrftoken',
+  xsrfHeaderName: 'X-Csrftoken',
+  headers: {
+    common: {
+      'X-CSRFToken': getCSRFToken(),
+    },
+  },
 })
 
 api.interceptors.response.use(
@@ -28,7 +38,7 @@ api.interceptors.response.use(
       ) {
         try {
           const { data } = await axios.post(
-            `${Environmnet.URL_BASE}/V1/api/token/refresh/`,
+            `${Environment.URL_BASE}/V1/api/token/refresh/`,
             {},
             {
               withCredentials: true,

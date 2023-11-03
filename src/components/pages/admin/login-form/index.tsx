@@ -43,7 +43,9 @@ export function AdminLoginForm() {
 
   useEffect(() => {
     if (user) {
-      window.location.href = `/${user.modules[0].type}/${user.modules[0].title}/dashboard`
+      window.location.replace(
+        `/${user.modules[0].type}/${user.modules[0].title}/dashboard`,
+      )
     }
   }, [user])
 

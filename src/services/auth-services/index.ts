@@ -29,12 +29,13 @@ export async function refreshToken(): Promise<RefreshData | Error> {
 
 export async function logout() {
   try {
-    const { data } = await api.post('/V1/api/logout/')
+    const data = await api.post('/V1/api/logout/')
 
     if (data) return data
 
     return new Error('Erro ao fazer logout')
   } catch (error) {
+    console.error(error)
     return new Error((error as { message: string }).message)
   }
 }

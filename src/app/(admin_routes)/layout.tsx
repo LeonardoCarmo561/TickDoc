@@ -1,9 +1,10 @@
 import { AuthProvider } from '@/contexts/auth-context'
+import { ReactNode } from 'react'
 
-export default function PrivateLayout({
+export default function AdminRoutesLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return <AuthProvider>{children}</AuthProvider>
 }

@@ -4,6 +4,7 @@ import { MdDashboard, MdLogout, MdPersonOutline } from 'react-icons/md'
 import { ItemLink } from './item-link'
 import Image from 'next/image'
 import Link from 'next/link'
+import { LogoutButton } from '../logout-button'
 
 export function Drawer({
   children,
@@ -13,7 +14,7 @@ export function Drawer({
   profilePicture?: string
 }) {
   return (
-    <div className="flex w-screen h-screen box-border">
+    <div className="flex flex-1 divide-x-[1px]">
       <nav
         id="drawer-area"
         className="h-screen w-screen overflow-hidden sm:w-56 sm:left-0 hidden sm:block bg-black sm:bg-transparent bg-opacity-0 transition-all absolute sm:relative box-border"
@@ -113,18 +114,18 @@ export function Drawer({
             <ItemLink href="/" icon={<MdDashboard />} label="Dashboard" />
           </div>
           <div className="flex box-border p-1">
-            <button className="transition-all flex w-full h-12 rounded-xl hover:bg-opacity-30 outline-none focus:bg-opacity-30 focus:bg-blue-500 hover:bg-blue-500">
+            <LogoutButton className="transition-all flex w-full h-12 rounded-xl hover:bg-opacity-30 outline-none focus:bg-opacity-30 focus:bg-blue-500 hover:bg-blue-500">
               <div className="flex items-center gap-2 p-2">
                 <span className="text-2xl">
                   <MdLogout />
                 </span>
                 <span className="text-lg">Sair</span>
               </div>
-            </button>
+            </LogoutButton>
           </div>
         </div>
       </nav>
-      {children}
+      <div className="flex flex-1 overflow-hidden">{children}</div>
     </div>
   )
 }

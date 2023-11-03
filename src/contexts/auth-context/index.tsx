@@ -7,7 +7,8 @@ import {
   UserData,
 } from '@/@types'
 import { LoadingScreen } from '@/components/loading-screen'
-import { logout, refreshToken } from '@/services'
+import { refreshToken } from '@/services'
+import { api } from '@/services/config'
 import { jwtDecode } from 'jwt-decode'
 import { usePathname } from 'next/navigation'
 import { createContext, useEffect, useState } from 'react'
@@ -20,9 +21,13 @@ export function AuthProvider(props: AuthProviderProps) {
   const pathName = usePathname()
 
   function handleLogout() {
-    logout()
-    setUser(null)
-    window.location.href = '/admin'
+    api
+      .post('/V1/api/logout/')
+      .then(() => {
+        setUser(null)
+        window.location.href = '/admin'
+      })
+      .catch((error) => console.error(error))
   }
 
   useEffect(() => {
@@ -54,11 +59,11 @@ export function AuthProvider(props: AuthProviderProps) {
       .finally(() => setUpdatingToken(false))
   }, [pathName])
 
-  return updatingToken ? (
-    <LoadingScreen />
-  ) : (
+  return (
     <AuthContext.Provider value={{ user, setUser, logout: handleLogout }}>
-      {props.children}
+      <div className="w-screen h-screen overflow-hidden flex flex-col">
+        {updatingToken ? <LoadingScreen /> : props.children}
+      </div>
     </AuthContext.Provider>
   )
 }
