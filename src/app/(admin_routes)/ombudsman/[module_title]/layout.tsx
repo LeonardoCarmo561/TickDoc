@@ -1,5 +1,7 @@
 'use client'
 import { LoadingScreen } from '@/components/loading-screen'
+import { DrawerProvider } from '@/contexts/drawer-context'
+import { ModuleProvider } from '@/contexts/module-context'
 import { useAuthContext } from '@/utils/hooks'
 import { ReactNode } from 'react'
 
@@ -25,7 +27,12 @@ export default function OmbudsmanLayout({
   ) {
     alert('Sem acesso ao módulo')
     window.location.href = `/${user.modules[0].type}/${user.modules[0].title}/dashboard`
-  } else return children
+  } else
+    return (
+      <ModuleProvider moduleTitle={params.module_title}>
+        <DrawerProvider>{children}</DrawerProvider>
+      </ModuleProvider>
+    )
 
   return <LoadingScreen />
 }

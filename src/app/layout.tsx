@@ -18,7 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={leagueSpartan.className}>
+      <body
+        className={`bg-zinc-100 dark:bg-zinc-800 ${leagueSpartan.className}`}
+      >
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

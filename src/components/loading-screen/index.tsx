@@ -4,7 +4,11 @@ import defaultLogo from '../../../public/default_logo.png'
 
 export function LoadingScreen() {
   return (
-    <main className="flex flex-1 justify-center items-center flex-col box-border h-max">
+    <main
+      className="
+        flex flex-1 justify-center items-center flex-col box-border h-max bg-zinc-800
+      "
+    >
       <Image
         alt="TickDoc Logo"
         src={defaultLogo}

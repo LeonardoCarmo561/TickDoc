@@ -1,8 +1,9 @@
 'use client'
 
-import { DrawerContextData } from '@/@types'
+import { DrawerContextData, DrawerOption } from '@/@types'
 import { Drawer } from '@/components/drawer'
-import { useAuthContext } from '@/utils/hooks'
+import { customerServiceOptions } from '@/utils/drawer-options'
+import { useAuthContext, useModuleContext } from '@/utils/hooks'
 import {
   ReactNode,
   createContext,
@@ -15,8 +16,10 @@ export const DrawerContext = createContext({} as DrawerContextData)
 
 export function DrawerProvider({ children }: { children: ReactNode }) {
   const { user } = useAuthContext()
+  const moduleContext = useModuleContext()
 
   const [isOpen, setIsOpen] = useState(false)
+  const [drawerOptions, setDrawerOptions] = useState<DrawerOption[]>([])
 
   const toggleDrawerOpen = useCallback(() => {
     setIsOpen((oldValue) => !oldValue)
@@ -47,6 +50,14 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
   }, [isOpen])
 
   useEffect(() => {
+    if (moduleContext && moduleContext.type === 'customer-service') {
+      setDrawerOptions(
+        customerServiceOptions(moduleContext.profile, moduleContext.title),
+      )
+    }
+  }, [moduleContext, moduleContext?.title, moduleContext?.type])
+
+  useEffect(() => {
     window.addEventListener('click', function (e) {
       if ((e.target as HTMLElement).id === 'drawer-area') {
         setIsOpen(false)
@@ -61,8 +72,12 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <DrawerContext.Provider value={{ isOpen, toggleDrawerOpen }}>
-      <Drawer profilePicture={user?.profilePicture}>{children}</Drawer>
+    <DrawerContext.Provider
+      value={{ isOpen, toggleDrawerOpen, drawerOptions, setDrawerOptions }}
+    >
+      <Drawer options={drawerOptions} user={user}>
+        {children}
+      </Drawer>
     </DrawerContext.Provider>
   )
 }
