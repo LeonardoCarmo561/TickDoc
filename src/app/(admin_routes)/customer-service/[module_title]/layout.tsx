@@ -1,4 +1,5 @@
 'use client'
+import { Header } from '@/components/header'
 import { LoadingScreen } from '@/components/loading-screen'
 import { DrawerProvider } from '@/contexts/drawer-context'
 import { ModuleProvider } from '@/contexts/module-context'
@@ -31,7 +32,10 @@ export default function CustomerServiceLayout({
   } else
     return (
       <ModuleProvider moduleTitle={params.module_title}>
-        <DrawerProvider>{children}</DrawerProvider>
+        <DrawerProvider>
+          <Header moduleTitle={params.module_title} moduleType="S.A.C" />
+          {children}
+        </DrawerProvider>
       </ModuleProvider>
     )
 
