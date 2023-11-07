@@ -1,5 +1,7 @@
+import { ReactNode } from 'react'
+
 export interface OptionProps {
   label: string
   value: string | number
-  icon?: () => JSX.Element
+  icon?: ReactNode
 }
