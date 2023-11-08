@@ -1,6 +1,5 @@
 import { ModuleLogo } from '..'
-import { Option } from '../option'
-import { Select } from '../select'
+import { SwitchModuleSelect } from '../switch-module-select'
 
 export function Header({
   moduleTitle,
@@ -21,13 +20,7 @@ export function Header({
           <ModuleLogo />
         </div>
         <div className="flex flex-1 box-border p-2">
-          <Select title="Alterar módulo" label="Selecione um módulo">
-            <Option
-              label="TickDoc"
-              value="/customer-service/TickDoc/dashboard"
-            />
-            <Option label="Alguma coisa" value="/ombudsman/TickDoc/dashboard" />
-          </Select>
+          <SwitchModuleSelect />
         </div>
       </div>
     </header>

@@ -1,6 +1,6 @@
 'use client'
 import { SelectProps } from '@/@types'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function Select(props: SelectProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,8 +17,10 @@ export function Select(props: SelectProps) {
     })
   }, [])
 
-  useCallback(() => {
-    props.onChange?.(value)
+  useEffect(() => {
+    if (value) {
+      props.onChange?.(value)
+    }
   }, [props, value])
 
   return (
