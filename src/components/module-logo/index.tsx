@@ -13,6 +13,7 @@ export function ModuleLogo() {
         height={150}
         alt={currentModule.title}
         src={currentModule.logo}
+        className="sm:w-80 w-48"
         priority
       />
     )

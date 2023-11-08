@@ -28,9 +28,11 @@ export function Select(props: SelectProps) {
       tabIndex={0}
       title={props.title}
       onClick={() => setIsOpen((oldValue) => !oldValue)}
-      className="flex flex-col cursor-pointer relative h-10 w-full justify-center border-2 border-blue-500 rounded-xl"
+      className="w-full flex flex-col cursor-pointer relative h-10 justify-center border-2 border-blue-500 rounded-xl"
     >
-      <span className="px-2">{optionLabel || props.label}</span>
+      <span className="px-2 flex-nowrap text-ellipsis line-clamp-1">
+        {optionLabel || props.label}
+      </span>
       {isOpen && (
         <ul className="flex flex-col absolute top-full bg-white dark:bg-zinc-950 mt-2 w-full p-2 rounded-xl border-2 border-blue-500 divide-y-[1px]">
           {props.children}

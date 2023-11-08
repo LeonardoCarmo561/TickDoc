@@ -23,7 +23,6 @@ export function AdminLoginForm() {
   })
 
   async function submit(formData: LoginFormData) {
-    console.log(formData)
     loginAdminUser(formData).then((result) => {
       if (result instanceof Error) {
         alert(result.message)

@@ -51,5 +51,6 @@ api.interceptors.response.use(
         }
       }
     }
+    return errorInterceptor(error)
   },
 )

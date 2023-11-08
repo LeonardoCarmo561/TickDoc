@@ -19,7 +19,7 @@ export function Header({
         <div className="flex flex-1 sm:flex-[2] items-center justify-center">
           <ModuleLogo />
         </div>
-        <div className="flex flex-1 box-border p-2">
+        <div className="flex flex-1 box-border p-2 justify-end">
           <SwitchModuleSelect />
         </div>
       </div>
