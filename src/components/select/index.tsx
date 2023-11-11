@@ -1,43 +1,69 @@
-'use client'
 import { SelectProps } from '@/@types'
-import { useEffect, useState } from 'react'
+import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 
 export function Select(props: SelectProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [value, setValue] = useState<string | number>()
-  const [optionLabel, setOptionLabel] = useState<string>()
-
-  useEffect(() => {
-    window.addEventListener('click', function (e) {
-      const element = e.target as HTMLElement
-      if (element.getAttribute('data-type') === 'option') {
-        setValue(element.getAttribute('data-value') || undefined)
-        setOptionLabel(element.getAttribute('aria-label') || undefined)
-      }
-    })
-  }, [])
-
-  useEffect(() => {
-    if (value) {
-      props.onChange?.(value)
-    }
-  }, [props, value])
-
   return (
     <div
-      tabIndex={0}
-      title={props.title}
-      onClick={() => setIsOpen((oldValue) => !oldValue)}
-      className="w-full flex flex-col cursor-pointer relative h-10 justify-center border-2 border-blue-500 rounded-xl"
+      id="select"
+      className={`group w-full ${props.wFit ? 'min-w-fit' : ''} ${
+        props.wFull ? 'w-full' : ''
+      }`}
     >
-      <span className="px-2 flex-nowrap text-ellipsis line-clamp-1">
-        {optionLabel || props.label}
-      </span>
-      {isOpen && (
-        <ul className="flex flex-col absolute top-full bg-white dark:bg-zinc-950 mt-2 w-full p-2 rounded-xl border-2 border-blue-500 divide-y-[1px]">
-          {props.children}
-        </ul>
-      )}
+      <div
+        id="category-select"
+        className="relative w-full line-clamp-1 flex-nowrap text-ellipsis group/category-select cursor-pointer "
+      >
+        <label
+          htmlFor="options-view-button"
+          className="text-[0.75rem] tracking-wide [&:has(input[id='options-view-button']:checked)]:text-green-500 dark:group-[&:has(input[type='radio']:checked)]:text-white group-[&:has(input[type='radio']:checked)]:text-black"
+        >
+          {props.label}
+        </label>
+        <input
+          type="checkbox"
+          id="options-view-button"
+          className="peer [all:unset] [position:absolute] [inset:0] [cursor:pointer] [z-index:3]"
+        />
+
+        <div
+          id="select-button"
+          className="group/select-button peer-focus/check:outline peer-focus/check:outline-blue-500 mt-2 flex p-2 items-center justify-between rounded-xl border-2 border-zinc-500"
+        >
+          <div
+            id="selected-value"
+            className="text-black line-clamp-1 dark:text-white group-[&:has(input:checked)]/category-select:text-blue-500 text-sm tracking-wide"
+          >
+            {props.emptyValue || 'Selecione uma opção'}
+          </div>
+
+          <div id="icons" className="group/icons text-[#AFABB6]">
+            <span className="block group-[&:has(input:checked)]/category-select:hidden">
+              <MdExpandMore />
+            </span>
+            <span className="hidden group-[&:has(input:checked)]/category-select:block">
+              <MdExpandLess />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <ul
+        id="options"
+        className="
+          hidden
+          border-2
+          mt-2
+          flex-col
+          flex-1
+          rounded-xl
+          border-zinc-700
+          bg-zinc-50
+          dark:bg-zinc-900
+          group-[&:has(input[type='checkbox']:checked)]:flex
+        "
+      >
+        {props.children}
+      </ul>
     </div>
   )
 }

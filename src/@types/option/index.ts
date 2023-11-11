@@ -1,8 +1,7 @@
 import { ReactNode } from 'react'
 
 export interface OptionProps {
-  label: string
   value: string | number
+  label: string
   icon?: ReactNode
-  title?: string
 }

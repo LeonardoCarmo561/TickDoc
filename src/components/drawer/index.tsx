@@ -18,7 +18,7 @@ export function Drawer({
   user: UserData | null
 }) {
   return (
-    <div className="flex flex-1 divide-none divide-black sm:divide-x-[1px] dark:divide-white">
+    <div className="flex flex-1 divide-none divide-black sm:divide-x-[1px] dark:divide-white sm:gap-2">
       <nav
         id="drawer-area"
         className="h-screen inset-0 overflow-hidden sm:w-56 sm:left-0 hidden sm:block bg-black sm:bg-transparent bg-opacity-0 transition-all absolute sm:relative box-border"
