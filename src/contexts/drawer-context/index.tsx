@@ -3,6 +3,7 @@
 import { DrawerContextData, DrawerOption } from '@/@types'
 import { Drawer } from '@/components/drawer'
 import { customerServiceOptions } from '@/utils/drawer-options'
+import { ombudsmanOptions } from '@/utils/drawer-options/ombudsman'
 import { useAuthContext, useModuleContext } from '@/utils/hooks'
 import {
   ReactNode,
@@ -53,6 +54,10 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
     if (moduleContext && moduleContext.type === 'customer-service') {
       setDrawerOptions(
         customerServiceOptions(moduleContext.profile, moduleContext.title),
+      )
+    } else if (moduleContext && moduleContext.type === 'ombudsman') {
+      setDrawerOptions(
+        ombudsmanOptions(moduleContext.profile, moduleContext.title),
       )
     }
   }, [moduleContext, moduleContext?.title, moduleContext?.type])
