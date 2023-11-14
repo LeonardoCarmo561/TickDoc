@@ -4,7 +4,7 @@ import { LoadingScreen } from '@/components/loading-screen'
 import { useAuthContext } from '@/utils/hooks'
 import { ReactNode } from 'react'
 
-export default function OmbudsmanRootLayout({
+export default function CustomerServiceRootLayout({
   children,
 }: {
   children: ReactNode
@@ -17,7 +17,7 @@ export default function OmbudsmanRootLayout({
     user &&
     user.modules.find((module) => module.type === 'ombudsman') === undefined
   ) {
-    alert('Sem acesso ao(s) módulo(s) de ouvidoria')
+    alert('Sem acesso ao(s) módulo(s) de Ouvidoria')
     window.location.href = `/${user.modules[0].type}/${user.modules[0].title}/dashboard`
   } else return children
 

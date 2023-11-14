@@ -1,11 +1,12 @@
 'use client'
+import { Header } from '@/components/header'
 import { LoadingScreen } from '@/components/loading-screen'
 import { DrawerProvider } from '@/contexts/drawer-context'
 import { ModuleProvider } from '@/contexts/module-context'
 import { useAuthContext } from '@/utils/hooks'
 import { ReactNode } from 'react'
 
-export default function OmbudsmanLayout({
+export default function CustomerServiceLayout({
   children,
   params,
 }: {
@@ -30,7 +31,10 @@ export default function OmbudsmanLayout({
   } else
     return (
       <ModuleProvider moduleTitle={params.module_title}>
-        <DrawerProvider>{children}</DrawerProvider>
+        <DrawerProvider>
+          <Header moduleTitle={params.module_title} moduleType="Ouvidoria" />
+          {children}
+        </DrawerProvider>
       </ModuleProvider>
     )
 

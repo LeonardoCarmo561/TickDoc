@@ -16,7 +16,7 @@ export function generateMetadata({
 export default function Dashboard() {
   return (
     <main>
-      <span>S.A.C Dashboard</span>
+      <span>Ouvidoria Dashboard</span>
     </main>
   )
 }
