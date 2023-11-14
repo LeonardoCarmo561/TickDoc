@@ -1,5 +1,5 @@
 import { ModuleLogo } from '..'
-import { SwitchModuleSelect } from '../switch-module-select'
+import { SwitchModule } from '../switch-module'
 
 export function Header({
   moduleTitle,
@@ -20,7 +20,7 @@ export function Header({
           <ModuleLogo />
         </div>
         <div className="flex flex-1 box-border p-2 justify-end">
-          <SwitchModuleSelect />
+          <SwitchModule />
         </div>
       </div>
     </header>

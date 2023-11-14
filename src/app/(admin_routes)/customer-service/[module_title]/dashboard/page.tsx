@@ -1,11 +1,4 @@
-import { Option } from '@/components/option'
-import { Select } from '@/components/select'
 import { Metadata } from 'next'
-import {
-  MdConnectWithoutContact,
-  MdMapsUgc,
-  MdSupportAgent,
-} from 'react-icons/md'
 
 export function generateMetadata({
   params,
@@ -23,25 +16,7 @@ export function generateMetadata({
 export default function Dashboard() {
   return (
     <main>
-      <div className="w-full max-w-xs">
-        <Select label="Módulo" wFull>
-          <Option
-            label="TickDoc"
-            value="/customer-service/TickDoc/dashboard"
-            icon={<MdMapsUgc />}
-          />
-          <Option
-            label="TickDoc"
-            value="/ombudsman/TickDoc/dashboard"
-            icon={<MdSupportAgent />}
-          />
-          <Option
-            label="TickDoc"
-            value="/ci/TickDoc/dashboard"
-            icon={<MdConnectWithoutContact />}
-          />
-        </Select>
-      </div>
+      <div className="w-full max-w-sm">lnjkkjn</div>
     </main>
   )
 }
