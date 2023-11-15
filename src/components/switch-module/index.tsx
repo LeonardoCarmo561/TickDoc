@@ -84,7 +84,7 @@ export function SwitchModule() {
               }
               autoFocus
               tabIndex={0}
-              className="p-2 group/li cursor-pointer flex justify-between items-center hover:bg-blue-500 hover:text-white rounded-xl m-1"
+              className="p-2 group/li cursor-pointer flex justify-between items-center aria-selected:bg-blue-500 aria-selected:bg-opacity-30 aria-selected:text-black aria-selected:dark:text-white hover:bg-blue-500 hover:text-white rounded-xl m-1"
             >
               <div className="flex items-center gap-2 line-clamp-1 text-ellipsis">
                 <span className="text-2xl">

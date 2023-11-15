@@ -12,9 +12,9 @@ export function Header({
     <header>
       <div className="flex flex-1 h-24 items-center border-b-[1px] text-black dark:text-white">
         <div className="hidden sm:flex sm:flex-1">
-          <span className="text-lg font-semibold">
+          <h1 className="text-2xl font-semibold">
             {moduleType} - {moduleTitle}
-          </span>
+          </h1>
         </div>
         <div className="flex flex-1 sm:flex-[2] items-center justify-center">
           <ModuleLogo />
