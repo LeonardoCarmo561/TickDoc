@@ -1,9 +1,12 @@
 'use client'
+import { Modal } from '@/components/modal'
+import { FormButton } from '@/components/pages/customer-service/clients/form-button'
 import { Tooltip } from '@/components/tooltip'
 import Link from 'next/link'
-import { MdAdd, MdInfoOutline, MdSearch } from 'react-icons/md'
+import { MdInfoOutline, MdSearch } from 'react-icons/md'
 
 export default function CustomerServiceClients() {
+  const modalOpen = false
   return (
     <main className="p-2">
       <h2 className="text-xl">Clientes</h2>
@@ -22,18 +25,12 @@ export default function CustomerServiceClients() {
               type="button"
               className="text-2xl p-1 rounded-full focus:bg-black focus:bg-opacity-10 hover:bg-black hover:bg-opacity-10 transition-colors outline-none"
               tabIndex={0}
-              onClick={() => console.log('clicou')}
             >
               <MdSearch />
             </button>
           </Tooltip>
         </div>
-        <button className="text-xs flex gap-1 items-center justify-between p-2 bg-blue-500 text-white font-bold rounded-xl hover:shadow-xl transition-all">
-          <span className="text-xl">
-            <MdAdd />
-          </span>
-          NOVO
-        </button>
+        <FormButton />
       </div>
 
       <div
@@ -62,8 +59,8 @@ export default function CustomerServiceClients() {
           <tbody className="divide-y divide-zinc-500">
             <tr>
               <td align="center" className="py-3">
-                <Tooltip title="detalhes">
-                  <Link href="details/1" tabIndex={-1}>
+                <Tooltip title="detalhes" position="rigth">
+                  <Link href="clients/details/1" tabIndex={-1}>
                     <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
                       <MdInfoOutline />
                     </button>
@@ -87,7 +84,7 @@ export default function CustomerServiceClients() {
             </tr>
             <tr>
               <td align="center" className="py-3">
-                <Tooltip title="detalhes">
+                <Tooltip title="detalhes" position="rigth">
                   <Link href="details/1" tabIndex={-1}>
                     <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
                       <MdInfoOutline />
@@ -111,15 +108,11 @@ export default function CustomerServiceClients() {
               </td>
             </tr>
           </tbody>
-
-          <tfoot>
-            <tr>
-              <td colSpan={5}>
-                <caption>Nenhum registro encontrado</caption>
-              </td>
-            </tr>
-          </tfoot>
         </table>
+
+        <Modal open={modalOpen}>
+          <span className="text-green-300">Isso aqui é um teste</span>
+        </Modal>
       </div>
     </main>
   )

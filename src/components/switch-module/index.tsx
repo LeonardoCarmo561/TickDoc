@@ -16,14 +16,16 @@ import { Tooltip } from '../tooltip'
 export function SwitchModule() {
   const pathName = usePathname()
   const router = useRouter()
-  const [selected, setSelected] = useState<string>()
+  const [label, setLabel] = useState<string>()
+  const [selectedModule, setSelectedModule] = useState<string>()
   const [value, setValue] = useState<string | number>()
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const currentPath = pathName.split('/')
     setValue(`${currentPath[1]}/${currentPath[2]}`)
-    setSelected(currentPath[2])
+    setSelectedModule(currentPath[1])
+    setLabel(currentPath[2])
   }, [pathName])
 
   const { user } = useAuthContext()
@@ -42,9 +44,22 @@ export function SwitchModule() {
         tabIndex={0}
         className="[all:unset] [inset:0] [position:absolute] focus:rounded-xl [z-index:30] [cursor:pointer] focus:outline focus:outline-blue-500"
       />
-      <span className="line-clamp-1 text-ellipsis px-2">
-        {selected || 'Selecione um módulo'}
-      </span>
+      <div className="flex px-2 items-center gap-2">
+        <span className="text-2xl">
+          {selectedModule === 'ci' ? (
+            <MdConnectWithoutContact />
+          ) : selectedModule === 'ombudsman' ? (
+            <MdSupportAgent />
+          ) : selectedModule === 'customer-service' ? (
+            <MdMapsUgc />
+          ) : (
+            ''
+          )}
+        </span>
+        <span className="line-clamp-1 text-ellipsis">
+          {label || 'Selecione um módulo'}
+        </span>
+      </div>
       <span className="px-2">
         {isOpen ? <MdExpandLess /> : <MdExpandMore />}
       </span>
@@ -57,6 +72,7 @@ export function SwitchModule() {
         {user?.modules.map((moduleOption, index) => (
           <Tooltip
             key={index}
+            position="left"
             title={
               moduleOption.type === 'ci'
                 ? 'Com. Interna'
@@ -70,7 +86,7 @@ export function SwitchModule() {
             <li
               onClick={() => {
                 if (value !== `${moduleOption.type}/${moduleOption.title}`) {
-                  setSelected(moduleOption.title)
+                  setLabel(moduleOption.title)
                   setIsOpen(false)
                   router.push(
                     `/${moduleOption.type}/${moduleOption.title}/dashboard`,
