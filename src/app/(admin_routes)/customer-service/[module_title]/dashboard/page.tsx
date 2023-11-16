@@ -16,7 +16,7 @@ export function generateMetadata({
 export default function Dashboard() {
   return (
     <main>
-      <div className="w-full max-w-sm">lnjkkjn</div>
+      <div className="w-full max-w-sm">S.A.C Dashboard</div>
     </main>
   )
 }

@@ -14,7 +14,7 @@ export function Input(props: InputProps) {
       id={props.name}
       {...register(props.name)}
       {...props}
-      className="h-10 rounded-xl px-2 shadow-2xl border-gray-400 border-[2px] focus:outline-dodgerblue"
+      className="h-10 rounded-xl px-2 text-black shadow-2xl border-gray-400 border-[2px] focus:outline-dodgerblue"
     />
   )
 }

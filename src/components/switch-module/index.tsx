@@ -42,7 +42,7 @@ export function SwitchModule() {
         onChange={() => setIsOpen((oldValue) => !oldValue)}
         type="checkbox"
         tabIndex={0}
-        className="[all:unset] [inset:0] [position:absolute] focus:rounded-xl [z-index:30] [cursor:pointer] focus:outline focus:outline-blue-500"
+        className="[all:unset] [inset:0] [position:absolute] focus:rounded-xl z-20 [cursor:pointer] focus:outline focus:outline-blue-500"
       />
       <div className="flex px-2 items-center gap-2">
         <span className="text-2xl">
@@ -65,7 +65,7 @@ export function SwitchModule() {
       </span>
 
       <ul
-        className={`bg-inherit group/ul peer/ul shadow-xl z-30 border border-zinc-500 rounded-xl w-full divide-y top-full mt-2 bg-white dark:bg-zinc-950 absolute ${
+        className={`bg-inherit group/ul peer/ul shadow-xl z-20 border border-zinc-500 rounded-xl w-full divide-y top-full mt-2 bg-white dark:bg-zinc-950 absolute ${
           isOpen ? 'block' : 'hidden'
         }`}
       >
@@ -98,7 +98,6 @@ export function SwitchModule() {
               aria-selected={
                 value === `${moduleOption.type}/${moduleOption.title}`
               }
-              autoFocus
               tabIndex={0}
               className="p-2 group/li cursor-pointer flex justify-between items-center aria-selected:bg-blue-500 aria-selected:bg-opacity-30 aria-selected:text-black aria-selected:dark:text-white hover:bg-blue-500 hover:text-white rounded-xl m-1"
             >

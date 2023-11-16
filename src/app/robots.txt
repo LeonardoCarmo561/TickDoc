@@ -1,0 +1,7 @@
+User-agent: *
+
+Disallow: /ombudsman/
+Disallow: /ci/
+Disallow: /reset_password/*
+
+Allow: /reset_password

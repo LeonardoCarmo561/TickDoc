@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useAuthContext } from '@/utils/hooks'
 import { jwtDecode } from 'jwt-decode'
+import Link from 'next/link'
 
 export function AdminLoginForm() {
   const { user, setUser } = useAuthContext()
@@ -93,12 +94,14 @@ export function AdminLoginForm() {
             <MdLogin />
             ENTRAR
           </button>
-          <button
-            type="button"
-            className="w-full gap-1 transition-all hover:bg-blue-500 hover:bg-opacity-25 flex items-center justify-center rounded-xl border-blue-500 border-[2px] text-black shadow-2xl"
+          <Link
+            role="button"
+            href="/reset_password"
+            target="_blank"
+            className="w-full gap-1 text-center font-semibold transition-all hover:bg-blue-500 hover:bg-opacity-25 flex items-center justify-center rounded-xl border-blue-500 border-[2px] text-black shadow-2xl"
           >
             ESQUECI A SENHA
-          </button>
+          </Link>
         </div>
       </form>
     </FormProvider>
