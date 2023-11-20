@@ -8,7 +8,7 @@ export function generateMetadata({
   const moduleTitle = params.module_title
 
   return {
-    title: `Dashboard de ${moduleTitle} - S.A.C | TickDoc`,
+    title: `Dashboard de ${moduleTitle} · S.A.C · TickDoc`,
     description: `Dashboard do módulo de S.A.C ${moduleTitle} para gestão de protocolos abertos digitalmente`,
   }
 }

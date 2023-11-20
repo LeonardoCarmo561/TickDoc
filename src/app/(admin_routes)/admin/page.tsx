@@ -3,7 +3,7 @@ import { AdminLoginForm } from '@/components/pages/admin'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Administração | TickDoc',
+  title: 'Administração · TickDoc',
   description: 'Página de acesso ao ambiente de administração TickDoc',
 }
 

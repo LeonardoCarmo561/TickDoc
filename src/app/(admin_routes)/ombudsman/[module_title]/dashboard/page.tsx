@@ -8,7 +8,7 @@ export function generateMetadata({
   const moduleTitle = params.module_title
 
   return {
-    title: `Dashboard de ${moduleTitle} | Ouvidoria | TickDoc`,
+    title: `Dashboard de ${moduleTitle} · Ouvidoria · TickDoc`,
     description: `Dashboard do módulo de ouvidoria ${moduleTitle} para gestão de manifestações abertas digitalmente`,
   }
 }

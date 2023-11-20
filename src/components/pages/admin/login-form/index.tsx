@@ -74,13 +74,17 @@ export function AdminLoginForm() {
         <Image alt="tickdoc" src={defaultLogo} priority />
 
         <Form.Field>
-          <Form.Label htmlFor="email">E-mail</Form.Label>
+          <Form.Label htmlFor="email" className="text-zinc-700">
+            E-mail
+          </Form.Label>
           <Form.Input type="email" name="email" />
           <Form.ErrorMessage field="email" />
         </Form.Field>
 
         <Form.Field>
-          <Form.Label htmlFor="password">Senha</Form.Label>
+          <Form.Label htmlFor="password" className="text-zinc-700">
+            Senha
+          </Form.Label>
           <Form.Input type="password" name="password" />
           <Form.ErrorMessage field="password" />
         </Form.Field>
