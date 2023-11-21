@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ClientsForm } from '..'
 import { MdAdd } from 'react-icons/md'
 
-export function FormButton() {
+export function FormButton(props: { create: boolean }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -18,7 +18,11 @@ export function FormButton() {
         </span>
         NOVO
       </button>
-      <ClientsForm open={isOpen} onClose={() => setIsOpen(false)} />
+      <ClientsForm
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        create={props.create}
+      />
     </>
   )
 }

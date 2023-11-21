@@ -3,11 +3,11 @@ import defaultLogo from '../../../../../public/default_logo.png'
 import { LoginFormData, TokenData } from '@/@types'
 import { Form } from '@/components'
 import { loginAdminUser } from '@/services'
-import { loginFormSchema } from '@/utils'
+import { Environment, loginFormSchema } from '@/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
-import { MdLogin } from 'react-icons/md'
+import { MdLogin, MdSupportAgent } from 'react-icons/md'
 import { publicIpv4 } from 'public-ip'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -71,7 +71,9 @@ export function AdminLoginForm() {
         }}
         className="mx-4 rounded-xl shadow-2xl bg-zinc-300 bg-opacity-30 p-4 gap-4 max-w-sm w-full flex flex-col justify-center items-center"
       >
-        <Image alt="tickdoc" src={defaultLogo} priority />
+        <div>
+          <Image alt="tickdoc" src={defaultLogo} priority className="" />
+        </div>
 
         <Form.Field>
           <Form.Label htmlFor="email" className="text-zinc-700">
@@ -89,22 +91,32 @@ export function AdminLoginForm() {
           <Form.ErrorMessage field="password" />
         </Form.Field>
 
-        <div className="flex w-full gap-2 px-2">
-          <button
-            disabled={isSubmitting}
-            type="submit"
-            className="p-2 w-full gap-1 flex transition-all items-center justify-center hover:bg-blue-700 hover:text-white rounded-xl bg-blue-500"
-          >
-            <MdLogin />
-            ENTRAR
-          </button>
+        <div className="flex flex-col w-full gap-2 px-2">
+          <div className="flex gap-2">
+            <button
+              disabled={isSubmitting}
+              type="submit"
+              className="p-2 w-full gap-1 flex transition-all items-center font-semibold justify-center hover:bg-blue-700 hover:text-white rounded-xl bg-blue-500"
+            >
+              <MdLogin />
+              ENTRAR
+            </button>
+            <Link
+              role="button"
+              href="/reset_password"
+              target="_blank"
+              className="w-full gap-1 text-center font-semibold transition-all hover:bg-blue-500 hover:bg-opacity-50 flex items-center justify-center rounded-xl border-blue-500 border-[2px] text-blue-950 shadow-2xl"
+            >
+              ESQUECI A SENHA
+            </Link>
+          </div>
           <Link
-            role="button"
-            href="/reset_password"
             target="_blank"
-            className="w-full gap-1 text-center font-semibold transition-all hover:bg-blue-500 hover:bg-opacity-25 flex items-center justify-center rounded-xl border-blue-500 border-[2px] text-black shadow-2xl"
+            href={String(Environment.CUSTOMER_SERVICE_URL)}
+            className="flex gap-2 items-center justify-center font-semibold w-full transition-colors text-blue-950 rounded-xl hover:bg-blue-700 hover:bg-opacity-50 p-2"
           >
-            ESQUECI A SENHA
+            <MdSupportAgent className="text-2xl" />
+            FALE CONOSCO
           </Link>
         </div>
       </form>

@@ -15,6 +15,7 @@
     "@tiptap/react": "^2.1.12",
     "@tiptap/starter-kit": "^2.1.12",
     "axios": "^1.6.0",
+    "brazilian-values": "^0.13.0",
     "jwt-decode": "^4.0.0",
     "next": "14.0.1",
     "public-ip": "^6.0.1",

@@ -6,7 +6,8 @@ import { getAllClients } from '@/services/clients-services'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
-import { MdInfoOutline } from 'react-icons/md'
+import { MdInfoOutline, MdSearch } from 'react-icons/md'
+import { FormButton } from '../form-button'
 
 export function ClientsTable() {
   const searchParams = useSearchParams()
@@ -35,74 +36,101 @@ export function ClientsTable() {
         setClients(result.results)
       }
 
-      setIsLoading(true)
+      setIsLoading(false)
     }
 
     getClients()
   }, [item, search, status, total])
 
   return (
-    <div
-      id="table-container"
-      className="w-full rounded-xl border border-blue-500 mt-2 overflow-auto flex-wrap bg-zinc-50 dark:bg-zinc-900"
-    >
-      <table className="w-full divide-y divide-zinc-500">
-        <thead>
-          <tr>
-            <th align="center" className="py-3"></th>
-            <th align="center" className="py-3">
-              Nome
-            </th>
-            <th align="center" className="py-3">
-              CI Expira Em
-            </th>
-            <th align="center" className="py-3">
-              Ouvidoria Expira Em
-            </th>
-            <th align="center" className="py-3">
-              Status
-            </th>
-          </tr>
-        </thead>
-
-        <tbody className="divide-y divide-zinc-500">
-          {isLoading && (
+    <>
+      <div
+        id="toolbar"
+        className="w-full p-2 mt-2 flex items-center justify-between rounded-xl border border-blue-500 bg-zinc-50 dark:bg-zinc-900"
+      >
+        <div className="flex gap-1 items-center">
+          <input
+            type="search"
+            className="rounded-xl p-2 bg-inherit border border-zinc-500"
+            placeholder="Pesquisar..."
+          />
+          <Tooltip title="pesquisar">
+            <button
+              type="button"
+              className="text-2xl p-1 rounded-full focus:bg-black focus:bg-opacity-10 hover:bg-black hover:bg-opacity-10 transition-colors outline-none"
+              tabIndex={0}
+            >
+              <MdSearch />
+            </button>
+          </Tooltip>
+        </div>
+        <FormButton create />
+      </div>
+      <div
+        id="table-container"
+        className="w-full rounded-xl border border-blue-500 mt-2 overflow-auto flex-wrap bg-zinc-50 dark:bg-zinc-900"
+      >
+        <table className="w-full divide-y divide-zinc-500">
+          <thead>
             <tr>
-              <td colSpan={5} className="p-3 overflow-hidden flex-nowrap flex">
-                <LoadingSpinner />
-                <span>carregando...</span>
-              </td>
+              <th align="center" className="py-3"></th>
+              <th align="center" className="py-3">
+                Nome
+              </th>
+              <th align="center" className="py-3">
+                CI Expira Em
+              </th>
+              <th align="center" className="py-3">
+                Ouvidoria Expira Em
+              </th>
+              <th align="center" className="py-3">
+                Status
+              </th>
             </tr>
-          )}
-          {clients.map((row) => (
-            <tr key={row.id}>
-              <td align="center" className="py-3">
-                <Tooltip title="detalhes" position="rigth">
-                  <Link href={`clients/details/${row.id}`} tabIndex={-1}>
-                    <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
-                      <MdInfoOutline />
-                    </button>
-                  </Link>
-                </Tooltip>
-              </td>
-              <td align="center" className="py-3">
-                {row.name}
-              </td>
-              <td align="center" className="py-3">
-                Não possui CI
-              </td>
-              <td align="center" className="py-3">
-                Não possui ouvidoria
-              </td>
-              <td align="center" className="py-3">
-                <span className="bg-red-300 text-xs font-semibold text-black w-full rounded-xl p-1 px-2">
-                  Inativo
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+
+          <tbody className="divide-y divide-zinc-500">
+            {isLoading && (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="p-3 overflow-hidden flex-nowrap flex text-lg gap-2 items-center justify-center"
+                >
+                  <LoadingSpinner />
+                  <span>carregando...</span>
+                </td>
+              </tr>
+            )}
+            {clients.map((row) => (
+              <tr key={row.id}>
+                <td align="center" className="py-3">
+                  <Tooltip title="detalhes" position="rigth">
+                    <Link href={`clients/details/${row.id}`} tabIndex={-1}>
+                      <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
+                        <MdInfoOutline />
+                      </button>
+                    </Link>
+                  </Tooltip>
+                </td>
+                <td align="center" className="py-3">
+                  {row.name}
+                </td>
+                <td align="center" className="py-3">
+                  Não possui CI
+                </td>
+                <td align="center" className="py-3">
+                  Não possui ouvidoria
+                </td>
+                <td align="center" className="py-3">
+                  <span className="bg-red-300 text-xs font-semibold text-black w-full rounded-xl p-1 px-2">
+                    Inativo
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }
