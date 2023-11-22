@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import defaultLogo from '../../../../../public/default_logo.png'
-import { ResetPasswordTokenForm } from '@/components/pages/reset_password'
+// import { ResetPasswordTokenForm } from '@/components/pages/reset_password'
 
 export const metadata: Metadata = {
   title: 'Redefinir Senha - Administração | TickDoc',
@@ -27,7 +27,7 @@ export default function ResetPasswordTokenPage({
           Mantenha a sua senha guardada em um lugar seguro
         </span>
 
-        <ResetPasswordTokenForm token={params.token} />
+        {/* <ResetPasswordTokenForm token={params.token} /> */}
       </main>
     </div>
   )

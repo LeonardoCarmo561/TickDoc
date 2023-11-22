@@ -1,7 +1,7 @@
 import {
   ResetPasswordFormData,
   ResetPasswordTokenFormData,
-} from '@/@types/rese-password'
+} from '@/@types/reset-password'
 import { api } from '../config'
 
 export async function resetPassword(formData: ResetPasswordFormData) {

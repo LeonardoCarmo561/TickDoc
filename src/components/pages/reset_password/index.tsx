@@ -3,9 +3,9 @@
 import {
   ResetPasswordFormData,
   ResetPasswordTokenFormData,
-} from '@/@types/rese-password'
+} from '@/@types/reset-password'
 import { Form } from '@/components'
-import { resetPassword } from '@/services'
+import { resetPassword, resetPasswordToken } from '@/services'
 import {
   resetPasswordFormSchema,
   resetPasswordTokenFormSchema,
@@ -60,24 +60,24 @@ export function ResetPasswordForm() {
   )
 }
 
-export function ResetPasswordTokenForm(props: { token: string }) {
-  const resetPasswordTokenForm = useForm<ResetPasswordTokenFormData>({
-    resolver: zodResolver(resetPasswordTokenFormSchema),
-  })
+// export function ResetPasswordTokenForm(props: { token: string }) {
+//   const resetPasswordTokenForm = useForm<ResetPasswordTokenFormData>({
+//     resolver: zodResolver(resetPasswordTokenFormSchema),
+//   })
 
-  async function submit(formData: ResetPasswordTokenFormData) {
-    const result = await resetPassword(formData)
+//   async function submit(formData: ResetPasswordTokenFormData) {
+//     const result = await resetPasswordToken(formData)
 
-    if (result instanceof Error) return alert(result.message)
+//     if (result instanceof Error) return alert(result.message)
 
-    alert(
-      'Solicitação recebida com sucesso! Em alguns minutos, você recebrá um e-mail com as instruções para redefinição de senha',
-    )
-  }
+//     alert(
+//       'Solicitação recebida com sucesso! Em alguns minutos, você recebrá um e-mail com as instruções para redefinição de senha',
+//     )
+//   }
 
-  return (
-    <FormProvider {...resetPasswordTokenForm}>
-      <form></form>
-    </FormProvider>
-  )
-}
+//   return (
+//     <FormProvider {...resetPasswordTokenForm}>
+//       <form></form>
+//     </FormProvider>
+//   )
+// }
