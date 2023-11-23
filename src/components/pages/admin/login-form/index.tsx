@@ -51,6 +51,7 @@ export function AdminLoginForm() {
 
   const {
     handleSubmit,
+    register,
     formState: { isSubmitting },
   } = loginUserForm
 
@@ -79,16 +80,22 @@ export function AdminLoginForm() {
           <Form.Label htmlFor="email" className="text-zinc-700">
             E-mail
           </Form.Label>
-          <Form.Input type="email" name="email" />
-          <Form.ErrorMessage field="email" />
+          <input
+            type="email"
+            className="h-10 rounded-xl px-2 text-black shadow-2xl border-gray-400 border-[2px] focus:outline-dodgerblue"
+            {...register('email')}
+          />
         </Form.Field>
 
         <Form.Field>
           <Form.Label htmlFor="password" className="text-zinc-700">
             Senha
           </Form.Label>
-          <Form.Input type="password" name="password" />
-          <Form.ErrorMessage field="password" />
+          <input
+            type="password"
+            className="h-10 rounded-xl px-2 text-black shadow-2xl border-gray-400 border-[2px] focus:outline-dodgerblue"
+            {...register('password')}
+          />
         </Form.Field>
 
         <div className="flex flex-col w-full gap-2 px-2">
