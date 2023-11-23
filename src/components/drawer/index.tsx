@@ -37,6 +37,7 @@ export function Drawer({
                   src={user.profilePicture}
                   width={96}
                   height={96}
+                  className="rounded-full"
                 />
               ) : (
                 <div
