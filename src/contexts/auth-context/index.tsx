@@ -10,7 +10,6 @@ import { LoadingScreen } from '@/components/loading-screen'
 import { refreshToken } from '@/services'
 import { api } from '@/services/config'
 import { jwtDecode } from 'jwt-decode'
-import { usePathname } from 'next/navigation'
 import { createContext, useEffect, useState } from 'react'
 
 export const AuthContext = createContext({} as AuthContextData)
@@ -18,7 +17,6 @@ export const AuthContext = createContext({} as AuthContextData)
 export function AuthProvider(props: AuthProviderProps) {
   const [user, setUser] = useState<UserData | null>(null)
   const [updatingToken, setUpdatingToken] = useState(true)
-  const pathName = usePathname()
 
   function handleLogout() {
     api
@@ -31,11 +29,11 @@ export function AuthProvider(props: AuthProviderProps) {
   }
 
   useEffect(() => {
-    setUpdatingToken(false)
+    setUpdatingToken(true)
     refreshToken()
       .then((result) => {
         if (result instanceof Error) {
-          if (pathName !== '/admin') {
+          if (window.location.pathname !== '/admin') {
             alert('Faça login')
             window.location.href = '/admin'
           }
@@ -50,14 +48,14 @@ export function AuthProvider(props: AuthProviderProps) {
             genre: tokenData.gender,
             profilePicture: tokenData.profile_picture,
           })
-          if (pathName === '/admin') {
+          if (window.location.pathname === '/admin') {
             window.location.href = `/${tokenData.modules[0].type}/${tokenData.modules[0].title}/dashboard`
           }
         }
       })
       .catch(() => alert('Erro desconhecido'))
       .finally(() => setUpdatingToken(false))
-  }, [pathName])
+  }, [])
 
   return (
     <AuthContext.Provider value={{ user, setUser, logout: handleLogout }}>
