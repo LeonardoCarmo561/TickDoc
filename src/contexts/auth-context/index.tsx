@@ -59,7 +59,7 @@ export function AuthProvider(props: AuthProviderProps) {
 
   return (
     <AuthContext.Provider value={{ user, setUser, logout: handleLogout }}>
-      <div className="w-screen h-screen overflow-hidden flex flex-col">
+      <div className="w-screen h-screen flex flex-col overflow-hidden">
         {updatingToken ? <LoadingScreen /> : props.children}
       </div>
     </AuthContext.Provider>

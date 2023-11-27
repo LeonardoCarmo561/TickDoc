@@ -8,10 +8,52 @@ export const metadata: Metadata = {
 
 export default function OmbudsmanClients() {
   return (
-    <main className="p-2">
+    <main className="p-2 flex flex-col overflow-auto">
       <h2 className="text-xl">Clientes</h2>
 
       <ClientsTable />
+
+      <div className="flex flex-col h-fit">
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll</span>
+        <span>Testado Scroll 2</span>
+      </div>
     </main>
   )
 }

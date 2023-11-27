@@ -84,7 +84,7 @@ export function Drawer({
           </div>
         </div>
       </nav>
-      <div className="flex flex-1 overflow-hidden flex-col px-2 sm:px-0">
+      <div className="flex flex-1 flex-col px-2 sm:px-0 max-h-screen overflow-y-hidden">
         {children}
       </div>
     </div>
