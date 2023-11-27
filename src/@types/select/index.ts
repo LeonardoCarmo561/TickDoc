@@ -17,5 +17,6 @@ export interface SelectFormProps {
   multiple?: boolean
   closeOnChange?: boolean
   name: string
+  placeholder?: string
   options: SelectOption[]
 }

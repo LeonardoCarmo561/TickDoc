@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { ClientsTable } from '@/components/pages/customer-service/clients/table'
+import { ClientsTable } from '@/components/pages/ombudsman'
 
 export const metadata: Metadata = {
   title: 'Clientes · Ouvidoria · TickDoc',
@@ -12,48 +12,6 @@ export default function OmbudsmanClients() {
       <h2 className="text-xl">Clientes</h2>
 
       <ClientsTable />
-
-      <div className="flex flex-col h-fit">
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll</span>
-        <span>Testado Scroll 2</span>
-      </div>
     </main>
   )
 }

@@ -31,7 +31,7 @@ export function Select({ closeOnChange = true, ...props }: SelectFormProps) {
       <div className="flex px-2 items-center gap-2">
         {!props.multiple && selectedIcon}
         <span className="line-clamp-1 text-ellipsis">
-          {label || 'Selecione um módulo'}
+          {label || props.placeholder || 'Selecione um módulo'}
         </span>
       </div>
       <span className="px-2">

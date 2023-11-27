@@ -71,7 +71,7 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
 
     window.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        setIsOpen(true)
+        setIsOpen((oldValue) => (oldValue ? false : oldValue))
       }
     })
   }, [])
