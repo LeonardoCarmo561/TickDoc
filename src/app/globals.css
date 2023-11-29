@@ -40,3 +40,8 @@
   border-radius: 15px;
   border: none;
 }
+
+#modal-area > *::-webkit-scrollbar-track {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}

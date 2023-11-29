@@ -26,3 +26,19 @@ export async function getAllClients(
     return new Error((error as { message: string }).message)
   }
 }
+
+export async function getClientDetails(
+  id: number | string,
+): Promise<ClientData | Error> {
+  try {
+    const relativeUrl = `/V1/institutions/${id}/`
+
+    const { data } = await api.get(relativeUrl)
+
+    if (data) return data
+
+    return new Error('Erro ao carregar instância')
+  } catch (error) {
+    return new Error((error as { message: string }).message)
+  }
+}

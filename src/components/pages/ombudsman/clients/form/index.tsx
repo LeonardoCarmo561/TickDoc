@@ -7,19 +7,32 @@ import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { MdCancel, MdDelete, MdImage, MdSave } from 'react-icons/md'
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
+import {
+  MdAddCircle,
+  MdCancel,
+  MdDelete,
+  MdImage,
+  MdRemoveCircle,
+  MdSave,
+} from 'react-icons/md'
 
 export function ClientsForm(props: ClientsFormProps) {
   const [logoURL, setLogoURL] = useState<string>()
 
   const clientsForm = useForm<ClientsFormData>({
     resolver: zodResolver(clientsFormSchema),
+    defaultValues: {
+      ...props.clientData,
+      work_field: Number((props.clientData?.work_field as { id: number }).id),
+      sms_quantity: String(props.clientData?.sms_quantity),
+    },
   })
 
   const {
     reset,
     watch,
+    control,
     register,
     setValue,
     getValues,
@@ -27,8 +40,43 @@ export function ClientsForm(props: ClientsFormProps) {
     formState: { isSubmitting },
   } = clientsForm
 
+  const {
+    fields: fieldPhones,
+    append: appendPhones,
+    remove: removePhones,
+  } = useFieldArray({
+    control,
+    name: 'phones',
+  })
+
+  const {
+    fields: fieldCellphones,
+    append: appendCellphones,
+    remove: removeCellphones,
+  } = useFieldArray({
+    control,
+    name: 'cellphones',
+  })
+
+  function addNewPhone() {
+    appendPhones({ number: '', title: '' })
+  }
+
+  function removePhone(index: number) {
+    removePhones(index)
+  }
+
+  function addNewCellhone() {
+    appendCellphones({ number: '', title: '' })
+  }
+
+  function removeCellPhone(index: number) {
+    removeCellphones(index)
+  }
+
   const watchLogo = watch('logo')
   const watchModules = watch('modules')
+  const watchActivateSms = watch('activate_sms')
 
   function handleClose() {
     reset()
@@ -116,18 +164,20 @@ export function ClientsForm(props: ClientsFormProps) {
                   {...register('name')}
                   className="bg-inherit p-2 border border-zinc-500 rounded-xl w-full"
                 />
+                <Form.ErrorMessage field="name" />
               </div>
 
               <div className="col-span-12 sm:col-span-6 md:col-span-4">
                 <label htmlFor="cnpj" className="text-sm">
                   CNPJ *
                 </label>
-                <Form.Input
-                  name="cnpj"
+                <input
                   required
-                  className="w-full bg-inherit border border-zinc-500 rounded-xl p-2"
-                  placeholder="01.001.001/0001-00"
+                  id="cnpj"
                   maxLength={18}
+                  placeholder="01.001.001/0001-00"
+                  className="w-full bg-inherit border border-zinc-500 rounded-xl p-2"
+                  {...register('cnpj')}
                 />
                 <Form.ErrorMessage field="cnpj" />
               </div>
@@ -194,10 +244,11 @@ export function ClientsForm(props: ClientsFormProps) {
 
               <div
                 id="status-field"
-                className="col-span-12 flex items-center justify-center"
+                className="col-span-12 flex items-center justify-center gap-2"
               >
                 <label htmlFor="status">Status</label>
                 <input {...register('status')} type="checkbox" />
+                <Form.ErrorMessage field="status" />
               </div>
             </div>
 
@@ -218,6 +269,7 @@ export function ClientsForm(props: ClientsFormProps) {
                     className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
                     {...register('ombudsman_title')}
                   />
+                  <Form.ErrorMessage field="ombudsman_title" />
                 </div>
 
                 <div className="col-span-12 sm:col-span-6">
@@ -228,6 +280,7 @@ export function ClientsForm(props: ClientsFormProps) {
                     className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
                     {...register('ombudsman_email')}
                   />
+                  <Form.ErrorMessage field="ombudsman_email" />
                 </div>
 
                 <div className="col-span-12 sm:col-span-6 md:col-span-4">
@@ -238,6 +291,7 @@ export function ClientsForm(props: ClientsFormProps) {
                     className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
                     {...register('slug')}
                   />
+                  <Form.ErrorMessage field="slug" />
                 </div>
 
                 <div className="col-span-12 sm:col-span-6 md:col-span-4">
@@ -248,6 +302,7 @@ export function ClientsForm(props: ClientsFormProps) {
                     className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
                     {...register('contact_name')}
                   />
+                  <Form.ErrorMessage field="contact_name" />
                 </div>
 
                 <div className="col-span-12 md:col-span-4">
@@ -258,16 +313,228 @@ export function ClientsForm(props: ClientsFormProps) {
                     className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
                     {...register('working_hour')}
                   />
+                  <Form.ErrorMessage field="working_hour" />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4">
+                  <label htmlFor="ombudsman_plan">Tipo de Plano</label>
+                  <select
+                    id="ombudsan_plan"
+                    {...register('ombudsan_plan')}
+                    className="bg-inherit rounded-xl p-2 border border-zinc-500 w-full h-10"
+                  >
+                    <option value={1}>Gratuito</option>
+                    <option value={2}>Pago</option>
+                  </select>
+                  <Form.ErrorMessage field="ombudsman_plan" />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4">
+                  <label htmlFor="client_type">Tipo de Cliente</label>
+                  <select
+                    id="client_type"
+                    {...register('client_type')}
+                    className="bg-inherit rounded-xl p-2 border border-zinc-500 w-full h-10"
+                  >
+                    <option value={1}>Público</option>
+                    <option value={2}>Privado</option>
+                  </select>
+                  <Form.ErrorMessage field="client_type" />
                 </div>
 
                 <div className="col-span-12 md:col-span-4">
-                  <label htmlFor="working_hour">Horário de Funcionamento</label>
+                  <label htmlFor="ombudsman_expires_at">Expira em</label>
                   <input
-                    id="working_hour"
-                    placeholder="Segunda à Sexta - 08:00h às 17:00h"
-                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
-                    {...register('working_hour')}
+                    id="ombudsman_expires_at"
+                    type="date"
+                    className="px-2 h-10 w-full border border-zinc-500 rounded-xl"
+                    {...register('ombudsman_expires_at')}
                   />
+                  <Form.ErrorMessage field="ombudsman_expires_at" />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-12">
+                  <label htmlFor="separator_ov">Separador</label>
+                  <input
+                    className="p-2 w-full border border-zinc-500 rounded-xl"
+                    placeholder="PREFIXO-SEPARADOR-0123456789"
+                    {...register('separator_ov')}
+                  />
+                  <Form.ErrorMessage field="separator_ov" />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4 flex items-center justify-center gap-2">
+                  <label htmlFor="general_informations">
+                    Informações Gerais
+                  </label>
+                  <input
+                    id="general_informations"
+                    type="checkbox"
+                    {...register('general_informations')}
+                  />
+                  <Form.ErrorMessage field="general_information" />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4 flex items-center justify-center gap-2">
+                  <label htmlFor="anonymous">Manifestações Anônimas</label>
+                  <input
+                    id="anonymous"
+                    type="checkbox"
+                    {...register('anonymous')}
+                  />
+                  <Form.ErrorMessage field="anonymous" />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4 flex items-center justify-center gap-2">
+                  <label htmlFor="general_informations">
+                    Informações Gerais
+                  </label>
+                  <input
+                    id="general_informations"
+                    type="checkbox"
+                    {...register('general_informations')}
+                  />
+                  <Form.ErrorMessage field="general_information" />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 flex items-center justify-center gap-2">
+                  <label htmlFor="notify_sectors">Ouvidoria Automática</label>
+                  <input
+                    id="notify_sectors"
+                    type="checkbox"
+                    {...register('notify_sectors')}
+                  />
+                  <Form.ErrorMessage field="notify_sectors" />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 flex items-center justify-center gap-2">
+                  <label htmlFor="activate_sms">Ativar SMS</label>
+                  <input
+                    id="activate_sms"
+                    type="checkbox"
+                    {...register('activate_sms')}
+                  />
+                  <Form.ErrorMessage field="activate_sms" />
+                </div>
+
+                {watchActivateSms && (
+                  <div className="col-span-12">
+                    <label htmlFor="sms_quantity">Quantidade de SMS</label>
+                    <input
+                      id="sms_quantity"
+                      type="number"
+                      placeholder="500"
+                      className="p-2 w-full rounded-xl border border-zinc-500"
+                      {...register('sms_quantity')}
+                    />
+                    <Form.ErrorMessage field="sms_quantity" />
+                  </div>
+                )}
+
+                <div className="col-span-12 flex flex-col gap-2">
+                  <span className="flex items-center justify-between font-semibold">
+                    Telefones
+                    <button
+                      type="button"
+                      onClick={addNewPhone}
+                      className="text-sm p-2 bg-blue-500 rounded-xl text-white flex gap-1 items-center justify-center w-fit"
+                    >
+                      <MdAddCircle className="w-5 h-5" />
+                      Adicionar Telefone
+                    </button>
+                  </span>
+                  {fieldPhones.map((field, index) => (
+                    <div key={field.id} className="flex">
+                      <div className="w-full">
+                        <label htmlFor={`phones.${index}.title`}>Título</label>
+                        <input
+                          id={`phones.${index}.title`}
+                          className="p-2 border border-zinc-500 rounded-l-xl w-full"
+                          {...register(`phones.${index}.title`)}
+                          placeholder="Título"
+                          required={index > 0}
+                        />
+                        <Form.ErrorMessage field={`phones.${index}.title`} />
+                      </div>
+                      <div className="w-full">
+                        <label htmlFor={`phones.${index}.number`}>Número</label>
+                        <input
+                          id={`phones.${index}.number`}
+                          className="p-2 border border-zinc-500 rounded-r-xl w-full"
+                          {...register(`phones.${index}.number`)}
+                          placeholder="(85) 3333-3333"
+                          required={index > 0}
+                        />
+                        <Form.ErrorMessage field={`phones.${index}.number`} />
+                      </div>
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          className="text-red-500 ml-1 p-1 rounded-full focus:bg-zinc-500 focus:bg-opacity-30 hover:bg-zinc-500 hover:bg-opacity-30"
+                          onClick={() => removePhone(index)}
+                        >
+                          <MdRemoveCircle className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="col-span-12 flex flex-col gap-2">
+                  <span className="flex items-center justify-between font-semibold">
+                    Celulares
+                    <button
+                      type="button"
+                      onClick={addNewCellhone}
+                      className="text-sm p-2 bg-blue-500 rounded-xl text-white flex gap-1 items-center justify-center w-fit"
+                    >
+                      <MdAddCircle className="w-5 h-5" />
+                      Adicionar Celular
+                    </button>
+                  </span>
+                  {fieldCellphones.map((field, index) => (
+                    <div key={field.id} className="flex">
+                      <div className="w-full">
+                        <label htmlFor={`cellphones.${index}.title`}>
+                          Título
+                        </label>
+                        <input
+                          id={`phones.${index}.title`}
+                          className="p-2 border border-zinc-500 rounded-l-xl w-full"
+                          {...register(`cellphones.${index}.title`)}
+                          placeholder="Título"
+                          required={index > 0}
+                        />
+                        <Form.ErrorMessage
+                          field={`cellphones.${index}.title`}
+                        />
+                      </div>
+                      <div className="w-full">
+                        <label htmlFor={`cellphones.${index}.number`}>
+                          Número
+                        </label>
+                        <input
+                          id={`cellphones.${index}.number`}
+                          className="p-2 border border-zinc-500 rounded-r-xl w-full"
+                          {...register(`cellphones.${index}.number`)}
+                          placeholder="(85) 98888-3333"
+                          required={index > 0}
+                        />
+                        <Form.ErrorMessage
+                          field={`cellphones.${index}.number`}
+                        />
+                      </div>
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          className="text-red-500 ml-1 p-1 rounded-full focus:bg-zinc-500 focus:bg-opacity-30 hover:bg-zinc-500 hover:bg-opacity-30"
+                          onClick={() => removeCellPhone(index)}
+                        >
+                          <MdRemoveCircle className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

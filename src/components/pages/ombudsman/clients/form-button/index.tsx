@@ -3,8 +3,12 @@
 import { useState } from 'react'
 import { ClientsForm } from '../form'
 import { MdAdd } from 'react-icons/md'
+import { ClientData } from '@/@types'
 
-export function FormButton(props: { create: boolean }) {
+export function FormButton(props: {
+  create: boolean
+  clientData?: ClientData
+}) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -22,6 +26,7 @@ export function FormButton(props: { create: boolean }) {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         create={props.create}
+        clientData={props.clientData}
       />
     </>
   )

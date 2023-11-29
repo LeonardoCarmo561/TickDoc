@@ -11,7 +11,7 @@ export type ClientData = {
   cnpj: string
   prefix: string
   logo: string
-  work_field: string
+  work_field: string | { id: number; label: string }
   modules: string[]
   created_at: string
   updated_at: string
