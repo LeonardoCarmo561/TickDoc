@@ -2,56 +2,50 @@
 import { ClientsFormData, ClientsFormProps } from '@/@types/clients-form'
 import { Form } from '@/components'
 import { Modal } from '@/components/modal'
+import { Tooltip } from '@/components/tooltip'
 import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatToCNPJ } from 'brazilian-values'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import {
-  MdCancel,
-  MdConnectWithoutContact,
-  MdDelete,
-  MdImage,
-  MdSave,
-  MdSupportAgent,
-} from 'react-icons/md'
+import { MdCancel, MdDelete, MdImage, MdSave } from 'react-icons/md'
 
 export function ClientsForm(props: ClientsFormProps) {
   const [logoURL, setLogoURL] = useState<string>()
+
+  const clientsForm = useForm<ClientsFormData>({
+    resolver: zodResolver(clientsFormSchema),
+  })
+
+  const {
+    reset,
+    watch,
+    register,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = clientsForm
+
+  const watchLogo = watch('logo')
+  const watchModules = watch('modules')
 
   function handleClose() {
     reset()
     props.onClose?.()
   }
 
-  const clientsForm = useForm<ClientsFormData>({
-    resolver: zodResolver(clientsFormSchema),
-  })
-
   async function submit(formData: ClientsFormData) {
     console.log(formData)
   }
 
-  const {
-    reset,
-    watch,
-    register,
-    getValues,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = clientsForm
-
-  const watchLogo = watch('logo')
-
   useEffect(() => {
-    if (getValues().logo) {
-      setLogoURL(URL.createObjectURL(getValues().logo[0]))
-    }
-
-    return () => {
-      if (logoURL) URL.revokeObjectURL(logoURL)
+    if (getValues().logo && !logoURL && watchLogo) {
+      try {
+        setLogoURL(URL.createObjectURL(getValues().logo[0]))
+      } catch {
+        console.log('URL already created')
+      }
     }
   }, [getValues, logoURL, watchLogo])
 
@@ -63,155 +57,224 @@ export function ClientsForm(props: ClientsFormProps) {
         </h3>
 
         <FormProvider {...clientsForm}>
-          <form onSubmit={handleSubmit(submit)} className="p-2">
-            <div className="grid space-y-4">
-              {!watchLogo && (
-                <div className="flex justify-center items-center">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      document.getElementById('input-logo')?.click()
-                    }
-                    className="flex gap-2 items-center justify-center w-[300px] bg-zinc-500 text-white rounded-xl"
-                  >
-                    <MdImage className="text-9xl" />
-                    <span>Insira uma logo</span>
-                  </button>
-                </div>
-              )}
-              {watchLogo && logoURL && (
-                <div className="flex flex-col gap-1 justify-center items-center">
+          <form
+            onSubmit={handleSubmit(submit)}
+            className="p-2 divide-y divide-zinc-500"
+          >
+            <div className="grid grid-cols-12 space-y-4 space-x-2">
+              <h4 className="font-semibold text-lg col-span-12">Instituição</h4>
+              {watchLogo && logoURL ? (
+                <div className="col-span-12 flex flex-col items-center justify-center gap-2">
                   <Image
                     alt="Client Logo"
-                    src={logoURL}
+                    loading="lazy"
+                    src={URL.createObjectURL(getValues().logo[0])}
                     width={500}
                     height={500}
-                    className="max-w-[300px] h-auto"
+                    className="w-auto h-auto max-w-[300px]"
                   />
+                  <Tooltip title="Remover logo" position="rigth">
+                    <button
+                      className="hover:bg-zinc-500 hover:bg-opacity-30 focus:bg-zinc-500 focus:bg-opacity-30 rounded-full p-2"
+                      onClick={() => {
+                        setValue('logo', undefined)
+                      }}
+                    >
+                      <MdDelete className="w-6 h-6" />
+                    </button>
+                  </Tooltip>
+                </div>
+              ) : (
+                <div className="col-span-12 flex flex-col items-center justify-center">
                   <button
                     type="button"
-                    onClick={() => {
-                      setValue('logo', undefined)
-                    }}
-                    className="rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 p-1 transition-colors"
+                    className="flex items-center justify-center bg-blue-500 rounded-xl p-2 gap-2 text-xl text-white"
+                    onClick={() =>
+                      document.getElementById('logo-input')?.click()
+                    }
                   >
-                    <MdDelete className="w-7 h-7" />
+                    <MdImage />
+                    <span>Inserir logo</span>
                   </button>
+                  <input
+                    id="logo-input"
+                    type="file"
+                    hidden
+                    {...register('logo')}
+                  />
+                  <Form.ErrorMessage field="logo" />
                 </div>
               )}
-              <input type="file" id="input-logo" {...register('logo')} hidden />
-              <Form.ErrorMessage field="logo" />
-              <Form.Field>
-                <Form.Label htmlFor="name">Título</Form.Label>
-                <Form.Input
+
+              <div className="col-span-12">
+                <label htmlFor="name">Nome da Instituição *</label>
+                <input
+                  id="name"
                   required
-                  type="text"
-                  name="name"
-                  placeholder="Título da instituição"
-                  className="bg-inherit text-black dark:text-white p-2 rounded-xl outline-none border border-zinc-500 focus:border-2 focus:border-blue-500"
                   maxLength={50}
+                  placeholder="Rede Participar Brasil de Tecnologia"
+                  {...register('name')}
+                  className="bg-inherit p-2 border border-zinc-500 rounded-xl w-full"
                 />
-                <Form.ErrorMessage field="name" />
-              </Form.Field>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4">
-                <Form.Field>
-                  <Form.Label htmlFor="cnpj">CNPJ</Form.Label>
-                  <Form.Input
-                    required
-                    type="text"
-                    name="cnpj"
-                    mask={formatToCNPJ}
-                    placeholder="01.001.001/0001-01"
-                    className="bg-inherit text-black dark:text-white p-2 rounded-xl outline-none border border-zinc-500 focus:border-2 focus:border-blue-500"
-                    maxLength={18}
-                  />
-                  <Form.ErrorMessage field="cnpj" />
-                </Form.Field>
-
-                <Form.Field>
-                  <Form.Label htmlFor="prefix">Sigla</Form.Label>
-                  <Form.Input
-                    required
-                    type="text"
-                    name="prefix"
-                    mask={(value) => value.toUpperCase()}
-                    placeholder="SIGLA-OV-1234567890"
-                    className="bg-inherit text-black dark:text-white p-2 rounded-xl outline-none border border-zinc-500 focus:border-2 focus:border-blue-500"
-                    maxLength={10}
-                  />
-                  <Form.ErrorMessage field="prefix" />
-                </Form.Field>
-
-                <Form.Field className="flex flex-col gap-1 w-full px-2 sm:col-span-3 md:col-span-1">
-                  <Form.Label htmlFor="work_field">
-                    Ramo de Atividades
-                  </Form.Label>
-                  <Form.Input
-                    required
-                    type="text"
-                    name="work_field"
-                    placeholder="Empresa de Tecnologia"
-                    className="bg-inherit w-full text-black dark:text-white p-2 rounded-xl outline-none border border-zinc-500 focus:border-2 focus:border-blue-500"
-                  />
-                  <Form.ErrorMessage field="work_field" />
-                </Form.Field>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2">
-                <Form.Field>
-                  <Form.Label htmlFor="address">Endereço</Form.Label>
-                  <Form.Input
-                    type="text"
-                    name="address"
-                    placeholder="Av. Júlio Abreu, Nº 160 - Sala 308 - Fortaleza/CE"
-                    className="bg-inherit w-full text-black dark:text-white p-2 rounded-xl outline-none border border-zinc-500 focus:border-2 focus:border-blue-500"
-                  />
-                </Form.Field>
-
-                <Form.Field>
-                  <Form.Label htmlFor="modules">Módulos</Form.Label>
-                  <Form.Select
-                    closeOnChange={false}
-                    multiple
-                    name="modules"
-                    options={[
-                      {
-                        label: 'Ouvidoria',
-                        value: 'ombudsman',
-                        icon: <MdSupportAgent />,
-                      },
-                      {
-                        label: 'Com. Interna',
-                        value: 'ci',
-                        icon: <MdConnectWithoutContact />,
-                      },
-                    ]}
-                  />
-                </Form.Field>
+              <div className="col-span-12 sm:col-span-6 md:col-span-4">
+                <label htmlFor="cnpj" className="text-sm">
+                  CNPJ *
+                </label>
+                <Form.Input
+                  name="cnpj"
+                  required
+                  className="w-full bg-inherit border border-zinc-500 rounded-xl p-2"
+                  placeholder="01.001.001/0001-00"
+                  maxLength={18}
+                />
+                <Form.ErrorMessage field="cnpj" />
+              </div>
+              <div className="col-span-12 sm:col-span-6 md:col-span-4">
+                <label htmlFor="prefix" className="text-sm">
+                  Prefixo *
+                </label>
+                <input
+                  required
+                  id="prefix"
+                  className="w-full bg-inherit border border-zinc-500 rounded-xl p-2"
+                  placeholder="PREFIXO-OV-0123456789"
+                  {...register('prefix')}
+                />
+                <Form.ErrorMessage field="prefix" />
+              </div>
+              <div className="col-span-12 md:col-span-4">
+                <label htmlFor="work_field" className="text-sm">
+                  Ramo de atividade *
+                </label>
+                <select
+                  {...register('work_field')}
+                  required
+                  className="w-full p-2 h-10 border border-zinc-500 rounded-xl"
+                >
+                  <option value={1} className="">
+                    Tecnologia
+                  </option>
+                  <option value={1} className="">
+                    Sistema S
+                  </option>
+                  <option value={1} className="">
+                    Assembleia Legislativa
+                  </option>
+                </select>
+                <Form.ErrorMessage field="work_field" />
               </div>
 
-              <div className="flex flex-1 justify-center items-center">
-                <Form.Field className="flex items-center justify-center gap-1 w-full px-2">
-                  <Form.Input
-                    type="checkbox"
-                    name="status"
-                    className="block w-4 h-4"
-                  />
-                  <Form.Label htmlFor="status" className="text-xl">
-                    Status
-                  </Form.Label>
-                </Form.Field>
+              <div className="col-span-12 sm:col-span-6">
+                <label htmlFor="prefix" className="text-sm">
+                  Endereço
+                </label>
+                <input
+                  id="prefix"
+                  className="w-full bg-inherit border border-zinc-500 rounded-xl p-2"
+                  placeholder="Av. Júlio Abreu 160, Sala 308 - Fortaleza/CE"
+                  {...register('address')}
+                />
+                <Form.ErrorMessage field="address" />
+              </div>
+              <div className="col-span-12 sm:col-span-6">
+                <label htmlFor="modules">Módulos</label>
+                <select
+                  multiple
+                  {...register('modules')}
+                  id="modules"
+                  className="w-full p-2 rounded-xl border border-zinc-500"
+                >
+                  <option value="ombudsman">Ouvidoria</option>
+                  <option value="ci">Com. Interna</option>
+                </select>
+                <Form.ErrorMessage field="modules" />
+              </div>
+
+              <div
+                id="status-field"
+                className="col-span-12 flex items-center justify-center"
+              >
+                <label htmlFor="status">Status</label>
+                <input {...register('status')} type="checkbox" />
               </div>
             </div>
 
-            {watch('modues') && getValues('modues').includes('ombudsman') && (
-              <span>Tem Ouvidoria</span>
+            {watchModules && watchModules.includes('ombudsman') && (
+              <div className="grid grid-cols-12 space-y-4 space-x-2 my-2">
+                <h4 className="font-semibold text-lg col-span-12">
+                  Módulo de Ouvidoria
+                </h4>
+
+                <div className="col-span-12 sm:col-span-6">
+                  <label htmlFor="ombudsman_title">Título *</label>
+                  <input
+                    required={
+                      watchModules && watchModules.includes('ombudsman')
+                    }
+                    id="ombudsman_title"
+                    placeholder="Ouvidoria Parlamentar"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('ombudsman_title')}
+                  />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6">
+                  <label htmlFor="ombudsman_email">E-mail de Contato</label>
+                  <input
+                    id="ombudsman_email"
+                    placeholder="ouvidoria@exemplo.com"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('ombudsman_email')}
+                  />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4">
+                  <label htmlFor="slug">Slug</label>
+                  <input
+                    id="slug"
+                    placeholder="https://tickdoc.com.br/ouvidoria/slug/login"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('slug')}
+                  />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4">
+                  <label htmlFor="contact_name">Ouvidor Responsável</label>
+                  <input
+                    id="contact_name"
+                    placeholder="Jackson Pereira"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('contact_name')}
+                  />
+                </div>
+
+                <div className="col-span-12 md:col-span-4">
+                  <label htmlFor="working_hour">Horário de Funcionamento</label>
+                  <input
+                    id="working_hour"
+                    placeholder="Segunda à Sexta - 08:00h às 17:00h"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('working_hour')}
+                  />
+                </div>
+
+                <div className="col-span-12 md:col-span-4">
+                  <label htmlFor="working_hour">Horário de Funcionamento</label>
+                  <input
+                    id="working_hour"
+                    placeholder="Segunda à Sexta - 08:00h às 17:00h"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('working_hour')}
+                  />
+                </div>
+              </div>
             )}
 
             <div
               id="buttons"
-              className="flex flex-1 items-center justify-center gap-2 mt-2"
+              className="flex flex-1 items-center justify-center gap-2 pt-4"
             >
               <button
                 type="submit"
@@ -222,6 +285,7 @@ export function ClientsForm(props: ClientsFormProps) {
                 ENVIAR
               </button>
               <button
+                type="button"
                 onClick={handleClose}
                 className="p-2 flex text-blue-500 items-center justify-center rounded-xl border border-blue-500 gap-1 transition-colors hover:bg-blue-700 hover:bg-opacity-25"
               >
