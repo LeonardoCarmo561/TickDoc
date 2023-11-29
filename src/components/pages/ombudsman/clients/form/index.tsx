@@ -2,52 +2,52 @@
 import { ClientsFormData, ClientsFormProps } from '@/@types/clients-form'
 import { Form } from '@/components'
 import { Modal } from '@/components/modal'
+import { Tooltip } from '@/components/tooltip'
 import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatToCNPJ } from 'brazilian-values'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import {
-  MdCancel,
-  MdConnectWithoutContact,
-  MdImage,
-  MdSave,
-  MdSupportAgent,
-} from 'react-icons/md'
+import { MdCancel, MdDelete, MdImage, MdSave } from 'react-icons/md'
 
 export function ClientsForm(props: ClientsFormProps) {
   const [logoURL, setLogoURL] = useState<string>()
+
+  const clientsForm = useForm<ClientsFormData>({
+    resolver: zodResolver(clientsFormSchema),
+  })
+
+  const {
+    reset,
+    watch,
+    register,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = clientsForm
+
+  const watchLogo = watch('logo')
+  const watchModules = watch('modules')
 
   function handleClose() {
     reset()
     props.onClose?.()
   }
 
-  const clientsForm = useForm<ClientsFormData>({
-    resolver: zodResolver(clientsFormSchema),
-  })
-
   async function submit(formData: ClientsFormData) {
     console.log(formData)
   }
 
-  const {
-    reset,
-    register,
-    getValues,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = clientsForm
-
   useEffect(() => {
-    if (getValues().logo) {
-      setLogoURL(URL.createObjectURL(getValues().logo[0]))
+    if (getValues().logo && !logoURL && watchLogo) {
+      try {
+        setLogoURL(URL.createObjectURL(getValues().logo[0]))
+      } catch {
+        console.log('URL already created')
+      }
     }
-
-    return () => {
-      if (logoURL) URL.revokeObjectURL(logoURL)
-    }
-  }, [getValues, logoURL])
+  }, [getValues, logoURL, watchLogo])
 
   return (
     <Modal open={props.open} onClose={handleClose}>
@@ -57,30 +57,70 @@ export function ClientsForm(props: ClientsFormProps) {
         </h3>
 
         <FormProvider {...clientsForm}>
-          <form onSubmit={handleSubmit(submit)} className="p-2">
-            <div className="grid grid-cols-12 space-y-4">
-              <div className="col-span-12 flex items-center justify-center">
-                <button
-                  type="button"
-                  className="flex items-center justify-center bg-blue-500 rounded-xl p-2 gap-2 text-xl text-white"
-                  onClick={() => document.getElementById('logo-input')?.click()}
-                >
-                  <MdImage />
-                  <span>Inserir logo</span>
-                </button>
+          <form
+            onSubmit={handleSubmit(submit)}
+            className="p-2 divide-y divide-zinc-500"
+          >
+            <div className="grid grid-cols-12 space-y-4 space-x-2">
+              <h4 className="font-semibold text-lg col-span-12">Instituição</h4>
+              {watchLogo && logoURL ? (
+                <div className="col-span-12 flex flex-col items-center justify-center gap-2">
+                  <Image
+                    alt="Client Logo"
+                    loading="lazy"
+                    src={URL.createObjectURL(getValues().logo[0])}
+                    width={500}
+                    height={500}
+                    className="w-auto h-auto max-w-[300px]"
+                  />
+                  <Tooltip title="Remover logo" position="rigth">
+                    <button
+                      className="hover:bg-zinc-500 hover:bg-opacity-30 focus:bg-zinc-500 focus:bg-opacity-30 rounded-full p-2"
+                      onClick={() => {
+                        setValue('logo', undefined)
+                      }}
+                    >
+                      <MdDelete className="w-6 h-6" />
+                    </button>
+                  </Tooltip>
+                </div>
+              ) : (
+                <div className="col-span-12 flex flex-col items-center justify-center">
+                  <button
+                    type="button"
+                    className="flex items-center justify-center bg-blue-500 rounded-xl p-2 gap-2 text-xl text-white"
+                    onClick={() =>
+                      document.getElementById('logo-input')?.click()
+                    }
+                  >
+                    <MdImage />
+                    <span>Inserir logo</span>
+                  </button>
+                  <input
+                    id="logo-input"
+                    type="file"
+                    hidden
+                    {...register('logo')}
+                  />
+                  <Form.ErrorMessage field="logo" />
+                </div>
+              )}
+
+              <div className="col-span-12">
+                <label htmlFor="name">Nome da Instituição *</label>
                 <input
+                  id="name"
                   required
-                  id="logo-input"
-                  type="file"
-                  hidden
-                  {...register('logo')}
+                  maxLength={50}
+                  placeholder="Rede Participar Brasil de Tecnologia"
+                  {...register('name')}
+                  className="bg-inherit p-2 border border-zinc-500 rounded-xl w-full"
                 />
-                <Form.ErrorMessage field="logo" />
               </div>
 
               <div className="col-span-12 sm:col-span-6 md:col-span-4">
                 <label htmlFor="cnpj" className="text-sm">
-                  CNPJ
+                  CNPJ *
                 </label>
                 <Form.Input
                   name="cnpj"
@@ -88,15 +128,15 @@ export function ClientsForm(props: ClientsFormProps) {
                   className="w-full bg-inherit border border-zinc-500 rounded-xl p-2"
                   placeholder="01.001.001/0001-00"
                   maxLength={18}
-                  mask={(e) => formatToCNPJ(e || '')}
                 />
                 <Form.ErrorMessage field="cnpj" />
               </div>
               <div className="col-span-12 sm:col-span-6 md:col-span-4">
                 <label htmlFor="prefix" className="text-sm">
-                  Prefixo
+                  Prefixo *
                 </label>
                 <input
+                  required
                   id="prefix"
                   className="w-full bg-inherit border border-zinc-500 rounded-xl p-2"
                   placeholder="PREFIXO-OV-0123456789"
@@ -105,27 +145,24 @@ export function ClientsForm(props: ClientsFormProps) {
                 <Form.ErrorMessage field="prefix" />
               </div>
               <div className="col-span-12 md:col-span-4">
-                <label htmlFor="prefix" className="text-sm">
-                  Ramo de atividade
+                <label htmlFor="work_field" className="text-sm">
+                  Ramo de atividade *
                 </label>
-                <Form.Select
-                  name="work_field"
-                  placeholder="Selecione um ramo de atividade"
-                  options={[
-                    {
-                      label: 'Tecnologia',
-                      value: 1,
-                    },
-                    {
-                      label: 'Sistema S',
-                      value: 2,
-                    },
-                    {
-                      label: 'Assembleia Legislativa',
-                      value: 3,
-                    },
-                  ]}
-                />
+                <select
+                  {...register('work_field')}
+                  required
+                  className="w-full p-2 h-10 border border-zinc-500 rounded-xl"
+                >
+                  <option value={1} className="">
+                    Tecnologia
+                  </option>
+                  <option value={1} className="">
+                    Sistema S
+                  </option>
+                  <option value={1} className="">
+                    Assembleia Legislativa
+                  </option>
+                </select>
                 <Form.ErrorMessage field="work_field" />
               </div>
 
@@ -142,23 +179,16 @@ export function ClientsForm(props: ClientsFormProps) {
                 <Form.ErrorMessage field="address" />
               </div>
               <div className="col-span-12 sm:col-span-6">
-                <Form.Select
-                  closeOnChange={false}
+                <label htmlFor="modules">Módulos</label>
+                <select
                   multiple
-                  name="modules"
-                  options={[
-                    {
-                      label: 'Ouvidoria',
-                      value: 'ombudsman',
-                      icon: <MdSupportAgent />,
-                    },
-                    {
-                      label: 'Com. Interna',
-                      value: 'ci',
-                      icon: <MdConnectWithoutContact />,
-                    },
-                  ]}
-                />
+                  {...register('modules')}
+                  id="modules"
+                  className="w-full p-2 rounded-xl border border-zinc-500"
+                >
+                  <option value="ombudsman">Ouvidoria</option>
+                  <option value="ci">Com. Interna</option>
+                </select>
                 <Form.ErrorMessage field="modules" />
               </div>
 
@@ -166,13 +196,85 @@ export function ClientsForm(props: ClientsFormProps) {
                 id="status-field"
                 className="col-span-12 flex items-center justify-center"
               >
-                <span className="text-center">Aqui é o status</span>
+                <label htmlFor="status">Status</label>
+                <input {...register('status')} type="checkbox" />
               </div>
             </div>
 
+            {watchModules && watchModules.includes('ombudsman') && (
+              <div className="grid grid-cols-12 space-y-4 space-x-2 my-2">
+                <h4 className="font-semibold text-lg col-span-12">
+                  Módulo de Ouvidoria
+                </h4>
+
+                <div className="col-span-12 sm:col-span-6">
+                  <label htmlFor="ombudsman_title">Título *</label>
+                  <input
+                    required={
+                      watchModules && watchModules.includes('ombudsman')
+                    }
+                    id="ombudsman_title"
+                    placeholder="Ouvidoria Parlamentar"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('ombudsman_title')}
+                  />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6">
+                  <label htmlFor="ombudsman_email">E-mail de Contato</label>
+                  <input
+                    id="ombudsman_email"
+                    placeholder="ouvidoria@exemplo.com"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('ombudsman_email')}
+                  />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4">
+                  <label htmlFor="slug">Slug</label>
+                  <input
+                    id="slug"
+                    placeholder="https://tickdoc.com.br/ouvidoria/slug/login"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('slug')}
+                  />
+                </div>
+
+                <div className="col-span-12 sm:col-span-6 md:col-span-4">
+                  <label htmlFor="contact_name">Ouvidor Responsável</label>
+                  <input
+                    id="contact_name"
+                    placeholder="Jackson Pereira"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('contact_name')}
+                  />
+                </div>
+
+                <div className="col-span-12 md:col-span-4">
+                  <label htmlFor="working_hour">Horário de Funcionamento</label>
+                  <input
+                    id="working_hour"
+                    placeholder="Segunda à Sexta - 08:00h às 17:00h"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('working_hour')}
+                  />
+                </div>
+
+                <div className="col-span-12 md:col-span-4">
+                  <label htmlFor="working_hour">Horário de Funcionamento</label>
+                  <input
+                    id="working_hour"
+                    placeholder="Segunda à Sexta - 08:00h às 17:00h"
+                    className="p-2 bg-inherit border border-zinc-500 rounded-xl w-full"
+                    {...register('working_hour')}
+                  />
+                </div>
+              </div>
+            )}
+
             <div
               id="buttons"
-              className="flex flex-1 items-center justify-center gap-2 mt-2"
+              className="flex flex-1 items-center justify-center gap-2 pt-4"
             >
               <button
                 type="submit"
@@ -183,6 +285,7 @@ export function ClientsForm(props: ClientsFormProps) {
                 ENVIAR
               </button>
               <button
+                type="button"
                 onClick={handleClose}
                 className="p-2 flex text-blue-500 items-center justify-center rounded-xl border border-blue-500 gap-1 transition-colors hover:bg-blue-700 hover:bg-opacity-25"
               >

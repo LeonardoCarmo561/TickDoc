@@ -12,7 +12,7 @@ const ACCEPTED_IMAGE_TYPES = [
 export const clientsFormSchema = z.object({
   logo: z
     .any()
-    .refine((file) => file, 'A logo é obrigatória')
+    .refine((file) => file[0], 'A logo é obrigatória')
     .refine(
       (file) => file[0]?.size <= MAX_FILE_SIZE,
       'Tamanho máximo permitido: 5MB.',
@@ -20,7 +20,8 @@ export const clientsFormSchema = z.object({
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file[0]?.type),
       'Apenas imagens no formato .jpg, .jpeg, .png e .webp são suportadas',
-    ),
+    )
+    .transform((files) => files[0]),
   name: z
     .string({ description: 'Insira o título' })
     .min(3, 'Insira pelo menos 3 caracteres')
@@ -33,10 +34,18 @@ export const clientsFormSchema = z.object({
     .string({ description: 'Insira o prefixo' })
     .min(3, 'Insira pelo menos 3 caracteres')
     .max(10, 'Limite de 10 caracteres')
-    .transform((cnpj) => cnpj.toUpperCase()),
+    .transform((value) => value.toUpperCase()),
   work_field: z
-    .number({ description: 'Insira o ramo de atividade' })
-    .positive('Não pode ser um número negativo'),
+    .string({ description: 'Insira o ramo de atividade' })
+    .refine((value) => !isNaN(Number(value)), 'Insira uma opção válida')
+    .transform((value) => Number(value)),
   address: z.string().max(255, 'Limite de 255 caracteres').optional(),
-  modues: z.array(z.string()),
+  modules: z.array(z.string()),
+  status: z.boolean().default(false),
+
+  ombudsman_title: z.string().optional(),
+  ombudsman_email: z.string().email().max(255).min(5).optional(),
+  slug: z.string().max(10).optional(),
+  contact_name: z.string().optional(),
+  working_hour: z.string().optional(),
 })

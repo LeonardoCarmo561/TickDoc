@@ -14,29 +14,39 @@ export function Select({ closeOnChange = true, ...props }: SelectFormProps) {
   const { register } = useFormContext()
 
   return (
-    <div
-      id="select-box"
-      className="z-10 border bg-inherit relative border-zinc-500 w-full py-2 flex items-center justify-between rounded-xl"
-    >
-      <input
-        id={props.name}
-        {...register(props.name)}
-        value={value}
-        checked={isOpen}
-        onChange={() => setIsOpen((oldValue) => !oldValue)}
-        type="checkbox"
-        tabIndex={0}
-        className="[all:unset] [inset:0] [position:absolute] focus:rounded-xl z-20 [cursor:pointer] focus:outline focus:outline-blue-500"
-      />
-      <div className="flex px-2 items-center gap-2">
-        {!props.multiple && selectedIcon}
-        <span className="line-clamp-1 text-ellipsis">
-          {label || props.placeholder || 'Selecione um módulo'}
+    <div className="relative">
+      <div
+        id="select-box"
+        className="z-10 border bg-inherit border-zinc-500 w-full py-2 flex items-center justify-between rounded-xl"
+      >
+        <input
+          id={props.name}
+          {...register(props.name)}
+          value={value}
+          checked={isOpen}
+          onChange={() => setIsOpen((oldValue) => !oldValue)}
+          type="checkbox"
+          tabIndex={0}
+          className="[all:unset] [inset:0] [position:absolute] focus:rounded-xl z-20 [cursor:pointer] focus:outline focus:outline-blue-500"
+        />
+        <div className="flex px-2 items-center gap-2">
+          {!props.multiple && selectedIcon}
+          <span className="line-clamp-1 text-ellipsis">
+            {label || props.placeholder || 'Selecione um módulo'}
+          </span>
+        </div>
+        <span className="px-2">
+          {isOpen ? <MdExpandLess /> : <MdExpandMore />}
         </span>
+
+        {isOpen && (
+          <div
+            className="fixed inset-0 z-0"
+            aria-hidden
+            onClick={() => setIsOpen(false)}
+          />
+        )}
       </div>
-      <span className="px-2">
-        {isOpen ? <MdExpandLess /> : <MdExpandMore />}
-      </span>
 
       <ul
         className={`bg-inherit group/ul peer/ul shadow-xl z-20 border border-zinc-500 rounded-xl w-full top-full mt-2 bg-white dark:bg-zinc-950 absolute ${
@@ -111,13 +121,6 @@ export function Select({ closeOnChange = true, ...props }: SelectFormProps) {
           </li>
         ))}
       </ul>
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-0"
-          aria-hidden
-          onClick={() => setIsOpen(false)}
-        />
-      )}
     </div>
   )
 }
