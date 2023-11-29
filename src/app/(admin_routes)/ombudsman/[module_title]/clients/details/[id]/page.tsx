@@ -1,7 +1,10 @@
 'use client'
 import { ClientData } from '@/@types'
 import { DetailsPage } from '@/@types/params'
-import { FormButton } from '@/components/pages/ombudsman/clients/form-button'
+import {
+  CreateClientButton,
+  EditClientButton,
+} from '@/components/pages/ombudsman/clients/form-button'
 import { getClientDetails } from '@/services/clients-services'
 import { useEffect, useState } from 'react'
 
@@ -30,7 +33,8 @@ export default function ClientDetailsPage({ params }: { params: DetailsPage }) {
 
   return (
     <main>
-      {clientData && <FormButton create={false} clientData={clientData} />}
+      <CreateClientButton />
+      {clientData && <EditClientButton clientData={clientData} />}
       {isLoading && <span>Carregando...</span>}
 
       <span className=" ">{JSON.stringify(clientData)}</span>

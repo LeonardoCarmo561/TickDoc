@@ -2,31 +2,24 @@
 import { ClientsFormData, ClientsFormProps } from '@/@types/clients-form'
 import { Form } from '@/components'
 import { Modal } from '@/components/modal'
-import { Tooltip } from '@/components/tooltip'
+import { updateClient } from '@/services/clients-services'
 import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
-import {
-  MdAddCircle,
-  MdCancel,
-  MdDelete,
-  MdImage,
-  MdRemoveCircle,
-  MdSave,
-} from 'react-icons/md'
+import { MdAddCircle, MdCancel, MdRemoveCircle, MdSave } from 'react-icons/md'
 
 export function ClientsForm(props: ClientsFormProps) {
-  const [logoURL, setLogoURL] = useState<string>()
-
   const clientsForm = useForm<ClientsFormData>({
     resolver: zodResolver(clientsFormSchema),
-    defaultValues: {
-      ...props.clientData,
-      work_field: Number((props.clientData?.work_field as { id: number }).id),
-      sms_quantity: String(props.clientData?.sms_quantity),
-    },
+    defaultValues: props.create
+      ? undefined
+      : {
+          ...props.clientData,
+          work_field: Number(
+            (props.clientData?.work_field as { id: number }).id,
+          ),
+          sms_quantity: String(props.clientData?.sms_quantity),
+        },
   })
 
   const {
@@ -34,8 +27,6 @@ export function ClientsForm(props: ClientsFormProps) {
     watch,
     control,
     register,
-    setValue,
-    getValues,
     handleSubmit,
     formState: { isSubmitting },
   } = clientsForm
@@ -74,7 +65,7 @@ export function ClientsForm(props: ClientsFormProps) {
     removeCellphones(index)
   }
 
-  const watchLogo = watch('logo')
+  // const watchLogo = watch('logo')
   const watchModules = watch('modules')
   const watchActivateSms = watch('activate_sms')
 
@@ -84,18 +75,16 @@ export function ClientsForm(props: ClientsFormProps) {
   }
 
   async function submit(formData: ClientsFormData) {
-    console.log(formData)
-  }
-
-  useEffect(() => {
-    if (getValues().logo && !logoURL && watchLogo) {
-      try {
-        setLogoURL(URL.createObjectURL(getValues().logo[0]))
-      } catch {
-        console.log('URL already created')
-      }
+    if (props.clientData) {
+      updateClient(props.clientData.id, formData).then((result) => {
+        if (result instanceof Error) {
+          alert(result.message)
+        } else {
+          alert('Deu tudo certo')
+        }
+      })
     }
-  }, [getValues, logoURL, watchLogo])
+  }
 
   return (
     <Modal open={props.open} onClose={handleClose}>
@@ -111,7 +100,7 @@ export function ClientsForm(props: ClientsFormProps) {
           >
             <div className="grid grid-cols-12 space-y-4 space-x-2">
               <h4 className="font-semibold text-lg col-span-12">Instituição</h4>
-              {watchLogo && logoURL ? (
+              {/* {watchLogo && logoURL ? (
                 <div className="col-span-12 flex flex-col items-center justify-center gap-2">
                   <Image
                     alt="Client Logo"
@@ -152,7 +141,7 @@ export function ClientsForm(props: ClientsFormProps) {
                   />
                   <Form.ErrorMessage field="logo" />
                 </div>
-              )}
+              )} */}
 
               <div className="col-span-12">
                 <label htmlFor="name">Nome da Instituição *</label>

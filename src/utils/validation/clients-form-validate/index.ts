@@ -1,27 +1,15 @@
 import { isCNPJ } from 'brazilian-values'
 import { z } from 'zod'
 
-const MAX_FILE_SIZE = 5242880
-const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-]
+// const MAX_FILE_SIZE = 5242880
+// const ACCEPTED_IMAGE_TYPES = [
+//   'image/jpeg',
+//   'image/jpg',
+//   'image/png',
+//   'image/webp',
+// ]
 
 export const clientsFormSchema = z.object({
-  logo: z
-    .any()
-    .refine((file) => file[0], 'A logo é obrigatória')
-    .refine(
-      (file) => file[0]?.size <= MAX_FILE_SIZE,
-      'Tamanho máximo permitido: 5MB.',
-    )
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file[0]?.type),
-      'Apenas imagens no formato .jpg, .jpeg, .png e .webp são suportadas',
-    )
-    .transform((files) => files[0]),
   name: z
     .string({ description: 'Insira o título' })
     .min(3, 'Insira pelo menos 3 caracteres')
@@ -72,16 +60,20 @@ export const clientsFormSchema = z.object({
   notify_sectors: z.boolean().default(false),
   activate_sms: z.boolean().default(false),
   sms_quantity: z.string().optional(),
-  phones: z.array(
-    z.object({
-      title: z.string().min(2),
-      number: z.string(),
-    }),
-  ),
-  cellphones: z.array(
-    z.object({
-      title: z.string().min(2),
-      number: z.string(),
-    }),
-  ),
+  phones: z
+    .array(
+      z.object({
+        title: z.string().min(2),
+        number: z.string(),
+      }),
+    )
+    .default([]),
+  cellphones: z
+    .array(
+      z.object({
+        title: z.string().min(2),
+        number: z.string(),
+      }),
+    )
+    .default([]),
 })

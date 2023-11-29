@@ -1,14 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { ClientsForm } from '../form'
-import { MdAdd } from 'react-icons/md'
+import { ClientsForm } from '../../form'
+import { MdEdit } from 'react-icons/md'
 import { ClientData } from '@/@types'
 
-export function FormButton(props: {
-  create: boolean
-  clientData?: ClientData
-}) {
+export function EditClientButton({ clientData }: { clientData: ClientData }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -18,15 +15,15 @@ export function FormButton(props: {
         className="text-xs flex text-ellipsis flex-nowrap w-auto flex-row gap-1 items-center justify-between p-2 bg-blue-500 text-white font-bold rounded-xl hover:shadow-xl transition-all"
       >
         <span className="text-xl">
-          <MdAdd />
+          <MdEdit />
         </span>
-        NOVO
+        EDITAR
       </button>
       <ClientsForm
         open={isOpen}
+        create={false}
+        clientData={clientData}
         onClose={() => setIsOpen(false)}
-        create={props.create}
-        clientData={props.clientData}
       />
     </>
   )

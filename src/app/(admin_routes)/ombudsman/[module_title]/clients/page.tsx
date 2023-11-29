@@ -6,12 +6,17 @@ export const metadata: Metadata = {
   description: 'Página de clientes cadastrados no sistema TickDoc',
 }
 
-export default function OmbudsmanClients() {
+export default function OmbudsmanClients({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] }
+}) {
+  console.log(searchParams)
   return (
     <main className="p-2 flex flex-col overflow-auto">
       <h2 className="text-xl">Clientes</h2>
 
-      <ClientsTable />
+      <ClientsTable queryParams={searchParams} />
     </main>
   )
 }
