@@ -5,8 +5,14 @@ import { Modal } from '@/components/modal'
 import { updateClient } from '@/services/clients-services'
 import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
+import {
+  Controller,
+  FormProvider,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form'
 import { MdAddCircle, MdCancel, MdRemoveCircle, MdSave } from 'react-icons/md'
+import { AutocompleteWorkfields } from './autocomplete-workfields'
 
 export function ClientsForm(props: ClientsFormProps) {
   const clientsForm = useForm<ClientsFormData>({
@@ -76,7 +82,8 @@ export function ClientsForm(props: ClientsFormProps) {
   }
 
   async function submit(formData: ClientsFormData) {
-    if (props.clientData) {
+    if (props.clientData && !props.create) {
+      console.log(formData)
       updateClient(props.clientData.id, formData).then((result) => {
         if (result instanceof Error) {
           alert(result.message)
@@ -143,25 +150,20 @@ export function ClientsForm(props: ClientsFormProps) {
                 <Form.ErrorMessage field="prefix" />
               </div>
               <div className="col-span-12 md:col-span-4">
-                <label htmlFor="work_field" className="text-sm">
-                  Ramo de atividade *
-                </label>
-                <select
-                  {...register('work_field')}
-                  required
-                  className="w-full p-2 h-10 border border-zinc-500 rounded-xl"
-                >
-                  <option value={1} className="">
-                    Tecnologia
-                  </option>
-                  <option value={1} className="">
-                    Sistema S
-                  </option>
-                  <option value={1} className="">
-                    Assembleia Legislativa
-                  </option>
-                </select>
-                <Form.ErrorMessage field="work_field" />
+                <Controller
+                  name="work_field"
+                  control={control}
+                  defaultValue={
+                    !props.create &&
+                    props.clientData &&
+                    props.clientData.work_field
+                      ? (props.clientData.work_field as { id: number }).id
+                      : undefined
+                  }
+                  render={({ field: { onChange, value } }) => (
+                    <AutocompleteWorkfields onChange={onChange} value={value} />
+                  )}
+                />
               </div>
 
               <div className="col-span-12 sm:col-span-6">
@@ -182,7 +184,7 @@ export function ClientsForm(props: ClientsFormProps) {
                   multiple
                   {...register('modules')}
                   id="modules"
-                  className="w-full p-2 rounded-xl border border-zinc-500"
+                  className="w-full p-2 rounded-xl border border-zinc-500 bg-inherit"
                 >
                   <option value="ombudsman">Ouvidoria</option>
                   <option value="ci">Com. Interna</option>
