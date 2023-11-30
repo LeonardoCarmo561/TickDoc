@@ -13,6 +13,7 @@ import {
 } from 'react-hook-form'
 import { MdAddCircle, MdCancel, MdRemoveCircle, MdSave } from 'react-icons/md'
 import { AutocompleteWorkfields } from './autocomplete-workfields'
+import { SelectModules } from './select-modules'
 
 export function ClientsForm(props: ClientsFormProps) {
   const clientsForm = useForm<ClientsFormData>({
@@ -167,7 +168,7 @@ export function ClientsForm(props: ClientsFormProps) {
               </div>
 
               <div className="col-span-12 sm:col-span-6">
-                <label htmlFor="prefix" className="text-sm">
+                <label htmlFor="address" className="text-sm">
                   Endereço
                 </label>
                 <input
@@ -179,16 +180,18 @@ export function ClientsForm(props: ClientsFormProps) {
                 <Form.ErrorMessage field="address" />
               </div>
               <div className="col-span-12 sm:col-span-6">
-                <label htmlFor="modules">Módulos</label>
-                <select
-                  multiple
-                  {...register('modules')}
-                  id="modules"
-                  className="w-full p-2 rounded-xl border border-zinc-500 bg-inherit"
-                >
-                  <option value="ombudsman">Ouvidoria</option>
-                  <option value="ci">Com. Interna</option>
-                </select>
+                <Controller
+                  name="modules"
+                  control={control}
+                  defaultValue={
+                    !props.create && props.clientData
+                      ? props.clientData.modules
+                      : []
+                  }
+                  render={({ field: { onChange, value } }) => (
+                    <SelectModules value={value} onChange={onChange} />
+                  )}
+                />
                 <Form.ErrorMessage field="modules" />
               </div>
 
@@ -197,7 +200,7 @@ export function ClientsForm(props: ClientsFormProps) {
                 className="col-span-12 flex items-center justify-center gap-2"
               >
                 <label htmlFor="status">Status</label>
-                <input {...register('status')} type="checkbox" />
+                <input id="status" {...register('status')} type="checkbox" />
                 <Form.ErrorMessage field="status" />
               </div>
             </div>
@@ -396,7 +399,11 @@ export function ClientsForm(props: ClientsFormProps) {
                   {fieldPhones.map((field, index) => (
                     <div key={field.id} className="flex">
                       <div className="w-full">
-                        <label htmlFor={`phones.${index}.title`}>Título</label>
+                        {index === 0 && (
+                          <label htmlFor={`phones.${index}.title`}>
+                            Título
+                          </label>
+                        )}
                         <input
                           id={`phones.${index}.title`}
                           className="p-2 border border-zinc-500 rounded-l-xl w-full"
@@ -407,7 +414,11 @@ export function ClientsForm(props: ClientsFormProps) {
                         <Form.ErrorMessage field={`phones.${index}.title`} />
                       </div>
                       <div className="w-full">
-                        <label htmlFor={`phones.${index}.number`}>Número</label>
+                        {index === 0 && (
+                          <label htmlFor={`phones.${index}.number`}>
+                            Número
+                          </label>
+                        )}
                         <input
                           id={`phones.${index}.number`}
                           className="p-2 border border-zinc-500 rounded-r-xl w-full"
@@ -417,15 +428,13 @@ export function ClientsForm(props: ClientsFormProps) {
                         />
                         <Form.ErrorMessage field={`phones.${index}.number`} />
                       </div>
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          className="text-red-500 ml-1 p-1 rounded-full focus:bg-zinc-500 focus:bg-opacity-30 hover:bg-zinc-500 hover:bg-opacity-30"
-                          onClick={() => removePhone(index)}
-                        >
-                          <MdRemoveCircle className="w-5 h-5" />
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        className="text-red-500 ml-1 p-1 rounded-full focus:bg-zinc-500 focus:bg-opacity-30 hover:bg-zinc-500 hover:bg-opacity-30"
+                        onClick={() => removePhone(index)}
+                      >
+                        <MdRemoveCircle className="w-5 h-5" />
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -445,9 +454,11 @@ export function ClientsForm(props: ClientsFormProps) {
                   {fieldCellphones.map((field, index) => (
                     <div key={field.id} className="flex">
                       <div className="w-full">
-                        <label htmlFor={`cellphones.${index}.title`}>
-                          Título
-                        </label>
+                        {index === 0 && (
+                          <label htmlFor={`cellphones.${index}.title`}>
+                            Título
+                          </label>
+                        )}
                         <input
                           id={`phones.${index}.title`}
                           className="p-2 border border-zinc-500 rounded-l-xl w-full"
@@ -460,9 +471,11 @@ export function ClientsForm(props: ClientsFormProps) {
                         />
                       </div>
                       <div className="w-full">
-                        <label htmlFor={`cellphones.${index}.number`}>
-                          Número
-                        </label>
+                        {index === 0 && (
+                          <label htmlFor={`cellphones.${index}.number`}>
+                            Número
+                          </label>
+                        )}
                         <input
                           id={`cellphones.${index}.number`}
                           className="p-2 border border-zinc-500 rounded-r-xl w-full"
@@ -474,15 +487,13 @@ export function ClientsForm(props: ClientsFormProps) {
                           field={`cellphones.${index}.number`}
                         />
                       </div>
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          className="text-red-500 ml-1 p-1 rounded-full focus:bg-zinc-500 focus:bg-opacity-30 hover:bg-zinc-500 hover:bg-opacity-30"
-                          onClick={() => removeCellPhone(index)}
-                        >
-                          <MdRemoveCircle className="w-5 h-5" />
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        className="text-red-500 ml-1 p-1 rounded-full focus:bg-zinc-500 focus:bg-opacity-30 hover:bg-zinc-500 hover:bg-opacity-30"
+                        onClick={() => removeCellPhone(index)}
+                      >
+                        <MdRemoveCircle className="w-5 h-5" />
+                      </button>
                     </div>
                   ))}
                 </div>
