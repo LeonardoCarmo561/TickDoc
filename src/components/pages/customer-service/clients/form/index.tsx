@@ -2,17 +2,12 @@
 import { ClientsFormData, ClientsFormProps } from '@/@types/clients-form'
 import { Form } from '@/components'
 import { Modal } from '@/components/modal'
-import { Tooltip } from '@/components/tooltip'
 import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { MdCancel, MdDelete, MdImage, MdSave } from 'react-icons/md'
+import { MdCancel, MdSave } from 'react-icons/md'
 
 export function ClientsForm(props: ClientsFormProps) {
-  const [logoURL, setLogoURL] = useState<string>()
-
   const clientsForm = useForm<ClientsFormData>({
     resolver: zodResolver(clientsFormSchema),
   })
@@ -21,13 +16,10 @@ export function ClientsForm(props: ClientsFormProps) {
     reset,
     watch,
     register,
-    setValue,
-    getValues,
     handleSubmit,
     formState: { isSubmitting },
   } = clientsForm
 
-  const watchLogo = watch('logo')
   const watchModules = watch('modules')
 
   function handleClose() {
@@ -38,16 +30,6 @@ export function ClientsForm(props: ClientsFormProps) {
   async function submit(formData: ClientsFormData) {
     console.log(formData)
   }
-
-  useEffect(() => {
-    if (getValues().logo && !logoURL && watchLogo) {
-      try {
-        setLogoURL(URL.createObjectURL(getValues().logo[0]))
-      } catch {
-        console.log('URL already created')
-      }
-    }
-  }, [getValues, logoURL, watchLogo])
 
   return (
     <Modal open={props.open} onClose={handleClose}>
@@ -63,48 +45,6 @@ export function ClientsForm(props: ClientsFormProps) {
           >
             <div className="grid grid-cols-12 space-y-4 space-x-2">
               <h4 className="font-semibold text-lg col-span-12">Instituição</h4>
-              {watchLogo && logoURL ? (
-                <div className="col-span-12 flex flex-col items-center justify-center gap-2">
-                  <Image
-                    alt="Client Logo"
-                    loading="lazy"
-                    src={URL.createObjectURL(getValues().logo[0])}
-                    width={500}
-                    height={500}
-                    className="w-auto h-auto max-w-[300px]"
-                  />
-                  <Tooltip title="Remover logo" position="rigth">
-                    <button
-                      className="hover:bg-zinc-500 hover:bg-opacity-30 focus:bg-zinc-500 focus:bg-opacity-30 rounded-full p-2"
-                      onClick={() => {
-                        setValue('logo', undefined)
-                      }}
-                    >
-                      <MdDelete className="w-6 h-6" />
-                    </button>
-                  </Tooltip>
-                </div>
-              ) : (
-                <div className="col-span-12 flex flex-col items-center justify-center">
-                  <button
-                    type="button"
-                    className="flex items-center justify-center bg-blue-500 rounded-xl p-2 gap-2 text-xl text-white"
-                    onClick={() =>
-                      document.getElementById('logo-input')?.click()
-                    }
-                  >
-                    <MdImage />
-                    <span>Inserir logo</span>
-                  </button>
-                  <input
-                    id="logo-input"
-                    type="file"
-                    hidden
-                    {...register('logo')}
-                  />
-                  <Form.ErrorMessage field="logo" />
-                </div>
-              )}
 
               <div className="col-span-12">
                 <label htmlFor="name">Nome da Instituição *</label>
