@@ -13,13 +13,15 @@ export function ClientsForm(props: ClientsFormProps) {
     resolver: zodResolver(clientsFormSchema),
     defaultValues: props.create
       ? undefined
-      : {
+      : props.clientData && props.clientData.work_field
+      ? {
           ...props.clientData,
           work_field: Number(
             (props.clientData?.work_field as { id: number }).id,
           ),
           sms_quantity: String(props.clientData?.sms_quantity),
-        },
+        }
+      : undefined,
   })
 
   const {
@@ -65,7 +67,6 @@ export function ClientsForm(props: ClientsFormProps) {
     removeCellphones(index)
   }
 
-  // const watchLogo = watch('logo')
   const watchModules = watch('modules')
   const watchActivateSms = watch('activate_sms')
 
@@ -100,48 +101,6 @@ export function ClientsForm(props: ClientsFormProps) {
           >
             <div className="grid grid-cols-12 space-y-4 space-x-2">
               <h4 className="font-semibold text-lg col-span-12">Instituição</h4>
-              {/* {watchLogo && logoURL ? (
-                <div className="col-span-12 flex flex-col items-center justify-center gap-2">
-                  <Image
-                    alt="Client Logo"
-                    loading="lazy"
-                    src={URL.createObjectURL(getValues().logo[0])}
-                    width={500}
-                    height={500}
-                    className="w-auto h-auto max-w-[300px]"
-                  />
-                  <Tooltip title="Remover logo" position="rigth">
-                    <button
-                      className="hover:bg-zinc-500 hover:bg-opacity-30 focus:bg-zinc-500 focus:bg-opacity-30 rounded-full p-2"
-                      onClick={() => {
-                        setValue('logo', undefined)
-                      }}
-                    >
-                      <MdDelete className="w-6 h-6" />
-                    </button>
-                  </Tooltip>
-                </div>
-              ) : (
-                <div className="col-span-12 flex flex-col items-center justify-center">
-                  <button
-                    type="button"
-                    className="flex items-center justify-center bg-blue-500 rounded-xl p-2 gap-2 text-xl text-white"
-                    onClick={() =>
-                      document.getElementById('logo-input')?.click()
-                    }
-                  >
-                    <MdImage />
-                    <span>Inserir logo</span>
-                  </button>
-                  <input
-                    id="logo-input"
-                    type="file"
-                    hidden
-                    {...register('logo')}
-                  />
-                  <Form.ErrorMessage field="logo" />
-                </div>
-              )} */}
 
               <div className="col-span-12">
                 <label htmlFor="name">Nome da Instituição *</label>

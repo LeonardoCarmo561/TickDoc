@@ -9,9 +9,8 @@ export const metadata: Metadata = {
 export default function OmbudsmanClients({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] }
+  searchParams: { [key: string]: string }
 }) {
-  console.log(searchParams)
   return (
     <main className="p-2 flex flex-col overflow-auto">
       <h2 className="text-xl">Clientes</h2>

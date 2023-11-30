@@ -4,7 +4,7 @@ import { LoadingSpinner } from '@/components/loading-spinner'
 import { Tooltip } from '@/components/tooltip'
 import { getAllClients } from '@/services/clients-services'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import { CreateClientButton } from '../form-button'
@@ -13,7 +13,7 @@ import { FormatStatus, formatDate } from '@/utils'
 export function ClientsTable({
   queryParams,
 }: {
-  queryParams: { [key: string]: string | string[] }
+  queryParams: { [key: string]: string }
 }) {
   const [isLoading, setIsLoading] = useState(true)
   const [inputSearch, setInputSearch] = useState('')
@@ -21,22 +21,21 @@ export function ClientsTable({
   const [totalCount, setTotalCount] = useState(0)
 
   const { push } = useRouter()
-  const searchParams = useSearchParams()
 
   const item = useMemo(() => {
-    return searchParams.get('item') || '0'
-  }, [searchParams])
+    return String(queryParams.item) || '0'
+  }, [queryParams])
   const total = useMemo(() => {
-    return searchParams.get('total') || '10'
-  }, [searchParams])
+    return String(queryParams.total) || '10'
+  }, [queryParams])
   const search = useMemo(() => {
-    const searchValue = searchParams.get('search') || ''
-    setInputSearch(searchValue)
+    const searchValue = queryParams.search || ''
+    setInputSearch(String(searchValue))
     return searchValue
-  }, [searchParams])
+  }, [queryParams])
   const status = useMemo(() => {
-    return searchParams.get('status') || ''
-  }, [searchParams])
+    return String(queryParams.status) || ''
+  }, [queryParams])
 
   useEffect(() => {
     const getClients = async () => {
