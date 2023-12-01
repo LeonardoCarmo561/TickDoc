@@ -1,3 +1,4 @@
+'use client'
 import { ModuleData } from '@/@types'
 import { LoadingScreen } from '@/components'
 import { useAuthContext } from '@/utils/hooks'

@@ -60,3 +60,19 @@ export async function updateClient(
     return new Error((error as { message: string }).message)
   }
 }
+
+export async function createClient(
+  formData: ClientsFormData,
+): Promise<ClientData | Error> {
+  try {
+    const relativeUrl = '/V1/institutions/'
+
+    const { data } = await api.post(relativeUrl, formData)
+
+    if (data) return data
+
+    return new Error('Erro ao criar instância')
+  } catch (error) {
+    return new Error((error as { message: string }).message)
+  }
+}

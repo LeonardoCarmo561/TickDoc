@@ -1,8 +1,8 @@
 'use client'
 import { ClientsFormData, ClientsFormProps } from '@/@types/clients-form'
-import { Form } from '@/components'
+import { Form, LoadingSpinner } from '@/components'
 import { Modal } from '@/components/modal'
-import { updateClient } from '@/services/clients-services'
+import { createClient, updateClient } from '@/services'
 import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -14,8 +14,11 @@ import {
 import { MdAddCircle, MdCancel, MdRemoveCircle, MdSave } from 'react-icons/md'
 import { AutocompleteWorkfields } from './autocomplete-workfields'
 import { SelectModules } from './select-modules'
+import { useToastContext } from '@/utils/hooks'
 
 export function ClientsForm(props: ClientsFormProps) {
+  const { callToast } = useToastContext()
+
   const clientsForm = useForm<ClientsFormData>({
     resolver: zodResolver(clientsFormSchema),
     defaultValues: props.create
@@ -32,17 +35,17 @@ export function ClientsForm(props: ClientsFormProps) {
   })
 
   const {
+    control,
+    formState: { isSubmitting },
+    handleSubmit,
+    register,
     reset,
     watch,
-    control,
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
   } = clientsForm
 
   const {
-    fields: fieldPhones,
     append: appendPhones,
+    fields: fieldPhones,
     remove: removePhones,
   } = useFieldArray({
     control,
@@ -50,8 +53,8 @@ export function ClientsForm(props: ClientsFormProps) {
   })
 
   const {
-    fields: fieldCellphones,
     append: appendCellphones,
+    fields: fieldCellphones,
     remove: removeCellphones,
   } = useFieldArray({
     control,
@@ -83,13 +86,22 @@ export function ClientsForm(props: ClientsFormProps) {
   }
 
   async function submit(formData: ClientsFormData) {
-    if (props.clientData && !props.create) {
-      console.log(formData)
-      updateClient(props.clientData.id, formData).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message)
+    if (props.create) {
+      createClient(formData).then((res) => {
+        if (res instanceof Error) {
+          callToast('error', res.message)
         } else {
-          alert('Deu tudo certo')
+          callToast('success', 'Cliente criado com sucesso')
+          handleClose()
+        }
+      })
+    } else if (props.clientData) {
+      updateClient(props.clientData.id, formData).then((res) => {
+        if (res instanceof Error) {
+          callToast('error', res.message)
+        } else {
+          callToast('success', 'Cliente atualizado com sucesso')
+          handleClose()
         }
       })
     }
@@ -509,8 +521,12 @@ export function ClientsForm(props: ClientsFormProps) {
                 disabled={isSubmitting}
                 className="p-2 flex items-center justify-center text-white rounded-xl bg-blue-500 gap-1 transition-colors hover:bg-blue-700 disabled:text-zinc-300 disabled:bg-zinc-600"
               >
-                <MdSave className="text-xl" />
-                ENVIAR
+                {isSubmitting ? (
+                  <LoadingSpinner height="h-4" width="w-4" />
+                ) : (
+                  <MdSave className="text-xl" />
+                )}
+                {isSubmitting ? 'Enviando...' : 'ENVIAR'}
               </button>
               <button
                 type="button"

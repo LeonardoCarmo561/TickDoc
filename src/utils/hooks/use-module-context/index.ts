@@ -1,3 +1,4 @@
+'use client'
 import { ModuleContext } from '@/contexts/module-context'
 import { useContext } from 'react'
 
