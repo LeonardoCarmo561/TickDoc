@@ -14,11 +14,8 @@ import {
 import { MdAddCircle, MdCancel, MdRemoveCircle, MdSave } from 'react-icons/md'
 import { AutocompleteWorkfields } from './autocomplete-workfields'
 import { SelectModules } from './select-modules'
-import { useToastContext } from '@/utils/hooks'
 
 export function ClientsForm(props: ClientsFormProps) {
-  const { callToast } = useToastContext()
-
   const clientsForm = useForm<ClientsFormData>({
     resolver: zodResolver(clientsFormSchema),
     defaultValues: props.create
@@ -89,18 +86,18 @@ export function ClientsForm(props: ClientsFormProps) {
     if (props.create) {
       createClient(formData).then((res) => {
         if (res instanceof Error) {
-          callToast('error', res.message)
+          console.log('error', res.message)
         } else {
-          callToast('success', 'Cliente criado com sucesso')
+          console.log('success', 'Cliente criado com sucesso')
           handleClose()
         }
       })
     } else if (props.clientData) {
       updateClient(props.clientData.id, formData).then((res) => {
         if (res instanceof Error) {
-          callToast('error', res.message)
+          console.log('error', res.message)
         } else {
-          callToast('success', 'Cliente atualizado com sucesso')
+          console.log('success', 'Cliente atualizado com sucesso')
           handleClose()
         }
       })

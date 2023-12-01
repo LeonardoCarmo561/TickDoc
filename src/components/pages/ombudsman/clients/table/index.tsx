@@ -13,7 +13,7 @@ import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import { LoadingSpinner, FormatStatus, Tooltip } from '@/components'
 import { getAllClients } from '@/services'
 import { ClientData } from '@/@types'
-import { formatDate } from '@/utils'
+import { formatDate, updateQuery } from '@/utils'
 
 // Parent Directory
 import { CreateClientButton } from '../form-button'
@@ -77,21 +77,11 @@ export function ClientsTable({
           />
           <button
             onClick={() => {
-              let currentQuery = ''
-              let hasSearch = false
-              Object.keys(queryParams).forEach((queryKey) => {
-                if (queryKey !== 'search') {
-                  currentQuery += `${queryKey}=${queryParams[queryKey]}&`
-                } else {
-                  hasSearch = true
-                  currentQuery += `search=${inputSearch}&`
-                }
-              })
-
-              if (!hasSearch) {
-                currentQuery += `search=${inputSearch}&`
-              }
-
+              const currentQuery = updateQuery(
+                queryParams,
+                ['search'],
+                [inputSearch],
+              )
               push(`clients?${currentQuery}`)
             }}
             className="p-1 w-7 h-7 rounded-full hover:bg-zinc-500 hover:bg-opacity-30 transition-colors focus:bg-zinc-500 focus:bg-opacity-30 outline-none"
@@ -184,21 +174,11 @@ export function ClientsTable({
                     <div className="flex flex-1 items-center justify-center">
                       <select
                         onChange={(e) => {
-                          let currentQuery = ''
-                          let hasTotal = false
-                          Object.keys(queryParams).forEach((queryKey) => {
-                            if (queryKey !== 'total') {
-                              currentQuery += `${queryKey}=${queryParams[queryKey]}&`
-                            } else {
-                              hasTotal = true
-                              currentQuery += `total=${e.target.value}&`
-                            }
-                          })
-
-                          if (!hasTotal) {
-                            currentQuery += `total=${e.target.value}&`
-                          }
-
+                          const currentQuery = updateQuery(
+                            queryParams,
+                            ['total'],
+                            [e.target.value],
+                          )
                           push(`clients?${currentQuery}`)
                         }}
                         className="p-2 border border-zinc-500 rounded-xl bg-inherit"
