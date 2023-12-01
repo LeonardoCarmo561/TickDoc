@@ -7,7 +7,13 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   darkMode: 'class',
-  theme: {},
+  theme: {
+    extend: {
+      transitionProperty: {
+        height: 'height',
+      },
+    },
+  },
   plugins: [],
 }
 export default config

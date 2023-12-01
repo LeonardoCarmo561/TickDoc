@@ -309,7 +309,7 @@ export function ClientsForm(props: ClientsFormProps) {
                   <input
                     id="ombudsman_expires_at"
                     type="date"
-                    className="px-2 h-10 w-full border border-zinc-500 rounded-xl"
+                    className="px-2 h-10 w-full border border-zinc-500 rounded-xl bg-inherit"
                     {...register('ombudsman_expires_at')}
                   />
                   <Form.ErrorMessage field="ombudsman_expires_at" />
@@ -318,7 +318,7 @@ export function ClientsForm(props: ClientsFormProps) {
                 <div className="col-span-12 sm:col-span-6 md:col-span-12">
                   <label htmlFor="separator_ov">Separador</label>
                   <input
-                    className="p-2 w-full border border-zinc-500 rounded-xl"
+                    className="p-2 w-full border border-zinc-500 rounded-xl bg-inherit"
                     placeholder="PREFIXO-SEPARADOR-0123456789"
                     {...register('separator_ov')}
                   />
@@ -415,7 +415,7 @@ export function ClientsForm(props: ClientsFormProps) {
                         )}
                         <input
                           id={`phones.${index}.title`}
-                          className="p-2 border border-zinc-500 rounded-l-xl w-full"
+                          className="p-2 border border-zinc-500 rounded-l-xl w-full bg-inherit"
                           {...register(`phones.${index}.title`)}
                           placeholder="Título"
                           required={index > 0}
@@ -430,7 +430,7 @@ export function ClientsForm(props: ClientsFormProps) {
                         )}
                         <input
                           id={`phones.${index}.number`}
-                          className="p-2 border border-zinc-500 rounded-r-xl w-full"
+                          className="p-2 border border-zinc-500 rounded-r-xl w-full bg-inherit"
                           {...register(`phones.${index}.number`)}
                           placeholder="(85) 3333-3333"
                           required={index > 0}
@@ -470,7 +470,7 @@ export function ClientsForm(props: ClientsFormProps) {
                         )}
                         <input
                           id={`phones.${index}.title`}
-                          className="p-2 border border-zinc-500 rounded-l-xl w-full"
+                          className="p-2 border border-zinc-500 rounded-l-xl w-full bg-inherit"
                           {...register(`cellphones.${index}.title`)}
                           placeholder="Título"
                           required={index > 0}
@@ -487,7 +487,7 @@ export function ClientsForm(props: ClientsFormProps) {
                         )}
                         <input
                           id={`cellphones.${index}.number`}
-                          className="p-2 border border-zinc-500 rounded-r-xl w-full"
+                          className="p-2 border border-zinc-500 rounded-r-xl w-full bg-inherit"
                           {...register(`cellphones.${index}.number`)}
                           placeholder="(85) 98888-3333"
                           required={index > 0}

@@ -1,6 +1,7 @@
 export * from './drawer-options'
 export * from './environment'
 export * from './format-date'
+export * from './format-datetime'
 export * from './get-csrf-token'
 export * from './get-field-error'
 export * from './update-query'

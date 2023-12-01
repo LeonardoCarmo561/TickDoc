@@ -1,3 +1,4 @@
+export * from './accordion'
 export * from './back-button'
 export * from './drawer'
 export * from './editor'
