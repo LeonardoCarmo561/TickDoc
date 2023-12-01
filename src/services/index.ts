@@ -1,3 +1,5 @@
 export * from './auth-services'
+export * from './clients-services'
+export * from './config'
 export * from './reset-password-services'
 export * from './workfield-services'

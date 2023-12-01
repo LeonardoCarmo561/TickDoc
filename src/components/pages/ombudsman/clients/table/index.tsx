@@ -1,14 +1,22 @@
 'use client'
-import { ClientData } from '@/@types'
-import { LoadingSpinner } from '@/components/loading-spinner'
-import { Tooltip } from '@/components/tooltip'
-import { getAllClients } from '@/services/clients-services'
+// React
+import { useEffect, useMemo, useState } from 'react'
+
+// Next
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+
+// Others
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
+
+// Local
+import { LoadingSpinner, FormatStatus, Tooltip } from '@/components'
+import { getAllClients } from '@/services'
+import { ClientData } from '@/@types'
+import { formatDate } from '@/utils'
+
+// Parent Directory
 import { CreateClientButton } from '../form-button'
-import { FormatStatus, formatDate } from '@/utils'
 
 export function ClientsTable({
   queryParams,
