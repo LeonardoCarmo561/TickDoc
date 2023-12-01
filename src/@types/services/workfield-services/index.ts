@@ -1,4 +1,4 @@
-export interface WorkFieldData {
+export type WorkFieldData = {
   id: number
   name: string
 }

@@ -1,4 +1,4 @@
-export interface DrawerOption {
+export type DrawerOption = {
   href: string
   icon: () => JSX.Element
   label: string

@@ -1,4 +1,4 @@
-export interface DetailsPage {
+export type DetailsPage = {
   module_title: string
   id: string
 }

@@ -6,7 +6,7 @@ export interface SelectOption {
   icon?: ReactNode
 }
 
-export interface SelectProps {
+export type SelectProps = {
   multiple?: boolean
   closeOnChange?: boolean
   name?: string

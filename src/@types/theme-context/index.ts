@@ -1,4 +1,4 @@
-export interface ThemeContextData {
+export type ThemeContextData = {
   toggleTheme: () => void
   themeName: string
 }

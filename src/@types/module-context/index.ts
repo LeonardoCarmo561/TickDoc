@@ -1,5 +1,5 @@
 import { ModuleData } from '..'
 
-export interface ModuleContextData extends ModuleData {
+export type ModuleContextData = ModuleData & {
   currentModule: string
 }

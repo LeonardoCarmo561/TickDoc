@@ -4,7 +4,7 @@ import z from 'zod'
 
 export type LoginFormData = z.infer<typeof loginFormSchema>
 
-export interface TokenData {
+export type TokenData = {
   token_type: string
   exp: number
   iat: number
@@ -18,12 +18,12 @@ export interface TokenData {
   id: number
 }
 
-export interface RefreshData {
+export type RefreshData = {
   refresh: string
   access: string
 }
 
-export interface RefreshTokenData {
+export type RefreshTokenData = {
   Success: string
   data: RefreshData
 }

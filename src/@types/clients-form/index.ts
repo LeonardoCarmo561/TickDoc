@@ -2,7 +2,7 @@ import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
 import { z } from 'zod'
 import { ClientData } from '..'
 
-export interface ClientsFormProps {
+export type ClientsFormProps = {
   open: boolean
   onClose?: () => void
   create?: boolean

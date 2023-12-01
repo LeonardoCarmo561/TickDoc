@@ -1,6 +1,6 @@
 export type ModuleType = 'ombudsman' | 'ci' | 'customer-service'
 
-export interface ModuleData {
+export type ModuleData = {
   type: ModuleType
   title: string
   profile: number

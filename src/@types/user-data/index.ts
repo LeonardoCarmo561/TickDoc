@@ -1,6 +1,6 @@
 import { ModuleData } from '..'
 
-export interface UserData {
+export type UserData = {
   userId: number
   username: string
   institutionId: number

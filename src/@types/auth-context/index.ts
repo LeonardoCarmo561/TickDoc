@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 import { UserData } from '..'
 
-export interface AuthContextData {
+export type AuthContextData = {
   user: UserData | null
   setUser: (value: UserData | null) => void
   logout: () => void
