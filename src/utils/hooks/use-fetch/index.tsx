@@ -21,6 +21,7 @@ export function useFetch<T = unknown>(
   useEffect(() => {
     debounce(() => {
       if (update) {
+        setIsLoading(true)
         serviceFuncion
           .then((res) => {
             if (res instanceof Error) {

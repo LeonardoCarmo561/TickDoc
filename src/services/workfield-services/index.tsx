@@ -41,6 +41,22 @@ export async function createWorkField(
   }
 }
 
+export async function getWorkField(
+  id: number | string,
+): Promise<WorkFieldData | Error> {
+  try {
+    const relativeUrl = `/V1/workfields/${id}/`
+
+    const { data } = await api.get(relativeUrl)
+
+    if (data) return data
+
+    return new Error('Erro ao carregar instância')
+  } catch (error) {
+    return new Error((error as { message: string }).message)
+  }
+}
+
 export async function updateWorkField(
   id: number | string,
   formData: WorkFieldsFormData,

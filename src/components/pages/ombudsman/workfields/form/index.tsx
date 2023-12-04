@@ -14,6 +14,7 @@ export function WorkfFieldsForm(props: WorkfFieldsFormProps) {
 
   const workFieldForm = useForm<WorkFieldsFormData>({
     resolver: zodResolver(workFieldFormSchema),
+    defaultValues: props.workFieldData,
   })
 
   function submit(formData: WorkFieldsFormData) {
@@ -23,6 +24,7 @@ export function WorkfFieldsForm(props: WorkfFieldsFormProps) {
           alert(res.message)
         } else {
           alert('Ramo de atividade criado com sucesso')
+          props.revalidate?.()
           handleClose()
         }
       })
@@ -32,6 +34,7 @@ export function WorkfFieldsForm(props: WorkfFieldsFormProps) {
           alert(res.message)
         } else {
           alert('Ramo de atividade atualizado com sucesso')
+          props.revalidate?.()
           handleClose()
         }
       })

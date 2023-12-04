@@ -5,10 +5,12 @@ import { WorkfFieldsForm } from '../../form'
 import { MdEdit } from 'react-icons/md'
 import { WorkFieldData } from '@/@types'
 
-export function EditClientButton({
+export function EditWorkFieldButton({
   workFieldData,
+  revalidate,
 }: {
   workFieldData: WorkFieldData
+  revalidate?: () => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -23,12 +25,15 @@ export function EditClientButton({
         </span>
         EDITAR
       </button>
-      <WorkfFieldsForm
-        open={isOpen}
-        create={false}
-        workFieldData={workFieldData}
-        onClose={() => setIsOpen(false)}
-      />
+      {workFieldData && isOpen && (
+        <WorkfFieldsForm
+          open={isOpen}
+          create={false}
+          workFieldData={workFieldData}
+          revalidate={revalidate}
+          onClose={() => setIsOpen(false)}
+        />
+      )}
     </>
   )
 }

@@ -156,6 +156,11 @@ export function WorkFieldsTable(props: {
                   <td colSpan={5} className="py-2">
                     <div className="flex flex-1 items-center justify-center">
                       <select
+                        value={
+                          props.queryParams.total
+                            ? Number(props.queryParams.total)
+                            : 10
+                        }
                         onChange={(e) => {
                           const currentQuery = updateQuery(
                             props.queryParams,

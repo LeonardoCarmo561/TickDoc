@@ -1,4 +1,5 @@
 export * from './accordion-props'
+export * from './accordion-title-props'
 export * from './historical-services'
 export * from './services'
 export * from './modules'
