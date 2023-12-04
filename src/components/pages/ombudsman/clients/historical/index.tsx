@@ -11,9 +11,14 @@ import { HistoricalData } from '@/@types'
 import { formatDatetime } from '@/utils'
 import { useFetch } from '@/utils/hooks'
 
-export function HistoricalClient(props: { clientId: number }) {
-  const { data, error, isLoading } = useFetch<HistoricalData[]>(
+export function HistoricalClient(props: {
+  clientId: number
+  revalidate: boolean
+  onRevalidate: () => void
+}) {
+  const { data, error, isLoading, revalidate } = useFetch<HistoricalData[]>(
     getClientHistorical(props.clientId),
+    props.onRevalidate,
   )
 
   useEffect(() => {
@@ -22,12 +27,16 @@ export function HistoricalClient(props: { clientId: number }) {
     }
   }, [error])
 
+  useEffect(() => {
+    revalidate()
+  }, [revalidate, props.revalidate])
+
   return (
     <Accordion
       title={
         <div className="flex gap-1 items-center">
           <MdRestore className="w-8 h-8 sm:w-10 sm:h-10" />
-          <h3 className="text-lg font-semibold">Histórico {props.clientId}</h3>
+          <h3 className="text-lg font-semibold">Histórico</h3>
           {isLoading && <LoadingSpinner height="h-6" width="w-6" />}
         </div>
       }

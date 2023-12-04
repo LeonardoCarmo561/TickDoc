@@ -1,8 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { useCallback, useEffect, useState } from 'react'
 import { useDebounce } from '..'
 
-export function useFetch<T = unknown>(serviceFuncion: Promise<T | Error>) {
+export function useFetch<T = unknown>(
+  serviceFuncion: Promise<T | Error>,
+  onRevalidate?: () => void,
+) {
   const { debounce } = useDebounce(100)
   const [update, setUpdate] = useState(true)
   const [data, setData] = useState<T | null>(null)
@@ -11,6 +15,7 @@ export function useFetch<T = unknown>(serviceFuncion: Promise<T | Error>) {
 
   const revalidate = useCallback(() => {
     setUpdate(true)
+    onRevalidate?.()
   }, [])
 
   useEffect(() => {
@@ -28,12 +33,12 @@ export function useFetch<T = unknown>(serviceFuncion: Promise<T | Error>) {
             setError(new Error(err))
           })
           .finally(() => {
-            setUpdate(false)
+            setUpdate(() => false)
             setIsLoading(false)
           })
       }
     })
-  }, [debounce, serviceFuncion, update])
+  }, [update])
 
   return { data, isLoading, error, revalidate }
 }

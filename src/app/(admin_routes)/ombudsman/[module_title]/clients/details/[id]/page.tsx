@@ -11,9 +11,13 @@ import { HistoricalClient } from '@/components/pages/ombudsman/clients/historica
 import { getClientDetails } from '@/services/clients-services'
 import { useFetch } from '@/utils/hooks'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 export default function ClientDetailsPage({ params }: { params: DetailsPage }) {
+  const update = useRef(false)
+  const handleSetupdate = useCallback(() => {
+    update.current = false
+  }, [])
   const { data, error, isLoading, revalidate } = useFetch<ClientData>(
     getClientDetails(params.id),
   )
@@ -30,7 +34,13 @@ export default function ClientDetailsPage({ params }: { params: DetailsPage }) {
       <div className="flex w-full gap-2 border border-blue-500 p-2 rounded-xl dark:bg-zinc-700 bg-white shadow-lg">
         <div className="gap-2 flex">
           {data && (
-            <EditClientButton clientData={data} revalidate={revalidate} />
+            <EditClientButton
+              clientData={data}
+              revalidate={() => {
+                update.current = true
+                revalidate()
+              }}
+            />
           )}
           <CreateClientButton />
         </div>
@@ -51,7 +61,11 @@ export default function ClientDetailsPage({ params }: { params: DetailsPage }) {
         )}
       </div>
 
-      <HistoricalClient clientId={Number(params.id)} />
+      <HistoricalClient
+        revalidate={update.current}
+        clientId={Number(params.id)}
+        onRevalidate={handleSetupdate}
+      />
     </main>
   )
 }
