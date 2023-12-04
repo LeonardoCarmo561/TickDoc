@@ -1,6 +1,6 @@
 import {
   ResetPasswordFormData,
-  ResetPasswordTokenFormData,
+  // ResetPasswordTokenFormData,
 } from '@/@types/reset-password'
 import { api } from '../config'
 
@@ -17,8 +17,8 @@ export async function resetPassword(formData: ResetPasswordFormData) {
   }
 }
 
-export async function resetPasswordToken(formData: ResetPasswordTokenFormData) {
-  try {
-    const relativeUrl = ``
-  } catch (error) {}
-}
+// export async function resetPasswordToken(formData: ResetPasswordTokenFormData) {
+//   try {
+//     const relativeUrl = ``
+//   } catch (error) {}
+// }

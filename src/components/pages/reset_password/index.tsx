@@ -2,13 +2,13 @@
 
 import {
   ResetPasswordFormData,
-  ResetPasswordTokenFormData,
+  // ResetPasswordTokenFormData,
 } from '@/@types/reset-password'
 import { Form } from '@/components'
-import { resetPassword, resetPasswordToken } from '@/services'
+import { resetPassword } from '@/services'
 import {
   resetPasswordFormSchema,
-  resetPasswordTokenFormSchema,
+  // resetPasswordTokenFormSchema,
 } from '@/utils/validation/reset-password-form-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getFieldError(obj: Record<any, any>, path: string) {
   const travel = (regexp: RegExp) =>
     String.prototype.split

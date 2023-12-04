@@ -13,6 +13,7 @@ export default function ResetPasswordTokenPage({
 }: {
   params: { token: string }
 }) {
+  console.log(params.token)
   return (
     <div className="flex h-screen w-screen items-center justify-center overflow-hidden">
       <main className="p-2 bg-zinc-200 rounded-xl shadow-lg dark:bg-zinc-900 max-w-full w-80 flex flex-col">
