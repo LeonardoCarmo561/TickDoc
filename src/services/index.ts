@@ -1,3 +1,4 @@
+export * from './admin-users-services'
 export * from './auth-services'
 export * from './clients-services'
 export * from './config'
