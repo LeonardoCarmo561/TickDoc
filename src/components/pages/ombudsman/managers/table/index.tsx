@@ -1,6 +1,6 @@
 'use client'
 
-import { LoadingSpinner, Tooltip } from '@/components'
+import { FormatStatus, LoadingSpinner, Tooltip } from '@/components'
 import { getAllAdminUsers } from '@/services'
 import { formatDatetime, updateQuery } from '@/utils'
 import { useFetch } from '@/utils/hooks'
@@ -83,10 +83,13 @@ export function ManagersTable(props: {
                 Nome
               </th>
               <th align="center" className="py-3 px-3">
-                Criado em
+                E-mail
               </th>
               <th align="center" className="py-3 px-3">
-                Última atualização em
+                Último Login
+              </th>
+              <th align="center" className="py-3 px-3">
+                Status
               </th>
             </tr>
           </thead>
@@ -118,14 +121,15 @@ export function ManagersTable(props: {
                     {row.username}
                   </td>
                   <td align="center" className="py-3">
-                    {row.created_at
-                      ? formatDatetime(row.created_at)
-                      : 'Não definido'}
+                    {row.email}
                   </td>
                   <td align="center" className="py-3">
-                    {row.updated_at && row.updated_at !== row.created_at
-                      ? formatDatetime(row.updated_at)
-                      : 'Não houve atualizações'}
+                    {row.last_login
+                      ? formatDatetime(row.last_login)
+                      : 'Ainda não entrou'}
+                  </td>
+                  <td align="center" className="py-3">
+                    <FormatStatus status={row.is_active} />
                   </td>
                 </tr>
               ))}
