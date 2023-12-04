@@ -14,21 +14,25 @@ import {
 import { MdAddCircle, MdCancel, MdRemoveCircle, MdSave } from 'react-icons/md'
 import { AutocompleteWorkfields } from './autocomplete-workfields'
 import { SelectModules } from './select-modules'
+import { useMemo } from 'react'
 
 export function ClientsForm(props: ClientsFormProps) {
   const clientsForm = useForm<ClientsFormData>({
     resolver: zodResolver(clientsFormSchema),
-    defaultValues: props.create
-      ? undefined
-      : props.clientData && props.clientData.work_field
-      ? {
-          ...props.clientData,
-          work_field: Number(
-            (props.clientData?.work_field as { id: number }).id,
-          ),
-          sms_quantity: String(props.clientData?.sms_quantity),
+    defaultValues: useMemo(() => {
+      if (props.create) return undefined
+      else if (!props.clientData)
+        return {
+          phones: [],
+          cellphones: [],
         }
-      : undefined,
+
+      return {
+        ...props.clientData,
+        work_field: Number((props.clientData.work_field as { id: number }).id),
+        sms_quantity: String(props.clientData.sms_quantity),
+      }
+    }, [props.create, props.clientData]),
   })
 
   const {
@@ -89,6 +93,7 @@ export function ClientsForm(props: ClientsFormProps) {
           console.log('error', res.message)
         } else {
           console.log('success', 'Cliente criado com sucesso')
+          props.revalidate?.()
           handleClose()
         }
       })
@@ -98,6 +103,7 @@ export function ClientsForm(props: ClientsFormProps) {
           console.log('error', res.message)
         } else {
           console.log('success', 'Cliente atualizado com sucesso')
+          props.revalidate?.()
           handleClose()
         }
       })
@@ -386,7 +392,7 @@ export function ClientsForm(props: ClientsFormProps) {
                       id="sms_quantity"
                       type="number"
                       placeholder="500"
-                      className="p-2 w-full rounded-xl border border-zinc-500"
+                      className="p-2 w-full rounded-xl border border-zinc-500 bg-inherit"
                       {...register('sms_quantity')}
                     />
                     <Form.ErrorMessage field="sms_quantity" />

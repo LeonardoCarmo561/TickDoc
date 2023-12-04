@@ -12,24 +12,19 @@ import { MdInfoOutline, MdSearch } from 'react-icons/md'
 // Local
 import { LoadingSpinner, FormatStatus, Tooltip } from '@/components'
 import { getAllClients } from '@/services'
-import { ClientData } from '@/@types'
+import { ClientData, TotalCount } from '@/@types'
 import { formatDate, updateQuery } from '@/utils'
 
 // Parent Directory
 import { CreateClientButton } from '../form-button'
+import { useFetch } from '@/utils/hooks'
 
 export function ClientsTable({
   queryParams,
 }: {
   queryParams: { [key: string]: string }
 }) {
-  const [isLoading, setIsLoading] = useState(true)
   const [inputSearch, setInputSearch] = useState('')
-  const [clients, setClients] = useState<ClientData[]>([])
-  const [totalCount, setTotalCount] = useState(0)
-
-  const { push } = useRouter()
-
   const item = useMemo(() => {
     return String(queryParams.item) || '0'
   }, [queryParams])
@@ -45,22 +40,17 @@ export function ClientsTable({
     return String(queryParams.status) || ''
   }, [queryParams])
 
+  const { data, error, isLoading, revalidate } = useFetch<
+    TotalCount<ClientData>
+  >(getAllClients(item, total, search, status))
+
+  const { push } = useRouter()
+
   useEffect(() => {
-    const getClients = async () => {
-      setIsLoading(true)
-      const result = await getAllClients(item, total, search, status)
-      if (result instanceof Error) {
-        alert(result.message)
-      } else {
-        setClients(result.results)
-        setTotalCount(result.count)
-      }
-
-      setIsLoading(false)
+    if (error) {
+      alert(error.message)
     }
-
-    getClients()
-  }, [item, search, status, total])
+  }, [error])
 
   return (
     <div className="h-fit">
@@ -89,7 +79,7 @@ export function ClientsTable({
             <MdSearch className="w-5 h-5" />
           </button>
         </div>
-        <CreateClientButton />
+        <CreateClientButton revalidate={revalidate} />
       </div>
 
       <div
@@ -126,40 +116,42 @@ export function ClientsTable({
                 </td>
               </tr>
             )}
-            {clients.map((row) => (
-              <tr key={row.id}>
-                <td align="center" className="py-3">
-                  <Tooltip title="detalhes" position="rigth">
-                    <Link href={`clients/details/${row.id}`} tabIndex={-1}>
-                      <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
-                        <MdInfoOutline />
-                      </button>
-                    </Link>
-                  </Tooltip>
-                </td>
-                <td align="center" className="py-3">
-                  {row.name}
-                </td>
-                <td align="center" className="py-3">
-                  {row.ci_expires_at
-                    ? formatDate(row.ci_expires_at)
-                    : 'Não definido'}
-                </td>
-                <td align="center" className="py-3">
-                  {row.ombudsman_expires_at
-                    ? formatDate(row.ombudsman_expires_at)
-                    : 'Não definido'}
-                </td>
-                <td align="center" className="py-3 pr-2">
-                  <FormatStatus status={row.status} />
-                </td>
-              </tr>
-            ))}
+            {data &&
+              data.results.map((row) => (
+                <tr key={row.id}>
+                  <td align="center" className="py-3">
+                    <Tooltip title="detalhes" position="rigth">
+                      <Link href={`clients/details/${row.id}`} tabIndex={-1}>
+                        <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
+                          <MdInfoOutline />
+                        </button>
+                      </Link>
+                    </Tooltip>
+                  </td>
+                  <td align="center" className="py-3">
+                    {row.name}
+                  </td>
+                  <td align="center" className="py-3">
+                    {row.ci_expires_at
+                      ? formatDate(row.ci_expires_at)
+                      : 'Não definido'}
+                  </td>
+                  <td align="center" className="py-3">
+                    {row.ombudsman_expires_at
+                      ? formatDate(row.ombudsman_expires_at)
+                      : 'Não definido'}
+                  </td>
+                  <td align="center" className="py-3 pr-2">
+                    <FormatStatus status={row.status} />
+                  </td>
+                </tr>
+              ))}
           </tbody>
 
-          {((totalCount === 0 && !isLoading) || totalCount < 10) && (
+          {((data && data.count === 0 && !isLoading) ||
+            (data && data.count < 10)) && (
             <tfoot>
-              {totalCount === 0 && !isLoading && (
+              {data.count === 0 && !isLoading && (
                 <tr>
                   <td className="py-3">
                     <span className="text-zinc-700 dark:text-zinc-200 px-2">
@@ -168,7 +160,7 @@ export function ClientsTable({
                   </td>
                 </tr>
               )}
-              {totalCount < 10 && (
+              {data.count < 10 && (
                 <tr>
                   <td colSpan={5} className="py-2">
                     <div className="flex flex-1 items-center justify-center">

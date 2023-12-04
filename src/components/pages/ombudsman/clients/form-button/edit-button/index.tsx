@@ -5,7 +5,13 @@ import { ClientsForm } from '../../form'
 import { MdEdit } from 'react-icons/md'
 import { ClientData } from '@/@types'
 
-export function EditClientButton({ clientData }: { clientData: ClientData }) {
+export function EditClientButton({
+  clientData,
+  revalidate,
+}: {
+  clientData: ClientData
+  revalidate?: () => void
+}) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -19,12 +25,15 @@ export function EditClientButton({ clientData }: { clientData: ClientData }) {
         </span>
         EDITAR
       </button>
-      <ClientsForm
-        open={isOpen}
-        create={false}
-        clientData={clientData}
-        onClose={() => setIsOpen(false)}
-      />
+      {isOpen && clientData && (
+        <ClientsForm
+          open={isOpen}
+          create={false}
+          clientData={clientData}
+          onClose={() => setIsOpen(false)}
+          revalidate={revalidate}
+        />
+      )}
     </>
   )
 }

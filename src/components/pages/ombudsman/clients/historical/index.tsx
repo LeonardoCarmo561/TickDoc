@@ -1,5 +1,5 @@
 // React
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 // Others
 import { MdRestore } from 'react-icons/md'
@@ -9,28 +9,18 @@ import { LoadingSpinner, Accordion } from '@/components'
 import { getClientHistorical } from '@/services'
 import { HistoricalData } from '@/@types'
 import { formatDatetime } from '@/utils'
+import { useFetch } from '@/utils/hooks'
 
 export function HistoricalClient(props: { clientId: number }) {
-  const [historicalData, setHistoricalData] = useState<HistoricalData[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [update, setUpdate] = useState(true)
+  const { data, error, isLoading } = useFetch<HistoricalData[]>(
+    getClientHistorical(props.clientId),
+  )
 
   useEffect(() => {
-    if (update) {
-      getClientHistorical(props.clientId)
-        .then((res) => {
-          if (res instanceof Error) {
-            alert(`Histórico: ${res.message}`)
-          } else {
-            setHistoricalData(res)
-          }
-        })
-        .finally(() => {
-          setIsLoading(false)
-          setUpdate(false)
-        })
+    if (error) {
+      alert(error.message)
     }
-  }, [props.clientId, update])
+  }, [error])
 
   return (
     <Accordion
@@ -43,15 +33,16 @@ export function HistoricalClient(props: { clientId: number }) {
       }
     >
       <div className="flex w-full flex-col divide-y divide-zinc-500">
-        {historicalData.map((historical, index) => (
-          <div className="flex flex-col gap-1 p-2" key={index}>
-            <span>Campo &ldquo;{historical.field}&ldquo; Alterado</span>
-            <span>Valor anterior: {JSON.stringify(historical.old)}</span>
-            <span>Valor atual: {JSON.stringify(historical.new)}</span>
-            <span>Alterado por: {historical.user}</span>
-            <span>Data da alteração: {formatDatetime(historical.date)}</span>
-          </div>
-        ))}
+        {data &&
+          data.map((historical, index) => (
+            <div className="flex flex-col gap-1 p-2" key={index}>
+              <span>Campo &ldquo;{historical.field}&ldquo; Alterado</span>
+              <span>Valor anterior: {JSON.stringify(historical.old)}</span>
+              <span>Valor atual: {JSON.stringify(historical.new)}</span>
+              <span>Alterado por: {historical.user}</span>
+              <span>Data da alteração: {formatDatetime(historical.date)}</span>
+            </div>
+          ))}
       </div>
     </Accordion>
   )

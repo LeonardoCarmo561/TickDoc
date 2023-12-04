@@ -4,7 +4,11 @@ import { useState } from 'react'
 import { ClientsForm } from '../../form'
 import { MdAdd } from 'react-icons/md'
 
-export function CreateClientButton() {
+export function CreateClientButton({
+  revalidate,
+}: {
+  revalidate?: () => void
+}) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -18,7 +22,12 @@ export function CreateClientButton() {
         </span>
         NOVO
       </button>
-      <ClientsForm open={isOpen} onClose={() => setIsOpen(false)} create />
+      <ClientsForm
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        revalidate={revalidate}
+        create
+      />
     </>
   )
 }
