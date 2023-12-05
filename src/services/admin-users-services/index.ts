@@ -26,6 +26,22 @@ export async function getAllAdminUsers(
   }
 }
 
+export async function getAdminUser(
+  id: number | string,
+): Promise<AdminUserData | Error> {
+  try {
+    const relativeUrl = `/V1/adminusers/${id}/`
+
+    const { data } = await api.get(relativeUrl)
+
+    if (data) return data
+
+    return new Error('Erro ao carregar instância')
+  } catch (error) {
+    return new Error((error as { message: string }).message)
+  }
+}
+
 export async function updateAdminUser(
   id: number | string,
   formData: ManagersFormData,

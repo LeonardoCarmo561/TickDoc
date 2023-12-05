@@ -17,7 +17,14 @@ export function ManagersForm(props: ManagersFormProps) {
 
   const managerForm = useForm<ManagersFormData>({
     resolver: zodResolver(managersFormSchema),
-    defaultValues: props.create ? { birth_date: '' } : props.adminUserData,
+    defaultValues: props.create
+      ? { birth_date: '' }
+      : {
+          ...props.adminUserData,
+          birth_date: props.adminUserData?.birth_date
+            ? props.adminUserData.birth_date
+            : '',
+        },
   })
 
   function submit(formData: ManagersFormData) {

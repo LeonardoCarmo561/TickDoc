@@ -49,7 +49,12 @@ export function HistoricalClient(props: {
               <span>Valor anterior: {JSON.stringify(historical.old)}</span>
               <span>Valor atual: {JSON.stringify(historical.new)}</span>
               <span>Alterado por: {historical.user}</span>
-              <span>Data da alteração: {formatDatetime(historical.date)}</span>
+              <span>
+                Data da alteração:{' '}
+                {historical.date
+                  ? formatDatetime(historical.date)
+                  : 'Não definido'}
+              </span>
             </div>
           ))}
       </div>

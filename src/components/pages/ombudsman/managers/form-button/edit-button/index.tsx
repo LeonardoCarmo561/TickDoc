@@ -5,7 +5,7 @@ import { ManagersForm } from '../../form'
 import { MdEdit } from 'react-icons/md'
 import { AdminUserData } from '@/@types'
 
-export function EditWorkFieldButton({
+export function EditManagerButton({
   adminUserData,
   revalidate,
 }: {

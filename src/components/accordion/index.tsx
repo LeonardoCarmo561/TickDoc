@@ -3,7 +3,7 @@ import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 
 export function Accordion(props: AccoridonProps) {
   return (
-    <section className="border border-blue-500 flex flex-col w-full [&:not(:has(input:checked))]:overflow-hidden transition-height [&:not(:has(input:checked))]:h-14 bg-white dark:bg-zinc-700 shadow-lg p-2 rounded-xl">
+    <section className="border border-blue-500 flex flex-col w-full [&:not(:has(input:checked))]:overflow-hidden transition-height [&:not(:has(input:checked))]:max-h-[3.5rem] [&:not(:has(input:checked))]:min-h-[3.5rem] bg-white dark:bg-zinc-700 shadow-lg p-2 rounded-xl">
       <div className="relative h-12 min-h-[3rem] flex w-full items-center justify-between rounded-t-xl overflow-hiddenx ">
         <input
           type="checkbox"
