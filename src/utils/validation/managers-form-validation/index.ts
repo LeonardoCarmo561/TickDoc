@@ -20,12 +20,14 @@ export const managersFormSchema = z
     document_number: z.string(),
     is_active: z.boolean().default(false),
     birth_date: z.string().optional(),
+    institution_id: z.number().default(1),
   })
-  .refine((data) => data.document_type === 1 && isCPF(data.document_number), {
-    message: 'CPF Inválido',
-    path: ['document_nunmber'],
-  })
-  .refine((data) => data.document_type === 2 && isCNPJ(data.document_number), {
-    message: 'CNPJ Inválido',
-    path: ['document_number'],
-  })
+  .refine(
+    (data) =>
+      (data.document_type === 1 && isCPF(data.document_number)) ||
+      (data.document_type === 2 && isCNPJ(data.document_number)),
+    {
+      message: 'Documento Inválido',
+      path: ['document_nunmber'],
+    },
+  )

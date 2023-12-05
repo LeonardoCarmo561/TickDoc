@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ManagersFormData, ManagersFormProps } from '@/@types'
 import { Form, LoadingSpinner } from '@/components'
 import { createAdminUser, updateAdminUser } from '@/services'
@@ -6,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { SelectDocumentType } from './select-document-type'
 import { MdCancel, MdSave } from 'react-icons/md'
+import { BaseSyntheticEvent } from 'react'
 
 export function ManagersForm(props: ManagersFormProps) {
   function handleClose() {
@@ -15,7 +17,7 @@ export function ManagersForm(props: ManagersFormProps) {
 
   const managerForm = useForm<ManagersFormData>({
     resolver: zodResolver(managersFormSchema),
-    defaultValues: props.adminUserData,
+    defaultValues: props.create ? { birth_date: '' } : props.adminUserData,
   })
 
   function submit(formData: ManagersFormData) {
@@ -45,8 +47,10 @@ export function ManagersForm(props: ManagersFormProps) {
   const {
     handleSubmit,
     control,
+    getValues,
     register,
     reset,
+    unregister,
     watch,
     formState: { isSubmitting },
   } = managerForm
@@ -59,7 +63,16 @@ export function ManagersForm(props: ManagersFormProps) {
       open={props.open}
       onClose={handleClose}
       formReturn={managerForm}
-      handleSubmit={handleSubmit(submit)}
+      handleSubmit={(e: BaseSyntheticEvent<object, any, any>) => {
+        if (
+          getValues().birth_date === undefined ||
+          getValues().birth_date?.length === 0
+        ) {
+          console.log('registrando')
+          unregister('birth_date')
+        }
+        return handleSubmit(submit)(e)
+      }}
     >
       <div className="col-span-12">
         <label htmlFor="username-field">Nome *</label>
@@ -75,7 +88,7 @@ export function ManagersForm(props: ManagersFormProps) {
       </div>
 
       <div className="grid col-span-12 grid-cols-2 md:space-x-4">
-        <div className="flex col-span-2 md:col-span-1 items-end">
+        <div className="flex col-span-2 md:col-span-1">
           <div className="flex flex-[1]">
             <Controller
               name="document_type"
@@ -129,11 +142,17 @@ export function ManagersForm(props: ManagersFormProps) {
           required
           autoComplete="off"
           id="email-field"
+          type="email"
           placeholder="email@exemplo.com"
           className="p-2 border border-zinc-500 rounded-xl w-full"
           {...register('email')}
         />
         <Form.ErrorMessage field="email" />
+      </div>
+
+      <div className="col-span-12 flex items-center justify-center">
+        <label htmlFor="status-field">Status</label>
+        <input id="status-field" type="checkbox" {...register('is_active')} />
       </div>
 
       <div
