@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
+import { CreateManagerButton } from '../form-button/create-button'
 
 export function ManagersTable(props: {
   queryParams: { [key: string]: string }
@@ -68,7 +69,7 @@ export function ManagersTable(props: {
             <MdSearch className="w-5 h-5" />
           </button>
         </div>
-        {/* <CreateWorkFieldButton /> */}
+        <CreateManagerButton />
       </div>
 
       <div
@@ -128,7 +129,7 @@ export function ManagersTable(props: {
                       ? formatDatetime(row.last_login)
                       : 'Ainda não entrou'}
                   </td>
-                  <td align="center" className="py-3">
+                  <td align="center" className="py-3 pr-2">
                     <FormatStatus status={row.is_active} />
                   </td>
                 </tr>

@@ -10,12 +10,10 @@ export function ModalForm(props: ModalFormProps) {
 
         <FormProvider {...props.formReturn}>
           <form
-            onSubmit={props.handleSubmit(props.submit)}
+            onSubmit={props.handleSubmit}
             className="p-2 divide-y divide-zinc-500"
           >
-            <div className="grid grid-cols-12 space-y-4 space-x-2">
-              {props.children}
-            </div>
+            <div className="grid grid-cols-12 space-y-4">{props.children}</div>
           </form>
         </FormProvider>
       </div>

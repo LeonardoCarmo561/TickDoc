@@ -54,8 +54,7 @@ export function WorkfFieldsForm(props: WorkfFieldsFormProps) {
       open={props.open}
       onClose={handleClose}
       formReturn={workFieldForm}
-      handleSubmit={handleSubmit}
-      submit={submit}
+      handleSubmit={handleSubmit(submit)}
     >
       <div className="col-span-12">
         <label htmlFor="name">Nome *</label>
