@@ -18,7 +18,6 @@ export const managersFormSchema = z
       .max(2, 'Insira uma opção válida')
       .default(1),
     document_number: z.string(),
-    institution_id: z.number().min(1),
     is_active: z.boolean().default(false),
     birth_date: z.string().optional(),
   })

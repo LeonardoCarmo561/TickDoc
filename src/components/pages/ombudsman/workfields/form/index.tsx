@@ -50,7 +50,9 @@ export function WorkfFieldsForm(props: WorkfFieldsFormProps) {
 
   return (
     <Form.ModalForm
-      formTitle={props.create ? 'Novo Ramo de Atividade' : 'Editar Ramo de '}
+      formTitle={
+        props.create ? 'Novo Ramo de Atividade' : 'Editar Ramo de Atividade'
+      }
       open={props.open}
       onClose={handleClose}
       formReturn={workFieldForm}
