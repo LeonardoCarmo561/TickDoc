@@ -33,7 +33,7 @@ export function SwitchModule() {
   return (
     <div
       id="select-box"
-      className="z-10 border bg-inherit relative border-zinc-500 w-full py-2 flex items-center justify-between rounded-xl"
+      className="z-0 border bg-inherit relative border-zinc-500 w-full py-2 flex items-center justify-between rounded-xl"
     >
       <input
         name="module"

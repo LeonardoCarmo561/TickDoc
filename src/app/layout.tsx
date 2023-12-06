@@ -3,6 +3,7 @@ import { League_Spartan as LeagueSpartan } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/contexts/theme-context'
 import Script from 'next/script'
+import { ToastProvider } from '@/contexts/toast-context'
 
 const leagueSpartan = LeagueSpartan({ subsets: ['latin'] })
 
@@ -43,7 +44,9 @@ export default function RootLayout({
             width="0"
           ></iframe>
         )}
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
