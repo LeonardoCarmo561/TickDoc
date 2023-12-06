@@ -26,10 +26,10 @@ export function ClientsTable({
 }) {
   const [inputSearch, setInputSearch] = useState('')
   const item = useMemo(() => {
-    return String(queryParams.item) || '0'
+    return String(queryParams.item || '0')
   }, [queryParams])
   const total = useMemo(() => {
-    return String(queryParams.total) || '10'
+    return String(queryParams.total || '10')
   }, [queryParams])
   const search = useMemo(() => {
     const searchValue = queryParams.search || ''
@@ -37,7 +37,7 @@ export function ClientsTable({
     return searchValue
   }, [queryParams])
   const status = useMemo(() => {
-    return String(queryParams.status) || ''
+    return String(queryParams.status || '')
   }, [queryParams])
 
   const { data, error, isLoading, revalidate } = useFetch<

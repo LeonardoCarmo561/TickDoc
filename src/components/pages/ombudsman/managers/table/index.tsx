@@ -17,10 +17,10 @@ export function ManagersTable(props: {
   const [inputSearch, setInputSearch] = useState('')
 
   const item = useMemo(() => {
-    return String(props.queryParams.item) || '0'
+    return String(props.queryParams.item || '0')
   }, [props.queryParams])
   const total = useMemo(() => {
-    return String(props.queryParams.total) || '10'
+    return String(props.queryParams.total || '10')
   }, [props.queryParams])
   const search = useMemo(() => {
     const searchValue = props.queryParams.search || ''
