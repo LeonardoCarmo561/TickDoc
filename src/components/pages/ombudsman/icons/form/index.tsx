@@ -25,7 +25,7 @@ export function IconsForm(props: IconsFormProps) {
         if (res instanceof Error) {
           alert(res.message)
         } else {
-          alert('Ramo de atividade criado com sucesso')
+          alert('Ícone criado com sucesso')
           props.revalidate?.()
           handleClose()
         }
@@ -35,7 +35,7 @@ export function IconsForm(props: IconsFormProps) {
         if (res instanceof Error) {
           alert(res.message)
         } else {
-          alert('Ramo de atividade atualizado com sucesso')
+          alert('Ícone atualizado com sucesso')
           props.revalidate?.()
           handleClose()
         }
@@ -57,7 +57,11 @@ export function IconsForm(props: IconsFormProps) {
       formTitle={props.create ? 'Novo Ícone' : 'Editar Ícone'}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       handleSubmit={(e: BaseSyntheticEvent<object, any, any>) => {
-        if (getValues().icon.length === 0 && !props.create) {
+        if (
+          (getValues().icon.length === 0 ||
+            typeof getValues().icon === 'string') &&
+          !props.create
+        ) {
           unregister('icon')
         }
         return handleSubmit(submit)(e)

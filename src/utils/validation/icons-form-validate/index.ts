@@ -15,7 +15,7 @@ export const iconsFormSchema = z.object({
       'Tamanho máximo permitido: 5MB.',
     )
     .refine(
-      (file) => file[0]?.type.includes('image/'),
+      (file) => file[0] && file[0]?.type && file[0]?.type.includes('image/'),
       'Apenas imagens no formato .jpg, .jpeg, .png e .webp são suportadas',
     )
     .transform((files) => files[0])
