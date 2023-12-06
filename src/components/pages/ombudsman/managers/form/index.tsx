@@ -136,7 +136,7 @@ export function ManagersForm(props: ManagersFormProps) {
             autoComplete="off"
             id="birth_date-field"
             type="date"
-            className="p-2 border border-zinc-500 rounded-lg w-full"
+            className="p-2 border border-zinc-500 rounded-lg w-full bg-inherit"
             {...register('birth_date')}
           />
           <Form.ErrorMessage field="birth_date" />
@@ -151,7 +151,7 @@ export function ManagersForm(props: ManagersFormProps) {
           id="email-field"
           type="email"
           placeholder="email@exemplo.com"
-          className="p-2 border border-zinc-500 rounded-xl w-full"
+          className="p-2 border border-zinc-500 rounded-xl w-full bg-inherit"
           {...register('email')}
         />
         <Form.ErrorMessage field="email" />
