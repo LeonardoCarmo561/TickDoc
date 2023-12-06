@@ -1,4 +1,4 @@
-import { ManagersTable } from '@/components/pages/ombudsman/managers'
+import { GroupingsTable } from '@/components/pages/ombudsman/groupings'
 
 export default function ManagersPage({
   searchParams,
@@ -9,7 +9,7 @@ export default function ManagersPage({
     <main className="p-2 flex flex-col overflow-auto">
       <h2 className="text-xl">Agrupamentos</h2>
 
-      <ManagersTable queryParams={searchParams} />
+      <GroupingsTable queryParams={searchParams} />
     </main>
   )
 }
