@@ -1,12 +1,11 @@
 import { ClientData } from '@/@types'
 import { Environment } from '@/utils'
-import { Metadata, ResolvingMetadata } from 'next'
+import { Metadata } from 'next'
 
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string }
-  parent: ResolvingMetadata
 }): Promise<Metadata> {
   const ombudsmanSlug = params.slug
   const institution: ClientData = await fetch(
