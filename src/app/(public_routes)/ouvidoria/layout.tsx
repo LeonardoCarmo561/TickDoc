@@ -23,5 +23,5 @@ export default function PublicRootLayout({
 }: {
   children: ReactNode
 }) {
-  return { children }
+  return children
 }
