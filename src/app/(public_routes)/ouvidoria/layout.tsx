@@ -7,7 +7,6 @@ export const metadata: Metadata = {
     'TickDoc - Gestão Integrada. Um produto da Rede Participar Brasil de Tecnologia.',
   manifest: '/ouvidoria-manifest.json',
   keywords: ['nextjs', 'nextjs13', 'next13', 'pwa', 'next-pwa'],
-  themeColor: [{ media: '(prefers-color-scheme: dark)', color: '#1E90FF' }],
   authors: [
     { name: 'Rede Participar', url: 'https://redeparticiparbrasil.com.br/' },
     { name: 'Economic News Brasil', url: 'https://economicnewsbrasil.com.br' },
