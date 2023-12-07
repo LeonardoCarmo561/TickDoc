@@ -14,11 +14,7 @@ export function ModuleLogo() {
           width={300}
           height={150}
           alt={currentModule.title}
-          src={
-            process.env.NODE_ENV === 'development'
-              ? 'https://s3.amazonaws.com/static.tickdoc.com.br/Teste/logo/Logo.png'
-              : currentModule.logo
-          }
+          src={currentModule.logo}
           className="sm:w-80 w-48"
           priority
         />

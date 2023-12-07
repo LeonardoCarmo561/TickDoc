@@ -77,10 +77,11 @@ export function AdminLoginForm() {
         </div>
 
         <Form.Field>
-          <Form.Label htmlFor="email" className="text-zinc-700">
+          <Form.Label htmlFor="email-field" className="text-zinc-700">
             E-mail
           </Form.Label>
           <input
+            id="email-field"
             type="email"
             className="h-10 rounded-xl px-2 text-black shadow-2xl border-gray-400 border-[2px] focus:outline-dodgerblue"
             {...register('email')}
@@ -88,10 +89,11 @@ export function AdminLoginForm() {
         </Form.Field>
 
         <Form.Field>
-          <Form.Label htmlFor="password" className="text-zinc-700">
+          <Form.Label htmlFor="password-field" className="text-zinc-700">
             Senha
           </Form.Label>
           <input
+            id="password-field"
             type="password"
             className="h-10 rounded-xl px-2 text-black shadow-2xl border-gray-400 border-[2px] focus:outline-dodgerblue"
             {...register('password')}
