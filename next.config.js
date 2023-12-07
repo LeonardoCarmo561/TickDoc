@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+if (process.env.NODE_ENV === 'development') {
+  const dns = require("dns");
+  dns.setDefaultResultOrder("ipv4first")
+
+}
+
 const nextConfig = {
   images: {
     remotePatterns: [

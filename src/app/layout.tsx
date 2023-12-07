@@ -39,6 +39,7 @@ export default function RootLayout({
       >
         {process.env.NODE_ENV === 'production' && (
           <iframe
+            title="tagmanager"
             src="https://www.googletagmanager.com/ns.html?id=GTM-MNK5ZRTN"
             height="0"
             width="0"
