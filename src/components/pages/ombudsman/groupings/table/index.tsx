@@ -72,7 +72,7 @@ export function GroupingsTable(props: {
                 ['search'],
                 [inputSearch],
               )
-              push(`workfields?${currentQuery}`)
+              push(`groupings?${currentQuery}`)
             }}
             className="p-1 w-7 h-7 rounded-full hover:bg-zinc-500 hover:bg-opacity-30 transition-colors focus:bg-zinc-500 focus:bg-opacity-30 outline-none"
           >
@@ -184,7 +184,7 @@ export function GroupingsTable(props: {
                             ['total'],
                             [e.target.value],
                           )
-                          push(`workfields?${currentQuery}`)
+                          push(`groupings?${currentQuery}`)
                         }}
                         className="p-2 border border-zinc-500 rounded-xl bg-inherit"
                       >

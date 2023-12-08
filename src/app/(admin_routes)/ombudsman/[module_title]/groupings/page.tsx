@@ -1,6 +1,6 @@
 import { GroupingsTable } from '@/components/pages/ombudsman/groupings'
 
-export default function ManagersPage({
+export default function GroupingsPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string }

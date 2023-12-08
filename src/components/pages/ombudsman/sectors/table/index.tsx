@@ -1,20 +1,28 @@
 'use client'
 
-import { FormatStatus, LoadingSpinner, Tooltip } from '@/components'
-import { getAllAdminUsers } from '@/services'
-import { formatDatetime, updateQuery } from '@/utils'
-import { useFetch } from '@/utils/hooks'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+// React
 import { useEffect, useMemo, useState } from 'react'
-import { MdInfoOutline, MdSearch } from 'react-icons/md'
-import { CreateManagerButton } from '../form-button/create-button'
 
-export function ManagersTable(props: {
+// Local
+import { SectorData } from '@/@types'
+import { LoadingSpinner, Tooltip } from '@/components'
+import { MdInfoOutline, MdSearch } from 'react-icons/md'
+import Link from 'next/link'
+import { Environment, formatDatetime, updateQuery } from '@/utils'
+import { useRouter } from 'next/navigation'
+import { getAllSectors } from '@/services'
+// import { CreateGroupingButton } from '../form-button/create-button'
+import Image from 'next/image'
+
+export function SectorsTable(props: {
   queryParams: { [key: string]: string }
 }) {
   const { push } = useRouter()
+  const [sectors, setSectors] = useState<SectorData[]>([])
   const [inputSearch, setInputSearch] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [totalCount, setTotalCount] = useState(0)
+  const [update, setUpdate] = useState(true)
 
   const item = useMemo(() => {
     return String(props.queryParams.item || '0')
@@ -28,19 +36,21 @@ export function ManagersTable(props: {
     return searchValue
   }, [props.queryParams])
 
-  const { data, error, isLoading, revalidate } = useFetch(
-    getAllAdminUsers(item, total, search),
-  )
-
   useEffect(() => {
-    revalidate()
-  }, [item, total, search, revalidate])
-
-  useEffect(() => {
-    if (error) {
-      alert(error.message)
-    }
-  }, [error])
+    getAllSectors(item, total, search)
+      .then((res) => {
+        if (res instanceof Error) {
+          alert(res.message)
+        } else {
+          setSectors(res.results)
+          setTotalCount(res.count)
+        }
+      })
+      .finally(() => {
+        setUpdate(false)
+        setIsLoading(false)
+      })
+  }, [item, search, total, update])
 
   return (
     <div className="h-fit">
@@ -62,14 +72,14 @@ export function ManagersTable(props: {
                 ['search'],
                 [inputSearch],
               )
-              push(`managers?${currentQuery}`)
+              push(`sectors?${currentQuery}`)
             }}
             className="p-1 w-7 h-7 rounded-full hover:bg-zinc-500 hover:bg-opacity-30 transition-colors focus:bg-zinc-500 focus:bg-opacity-30 outline-none"
           >
             <MdSearch className="w-5 h-5" />
           </button>
         </div>
-        <CreateManagerButton />
+        {/* <CreateGroupingButton /> */}
       </div>
 
       <div
@@ -81,16 +91,19 @@ export function ManagersTable(props: {
             <tr>
               <th align="center" className="py-3 px-3"></th>
               <th align="center" className="py-3 px-3">
+                Ícone
+              </th>
+              <th align="center" className="py-3 px-3">
                 Nome
               </th>
               <th align="center" className="py-3 px-3">
-                E-mail
+                Agrupamento
               </th>
               <th align="center" className="py-3 px-3">
-                Último Login
+                Criado em
               </th>
               <th align="center" className="py-3 px-3">
-                Status
+                Última atualização em
               </th>
             </tr>
           </thead>
@@ -98,7 +111,7 @@ export function ManagersTable(props: {
           <tbody className="divide-y divide-zinc-500">
             {isLoading && (
               <tr>
-                <td colSpan={5}>
+                <td colSpan={6}>
                   <div className="p-3 overflow-hidden flex-nowrap flex text-lg gap-2 items-center justify-center">
                     <LoadingSpinner />
                     <span>carregando...</span>
@@ -106,39 +119,53 @@ export function ManagersTable(props: {
                 </td>
               </tr>
             )}
-            {data &&
-              data?.results.map((row) => (
-                <tr key={row.id}>
-                  <td align="center" className="py-3">
-                    <Tooltip title="detalhes" position="rigth">
-                      <Link href={`managers/details/${row.id}`} tabIndex={-1}>
-                        <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
-                          <MdInfoOutline />
-                        </button>
-                      </Link>
-                    </Tooltip>
-                  </td>
-                  <td align="center" className="py-3">
-                    {row.username}
-                  </td>
-                  <td align="center" className="py-3">
-                    {row.email}
-                  </td>
-                  <td align="center" className="py-3">
-                    {row.last_login
-                      ? formatDatetime(row.last_login)
-                      : 'Ainda não entrou'}
-                  </td>
-                  <td align="center" className="py-3 pr-2">
-                    <FormatStatus status={row.is_active} />
-                  </td>
-                </tr>
-              ))}
+            {sectors.map((row) => (
+              <tr key={row.id}>
+                <td align="center" className="py-3">
+                  <Tooltip title="detalhes" position="rigth">
+                    <Link href={`groupings/details/${row.id}`} tabIndex={-1}>
+                      <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
+                        <MdInfoOutline />
+                      </button>
+                    </Link>
+                  </Tooltip>
+                </td>
+                <td align="center" className="py-3">
+                  <Image
+                    alt={row.name}
+                    src={String(
+                      Environment.NODE_ENV === 'development'
+                        ? `${Environment.URL_BASE}${row.icon}`
+                        : row.icon,
+                    )}
+                    width={50}
+                    height={50}
+                    className="max-w-[50px] max-h-[50px] w-full h-full"
+                  />
+                </td>
+                <td align="center" className="py-3">
+                  {row.name}
+                </td>
+                <td align="center" className="py-3">
+                  {String(row.grouping_id)}
+                </td>
+                <td align="center" className="py-3">
+                  {row.created_at
+                    ? formatDatetime(row.created_at)
+                    : 'Não definido'}
+                </td>
+                <td align="center" className="py-3">
+                  {row.updated_at && row.updated_at !== row.created_at
+                    ? formatDatetime(row.updated_at)
+                    : 'Não houve atualizações'}
+                </td>
+              </tr>
+            ))}
           </tbody>
 
-          {data && ((data.count === 0 && !isLoading) || data.count > 10) && (
+          {((totalCount === 0 && !isLoading) || totalCount > 10) && (
             <tfoot>
-              {data.count === 0 && !isLoading && (
+              {totalCount === 0 && !isLoading && (
                 <tr>
                   <td className="py-3">
                     <span className="text-zinc-700 dark:text-zinc-200 px-2">
@@ -147,7 +174,7 @@ export function ManagersTable(props: {
                   </td>
                 </tr>
               )}
-              {data.count > 10 && (
+              {totalCount > 10 && (
                 <tr>
                   <td colSpan={5} className="py-2">
                     <div className="flex flex-1 items-center justify-center">
@@ -163,7 +190,7 @@ export function ManagersTable(props: {
                             ['total'],
                             [e.target.value],
                           )
-                          push(`managers?${currentQuery}`)
+                          push(`sectors?${currentQuery}`)
                         }}
                         className="p-2 border border-zinc-500 rounded-xl bg-inherit"
                       >
