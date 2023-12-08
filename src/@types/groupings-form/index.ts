@@ -1,4 +1,4 @@
-import { groupingsFormSchema } from '@/utils/validation/groupings-form-validate'
+import { groupingsFormSchema } from '@/utils/validation/groupings-form-validation'
 import { z } from 'zod'
 import { GroupingData } from '..'
 

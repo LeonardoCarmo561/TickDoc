@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+
+/**
+ * Node 17/18+ uses IPv6 in localhost
+ * Because of this, an error occurs when the Next.JS fecths images from localhost:8000
+ * To resolve this issue, simply add IPv4 as the first result in the DNS order 
+ */
 if (process.env.NODE_ENV === 'development') {
   const dns = require("dns");
   dns.setDefaultResultOrder("ipv4first")

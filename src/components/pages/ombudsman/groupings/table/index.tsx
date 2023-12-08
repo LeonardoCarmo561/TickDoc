@@ -8,10 +8,11 @@ import { GroupingData } from '@/@types'
 import { LoadingSpinner, Tooltip } from '@/components'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
-import { formatDatetime, updateQuery } from '@/utils'
+import { Environment, formatDatetime, updateQuery } from '@/utils'
 import { useRouter } from 'next/navigation'
 import { getAllGroupings } from '@/services'
 import { CreateGroupingButton } from '../form-button/create-button'
+import Image from 'next/image'
 
 export function GroupingsTable(props: {
   queryParams: { [key: string]: string }
@@ -90,6 +91,9 @@ export function GroupingsTable(props: {
             <tr>
               <th align="center" className="py-3 px-3"></th>
               <th align="center" className="py-3 px-3">
+                Ícone
+              </th>
+              <th align="center" className="py-3 px-3">
                 Nome
               </th>
               <th align="center" className="py-3 px-3">
@@ -116,12 +120,25 @@ export function GroupingsTable(props: {
               <tr key={row.id}>
                 <td align="center" className="py-3">
                   <Tooltip title="detalhes" position="rigth">
-                    <Link href={`workfields/details/${row.id}`} tabIndex={-1}>
+                    <Link href={`groupings/details/${row.id}`} tabIndex={-1}>
                       <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
                         <MdInfoOutline />
                       </button>
                     </Link>
                   </Tooltip>
+                </td>
+                <td align="center" className="py-3">
+                  <Image
+                    alt={row.name}
+                    src={String(
+                      Environment.NODE_ENV === 'development'
+                        ? `${Environment.URL_BASE}${row.icon}`
+                        : row.icon,
+                    )}
+                    width={50}
+                    height={50}
+                    className="max-w-[50px] max-h-[50px] w-full h-full"
+                  />
                 </td>
                 <td align="center" className="py-3">
                   {row.name}

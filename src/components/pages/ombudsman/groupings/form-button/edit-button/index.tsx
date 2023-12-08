@@ -5,7 +5,7 @@ import { GroupingsForm } from '../../form'
 import { MdEdit } from 'react-icons/md'
 import { GroupingData } from '@/@types'
 
-export function EditIconButton({
+export function EditGroupingButton({
   groupingData,
   revalidate,
 }: {

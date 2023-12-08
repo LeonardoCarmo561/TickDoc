@@ -1,4 +1,4 @@
-import { clientsFormSchema } from '@/utils/validation/clients-form-validate'
+import { clientsFormSchema } from '@/utils/validation/clients-form-validation'
 import { z } from 'zod'
 import { ClientData } from '..'
 

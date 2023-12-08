@@ -9,7 +9,7 @@ import { resetPassword } from '@/services'
 import {
   resetPasswordFormSchema,
   // resetPasswordTokenFormSchema,
-} from '@/utils/validation/reset-password-form-validate'
+} from '@/utils/validation/reset-password-form-validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { MdSend } from 'react-icons/md'
