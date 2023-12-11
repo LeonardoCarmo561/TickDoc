@@ -11,8 +11,8 @@ import Link from 'next/link'
 import { Environment, formatDatetime, updateQuery } from '@/utils'
 import { useRouter } from 'next/navigation'
 import { getAllSectors } from '@/services'
-// import { CreateGroupingButton } from '../form-button/create-button'
 import Image from 'next/image'
+import { CreateSectordButton } from '../form-button/create-button'
 
 export function SectorsTable(props: {
   queryParams: { [key: string]: string }
@@ -79,7 +79,7 @@ export function SectorsTable(props: {
             <MdSearch className="w-5 h-5" />
           </button>
         </div>
-        {/* <CreateGroupingButton /> */}
+        <CreateSectordButton />
       </div>
 
       <div
@@ -123,7 +123,7 @@ export function SectorsTable(props: {
               <tr key={row.id}>
                 <td align="center" className="py-3">
                   <Tooltip title="detalhes" position="rigth">
-                    <Link href={`groupings/details/${row.id}`} tabIndex={-1}>
+                    <Link href={`sectors/details/${row.id}`} tabIndex={-1}>
                       <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
                         <MdInfoOutline />
                       </button>
