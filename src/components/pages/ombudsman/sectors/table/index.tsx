@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 // Local
 import { SectorData } from '@/@types'
-import { LoadingSpinner, Tooltip } from '@/components'
+import { FormatStatus, LoadingSpinner, Tooltip } from '@/components'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
 import { Environment, formatDatetime, updateQuery } from '@/utils'
@@ -105,6 +105,9 @@ export function SectorsTable(props: {
               <th align="center" className="py-3 px-3">
                 Última atualização em
               </th>
+              <th align="center" className="py-3 px-3">
+                Status
+              </th>
             </tr>
           </thead>
 
@@ -158,6 +161,9 @@ export function SectorsTable(props: {
                   {row.updated_at && row.updated_at !== row.created_at
                     ? formatDatetime(row.updated_at)
                     : 'Não houve atualizações'}
+                </td>
+                <td align="center" className="py-3 pr-3">
+                  <FormatStatus status={row.status} />
                 </td>
               </tr>
             ))}

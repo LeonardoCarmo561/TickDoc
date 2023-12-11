@@ -25,7 +25,9 @@ export async function getAllSectors(
   }
 }
 
-export async function getSector(id: number): Promise<SectorData | Error> {
+export async function getSector(
+  id: number | string,
+): Promise<SectorData | Error> {
   try {
     const relativeUrl = `/V1/sectors/${id}/`
 
@@ -56,7 +58,7 @@ export async function createSector(
 }
 
 export async function updateSector(
-  id: number,
+  id: number | number,
   formData: SectorsFormData,
 ): Promise<SectorData | Error> {
   try {
