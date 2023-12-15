@@ -1,7 +1,7 @@
 import { SectorsFormData, SectorsFormProps } from '@/@types'
 import { Form, LoadingSpinner } from '@/components'
 import { createSector, updateSector } from '@/services'
-import { sectorsFormSchema } from '@/utils'
+import { sectorsFormSchema } from '@/utils/validation/ombudsman'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { MdCancel, MdSave } from 'react-icons/md'

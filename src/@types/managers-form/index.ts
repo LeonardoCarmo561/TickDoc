@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { AdminUserData } from '..'
-import { managersFormSchema } from '@/utils'
+import { managersFormSchema } from '@/utils/validation/admin'
 
 export type ManagersFormProps = {
   create: boolean

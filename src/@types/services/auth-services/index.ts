@@ -1,5 +1,5 @@
 import { ModuleData } from '@/@types'
-import { loginFormSchema } from '@/utils/validation'
+import { loginFormSchema } from '@/utils/validation/others'
 import z from 'zod'
 
 export type LoginFormData = z.infer<typeof loginFormSchema>

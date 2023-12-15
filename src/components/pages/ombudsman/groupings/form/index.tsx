@@ -2,7 +2,7 @@
 import { GroupingsFormData, GroupingsFormProps } from '@/@types'
 import { Form, LoadingSpinner } from '@/components'
 import { createGrouping, updateGrouping } from '@/services'
-import { groupingsFormSchema } from '@/utils/validation'
+import { groupingsFormSchema } from '@/utils/validation/ombudsman'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { MdCancel, MdSave } from 'react-icons/md'

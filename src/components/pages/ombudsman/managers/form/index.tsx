@@ -2,7 +2,7 @@
 import { ManagersFormData, ManagersFormProps } from '@/@types'
 import { Form, LoadingSpinner } from '@/components'
 import { createAdminUser, updateAdminUser } from '@/services'
-import { managersFormSchema } from '@/utils'
+import { managersFormSchema } from '@/utils/validation/admin'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { SelectDocumentType } from './select-document-type'

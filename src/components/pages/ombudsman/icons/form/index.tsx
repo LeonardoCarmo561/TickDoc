@@ -1,7 +1,7 @@
 import { IconsFormData, IconsFormProps } from '@/@types'
 import { Form, LoadingSpinner } from '@/components'
 import { createIcon, updateIcon } from '@/services'
-import { iconsFormSchema } from '@/utils/validation'
+import { iconsFormSchema } from '@/utils/validation/admin'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BaseSyntheticEvent } from 'react'
 import { useForm } from 'react-hook-form'

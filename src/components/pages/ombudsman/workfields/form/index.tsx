@@ -1,7 +1,7 @@
 import { WorkFieldsFormData, WorkfFieldsFormProps } from '@/@types'
 import { Form, LoadingSpinner } from '@/components'
 import { createWorkField, updateWorkField } from '@/services'
-import { workFieldFormSchema } from '@/utils/validation'
+import { workFieldFormSchema } from '@/utils/validation/admin'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { MdCancel, MdSave } from 'react-icons/md'
