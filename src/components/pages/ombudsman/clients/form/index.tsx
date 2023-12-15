@@ -3,7 +3,7 @@ import { ClientsFormData, ClientsFormProps } from '@/@types/clients-form'
 import { Form, LoadingSpinner } from '@/components'
 import { Modal } from '@/components/modal'
 import { createClient, updateClient } from '@/services'
-import { clientsFormSchema } from '@/utils/validation/clients-form-validation'
+import { clientsFormSchema } from '@/utils/validation/admin'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Controller,

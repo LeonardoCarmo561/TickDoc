@@ -1,4 +1,4 @@
-import { sectorsFormSchema } from '@/utils/validation/sectors-form-validation'
+import { sectorsFormSchema } from '@/utils/validation/ombudsman'
 import { z } from 'zod'
 import { SectorData } from '..'
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { workFieldFormSchema } from '@/utils/validation/workfields-form-validation'
+import { workFieldFormSchema } from '@/utils/validation/admin'
 import { ReactNode } from 'react'
 import { z } from 'zod'
 

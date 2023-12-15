@@ -1,7 +1,7 @@
 import {
   resetPasswordFormSchema,
   resetPasswordTokenFormSchema,
-} from '@/utils/validation/reset-password-form-validation'
+} from '@/utils/validation/others'
 import { z } from 'zod'
 
 export type ResetPasswordFormData = z.infer<typeof resetPasswordFormSchema>

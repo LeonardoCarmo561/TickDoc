@@ -2,7 +2,7 @@
 import { ClientsFormData, ClientsFormProps } from '@/@types/clients-form'
 import { Form } from '@/components'
 import { Modal } from '@/components/modal'
-import { clientsFormSchema } from '@/utils/validation/clients-form-validation'
+import { clientsFormSchema } from '@/utils/validation/admin'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { MdCancel, MdSave } from 'react-icons/md'

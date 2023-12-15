@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { IconData } from '..'
-import { iconsFormSchema } from '@/utils/validation/icons-form-validation'
+import { iconsFormSchema } from '@/utils/validation/admin'
 
 export type IconsFormProps = {
   create: boolean

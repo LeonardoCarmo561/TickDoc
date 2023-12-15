@@ -1,15 +1,9 @@
 'use client'
 
-import {
-  ResetPasswordFormData,
-  // ResetPasswordTokenFormData,
-} from '@/@types/reset-password'
+import { ResetPasswordFormData } from '@/@types/reset-password'
 import { Form } from '@/components'
 import { resetPassword } from '@/services'
-import {
-  resetPasswordFormSchema,
-  // resetPasswordTokenFormSchema,
-} from '@/utils/validation/reset-password-form-validation'
+import { resetPasswordFormSchema } from '@/utils/validation/others'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { MdSend } from 'react-icons/md'
