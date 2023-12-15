@@ -150,7 +150,9 @@ export function SectorsTable(props: {
                   {row.name}
                 </td>
                 <td align="center" className="py-3">
-                  {String(row.grouping_id)}
+                  {row.grouping_id
+                    ? String(row.grouping_id)
+                    : 'Não possui agrupamento'}
                 </td>
                 <td align="center" className="py-3">
                   {row.created_at
