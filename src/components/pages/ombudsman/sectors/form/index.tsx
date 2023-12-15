@@ -22,7 +22,9 @@ export function SectorsForm(props: SectorsFormProps) {
     resolver: zodResolver(sectorsFormSchema),
     defaultValues: {
       ...props.sectorData,
-      grouping_id: props.sectorData?.grouping_id.id,
+      grouping_id: props.sectorData?.grouping_id
+        ? props.sectorData?.grouping_id.id
+        : undefined,
     },
   })
 
