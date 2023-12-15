@@ -1,4 +1,4 @@
-import { SubjectData, TotalCount } from '@/@types'
+import { SubjectData, SubjectFormData, TotalCount } from '@/@types'
 import { api } from '..'
 
 export async function getAllSubjects(
@@ -41,7 +41,7 @@ export async function getSubject(
 }
 
 export async function createSubject(
-  formData: any,
+  formData: SubjectFormData,
 ): Promise<SubjectData | Error> {
   try {
     const relativeUrl = '/V1/subjects/'
@@ -58,7 +58,7 @@ export async function createSubject(
 
 export async function updateSubject(
   id: number | string,
-  formData: any,
+  formData: SubjectFormData,
 ): Promise<SubjectData | Error> {
   try {
     const relativeUrl = `/V1/subjects/${id}/`
