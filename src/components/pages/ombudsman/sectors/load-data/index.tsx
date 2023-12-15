@@ -66,7 +66,12 @@ export function LoadSectorData(props: { sectorId: number | string }) {
               <FormatStatus status={data.status} />
             </div>
             <span>Nome: {data.name}</span>
-            <span>Agrupamento: {data.grouping_id.name}</span>
+            <span>
+              Agrupamento:{' '}
+              {data.grouping_id
+                ? data.grouping_id.name
+                : 'Não possui agrupamento'}
+            </span>
             <span>Criado em: {formatDatetime(data.created_at)}</span>
             <span>
               Última atualização:{' '}
