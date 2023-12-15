@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { League_Spartan as LeagueSpartan } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/contexts/theme-context'
@@ -47,6 +48,7 @@ export default function RootLayout({
         <ThemeProvider>
           <ToastProvider>{children}</ToastProvider>
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   )
