@@ -1,7 +1,6 @@
 'use client'
 
 import { FormatStatus, LoadingSpinner, Tooltip } from '@/components'
-import { getAllAdminUsers } from '@/services'
 import { formatDatetime, updateQuery } from '@/utils'
 import { useFetch } from '@/utils/hooks'
 import Link from 'next/link'
@@ -9,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import { CreateManagerButton } from '../form-button/create-button'
+import { AdminUserData, TotalCount } from '@/@types'
 
 export function ManagersTable(props: {
   queryParams: { [key: string]: string }
@@ -28,7 +28,9 @@ export function ManagersTable(props: {
     return searchValue
   }, [props.queryParams])
 
-  const { data, error, isLoading, revalidate } = useFetch(`/V1/adminusers/`, {
+  const { data, error, isLoading, revalidate } = useFetch<
+    TotalCount<AdminUserData>
+  >(`/V1/adminusers/`, {
     item,
     total,
     search,
