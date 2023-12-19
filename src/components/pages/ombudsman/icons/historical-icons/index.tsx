@@ -6,7 +6,6 @@ import { MdRestore } from 'react-icons/md'
 
 // Local
 import { LoadingSpinner, Accordion } from '@/components'
-import { getIconHistorical } from '@/services'
 import { HistoricalData } from '@/@types'
 import { formatDatetime } from '@/utils'
 import { useFetch } from '@/utils/hooks'
@@ -17,7 +16,8 @@ export function HistoricalIcon(props: {
   onRevalidate: () => void
 }) {
   const { data, error, isLoading, revalidate } = useFetch<HistoricalData[]>(
-    getIconHistorical(props.iconId),
+    `/V1/icons/${props.iconId}/historical/`,
+    {},
     props.onRevalidate,
   )
 

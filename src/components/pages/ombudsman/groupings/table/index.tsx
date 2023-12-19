@@ -1,28 +1,24 @@
 'use client'
 
 // React
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 // Local
-import { GroupingData } from '@/@types'
+import { GroupingData, TotalCount } from '@/@types'
 import { LoadingSpinner, Tooltip } from '@/components'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
 import { Environment, formatDatetime, updateQuery } from '@/utils'
 import { useRouter } from 'next/navigation'
-import { getAllGroupings } from '@/services'
 import { CreateGroupingButton } from '../form-button/create-button'
 import Image from 'next/image'
+import { useFetch } from '@/utils/hooks'
 
 export function GroupingsTable(props: {
   queryParams: { [key: string]: string }
 }) {
   const { push } = useRouter()
-  const [groupings, setGroupings] = useState<GroupingData[]>([])
   const [inputSearch, setInputSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [totalCount, setTotalCount] = useState(0)
-  const [update, setUpdate] = useState(true)
 
   const item = useMemo(() => {
     return String(props.queryParams.item || '0')
@@ -36,21 +32,10 @@ export function GroupingsTable(props: {
     return searchValue
   }, [props.queryParams])
 
-  useEffect(() => {
-    getAllGroupings(item, total, search)
-      .then((res) => {
-        if (res instanceof Error) {
-          alert(res.message)
-        } else {
-          setGroupings(res.results)
-          setTotalCount(res.count)
-        }
-      })
-      .finally(() => {
-        setUpdate(false)
-        setIsLoading(false)
-      })
-  }, [item, search, total, update])
+  const { data: groupings, isLoading } = useFetch<TotalCount<GroupingData>>(
+    '/V1/groupings/',
+    { item, total, search },
+  )
 
   return (
     <div className="h-fit">
@@ -116,7 +101,7 @@ export function GroupingsTable(props: {
                 </td>
               </tr>
             )}
-            {groupings.map((row) => (
+            {groupings?.results.map((row) => (
               <tr key={row.id}>
                 <td align="center" className="py-3">
                   <Tooltip title="detalhes" position="rigth">
@@ -157,9 +142,10 @@ export function GroupingsTable(props: {
             ))}
           </tbody>
 
-          {((totalCount === 0 && !isLoading) || totalCount > 10) && (
+          {((groupings?.count === 0 && !isLoading) ||
+            (groupings && groupings?.count > 10)) && (
             <tfoot>
-              {totalCount === 0 && !isLoading && (
+              {groupings?.count === 0 && !isLoading && (
                 <tr>
                   <td className="py-3">
                     <span className="text-zinc-700 dark:text-zinc-200 px-2">
@@ -168,7 +154,7 @@ export function GroupingsTable(props: {
                   </td>
                 </tr>
               )}
-              {totalCount > 10 && (
+              {groupings?.count > 10 && (
                 <tr>
                   <td colSpan={5} className="py-2">
                     <div className="flex flex-1 items-center justify-center">

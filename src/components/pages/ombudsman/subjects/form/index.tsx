@@ -2,11 +2,12 @@ import { SubjectFormData, SubjectsFormProps } from '@/@types'
 import { Form, LoadingSpinner } from '@/components'
 import { createSubject, updateSubject } from '@/services'
 import { useAuthContext, useModuleContext } from '@/utils/hooks'
-import { workFieldFormSchema } from '@/utils/validation/admin'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BaseSyntheticEvent } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { MdCancel, MdSave } from 'react-icons/md'
+import { AutocompleteSectors } from './autocomplete-sectors'
+import { subjectsFormSchema } from '@/utils/validation/ombudsman/subjects-form-validation'
 
 export function SubjectsForm(props: SubjectsFormProps) {
   const currentModule = useModuleContext()
@@ -18,12 +19,14 @@ export function SubjectsForm(props: SubjectsFormProps) {
   }
 
   const subjectForm = useForm<SubjectFormData>({
-    resolver: zodResolver(workFieldFormSchema),
+    resolver: zodResolver(subjectsFormSchema),
     defaultValues: props.create
-      ? undefined
+      ? { sectors: [] }
       : {
           ...props.subjectData,
-          sectors: props.subjectData?.sectors.map((sector) => sector.id),
+          sectors: props.subjectData?.sectors.map((sector) =>
+            Number(sector[1]),
+          ),
         },
   })
 
@@ -96,7 +99,13 @@ export function SubjectsForm(props: SubjectsFormProps) {
         </div>
 
         <div className="col-span-2 md:col-span-1">
-          <span>Em breve</span>
+          <Controller
+            name="sectors"
+            control={control}
+            render={({ field: { value, onChange } }) => (
+              <AutocompleteSectors onChange={onChange} value={value} />
+            )}
+          />
         </div>
       </div>
 

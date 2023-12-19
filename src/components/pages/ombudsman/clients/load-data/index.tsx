@@ -1,6 +1,5 @@
 'use client'
 import { ClientData } from '@/@types'
-import { getClientDetails } from '@/services'
 import { useFetch } from '@/utils/hooks'
 import { Fragment, useCallback, useEffect, useRef } from 'react'
 import { CreateClientButton, EditClientButton } from '../form-button'
@@ -14,7 +13,7 @@ export function LoadData(props: { clientId: number | string }) {
     update.current = false
   }, [])
   const { data, error, isLoading, revalidate } = useFetch<ClientData>(
-    getClientDetails(props.clientId),
+    `/V1/institutions/${props.clientId}/`,
   )
 
   useEffect(() => {

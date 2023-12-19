@@ -28,9 +28,11 @@ export function ManagersTable(props: {
     return searchValue
   }, [props.queryParams])
 
-  const { data, error, isLoading, revalidate } = useFetch(
-    getAllAdminUsers(item, total, search),
-  )
+  const { data, error, isLoading, revalidate } = useFetch(`/V1/adminusers/`, {
+    item,
+    total,
+    search,
+  })
 
   useEffect(() => {
     revalidate()

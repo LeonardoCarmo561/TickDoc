@@ -7,7 +7,6 @@ import {
   FormatStatus,
   LoadingSpinner,
 } from '@/components'
-import { getGrouping } from '@/services'
 import { useFetch } from '@/utils/hooks'
 import { Fragment, useCallback, useEffect, useRef } from 'react'
 import { EditGroupingButton } from '../form-button/edit-button'
@@ -17,13 +16,13 @@ import { Environment, formatDatetime } from '@/utils'
 import Image from 'next/image'
 import { HistoricalGrouping } from '../historical-grouping'
 
-export function LoadGroupingData(props: { iconId: number | string }) {
+export function LoadGroupingData(props: { groupingId: number | string }) {
   const update = useRef(false)
   const handleSetupdate = useCallback(() => {
     update.current = false
   }, [])
   const { data, error, isLoading, revalidate } = useFetch<GroupingData>(
-    getGrouping(props.iconId),
+    `/V1/groupings/${props.groupingId}/`,
   )
 
   useEffect(() => {
@@ -111,8 +110,8 @@ export function LoadGroupingData(props: { iconId: number | string }) {
 
       <HistoricalGrouping
         revalidate={update.current}
-        groupingId={Number(props.iconId)}
         onRevalidate={handleSetupdate}
+        groupingId={Number(props.groupingId)}
       />
     </Fragment>
   )

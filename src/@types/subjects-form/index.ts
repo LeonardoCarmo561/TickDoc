@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { SubjectData } from '..'
+import { SubjectDetailsData } from '..'
 import { subjectsFormSchema } from '@/utils/validation/ombudsman/subjects-form-validation'
 
 export type SubjectsFormProps = {
@@ -7,7 +7,7 @@ export type SubjectsFormProps = {
   open: boolean
   onClose: () => void
   revalidate?: () => void
-  subjectData?: SubjectData
+  subjectData?: SubjectDetailsData
 }
 
 export type SubjectFormData = z.infer<typeof subjectsFormSchema>

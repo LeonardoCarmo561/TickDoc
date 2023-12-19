@@ -6,7 +6,6 @@ import {
   BackButton,
   FormatStatus,
 } from '@/components'
-import { getAdminUser } from '@/services'
 import { useFetch } from '@/utils/hooks'
 import { Fragment, useCallback, useEffect, useRef } from 'react'
 import { EditManagerButton } from '../form-button/edit-button'
@@ -21,7 +20,7 @@ export function LoadManagerData(props: { userId: number | string }) {
     update.current = false
   }, [])
   const { data, error, isLoading, revalidate } = useFetch<AdminUserData>(
-    getAdminUser(props.userId),
+    `/V1/adminusers/${props.userId}/`,
   )
 
   useEffect(() => {

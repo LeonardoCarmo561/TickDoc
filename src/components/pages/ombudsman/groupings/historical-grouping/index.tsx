@@ -6,7 +6,6 @@ import { MdRestore } from 'react-icons/md'
 
 // Local
 import { LoadingSpinner, Accordion } from '@/components'
-import { getGroupingHistorical } from '@/services'
 import { HistoricalData } from '@/@types'
 import { formatDatetime } from '@/utils'
 import { useFetch } from '@/utils/hooks'
@@ -17,7 +16,8 @@ export function HistoricalGrouping(props: {
   onRevalidate: () => void
 }) {
   const { data, error, isLoading, revalidate } = useFetch<HistoricalData[]>(
-    getGroupingHistorical(props.groupingId),
+    `/V1/groupings/${props.groupingId}/historical/`,
+    {},
     props.onRevalidate,
   )
 

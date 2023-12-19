@@ -6,7 +6,6 @@ import { MdRestore } from 'react-icons/md'
 
 // Local
 import { LoadingSpinner, Accordion } from '@/components'
-import { getManagerHistorical } from '@/services'
 import { HistoricalData } from '@/@types'
 import { formatDatetime } from '@/utils'
 import { useFetch } from '@/utils/hooks'
@@ -17,7 +16,8 @@ export function HistoricalManager(props: {
   onRevalidate: () => void
 }) {
   const { data, error, isLoading, revalidate } = useFetch<HistoricalData[]>(
-    getManagerHistorical(props.userId),
+    `/V1/adminusers/${props.userId}/historical/`,
+    {},
     props.onRevalidate,
   )
 

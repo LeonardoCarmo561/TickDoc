@@ -8,7 +8,7 @@ export default function GroupingDetailsPage({
 }) {
   return (
     <main className="flex flex-col gap-2 p-2 overflow-auto">
-      <LoadGroupingData iconId={params.id} />
+      <LoadGroupingData groupingId={params.id} />
     </main>
   )
 }

@@ -3,13 +3,13 @@
 import { useState } from 'react'
 import { SubjectsForm } from '../../form'
 import { MdEdit } from 'react-icons/md'
-import { SubjectData } from '@/@types'
+import { SubjectDetailsData } from '@/@types'
 
 export function EditSubjectButton({
   subjectData,
   revalidate,
 }: {
-  subjectData: SubjectData
+  subjectData: SubjectDetailsData
   revalidate?: () => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -29,8 +29,8 @@ export function EditSubjectButton({
         <SubjectsForm
           open={isOpen}
           create={false}
-          subjectData={subjectData}
           revalidate={revalidate}
+          subjectData={subjectData}
           onClose={() => setIsOpen(false)}
         />
       )}

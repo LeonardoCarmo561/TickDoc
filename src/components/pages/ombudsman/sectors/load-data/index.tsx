@@ -6,7 +6,6 @@ import {
   BackButton,
   FormatStatus,
 } from '@/components'
-import { getSector } from '@/services'
 import { useFetch } from '@/utils/hooks'
 import { Fragment, useCallback, useEffect, useRef } from 'react'
 import { EditSectorButton } from '../form-button/edit-button'
@@ -21,7 +20,7 @@ export function LoadSectorData(props: { sectorId: number | string }) {
     update.current = false
   }, [])
   const { data, error, isLoading, revalidate } = useFetch<SectorData>(
-    getSector(props.sectorId),
+    `/V1/sectors/${props.sectorId}/`,
   )
 
   useEffect(() => {

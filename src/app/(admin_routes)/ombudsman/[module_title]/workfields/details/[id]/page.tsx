@@ -4,7 +4,6 @@ import { DetailsPage } from '@/@types/params'
 import { Accordion, AccordionTitle, BackButton } from '@/components'
 import { CreateWorkFieldButton } from '@/components/pages/ombudsman/workfields/form-button/create-button'
 import { EditWorkFieldButton } from '@/components/pages/ombudsman/workfields/form-button/edit-button'
-import { getWorkField } from '@/services'
 import { formatDatetime } from '@/utils'
 import { useFetch } from '@/utils/hooks'
 import { useEffect } from 'react'
@@ -12,7 +11,7 @@ import { MdInfoOutline } from 'react-icons/md'
 
 export default function WorkFieldsDetailsPage(props: { params: DetailsPage }) {
   const { data, error, isLoading, revalidate } = useFetch<WorkFieldData>(
-    getWorkField(props.params.id),
+    `/V1/workfields/${props.params.id}/`,
   )
 
   useEffect(() => {

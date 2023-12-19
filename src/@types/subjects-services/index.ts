@@ -12,3 +12,13 @@ export type SubjectData = {
   created_at: string
   updated_at: string
 }
+
+export type SubjectDetailsData = {
+  id: number
+  name: string
+  status: boolean
+  institution_id: number
+  sectors: string[]
+  created_at: string
+  updated_at: string
+}

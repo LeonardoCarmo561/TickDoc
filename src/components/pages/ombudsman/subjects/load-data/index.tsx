@@ -1,5 +1,5 @@
 'use client'
-import { IconData } from '@/@types'
+import { SubjectDetailsData } from '@/@types'
 import {
   Accordion,
   AccordionTitle,
@@ -7,20 +7,24 @@ import {
   FormatStatus,
 } from '@/components'
 import { useFetch } from '@/utils/hooks'
-import { Fragment, useCallback, useEffect, useRef } from 'react'
-import { EditIconButton } from '../form-button/edit-button'
-import { CreateIconButton } from '../form-button/create-button'
+import { Fragment, useEffect, useRef } from 'react'
+import { EditSubjectButton } from '../form-button/edit-button'
+import { CreateSubjectButton } from '../form-button/create-button'
 import { MdInfoOutline } from 'react-icons/md'
 import { formatDatetime } from '@/utils'
-import { HistoricalIcon } from '../historical-icons'
+import Link from 'next/link'
+// import { HistoricalSector } from '../historical-sectors'
 
-export function LoadIconData(props: { iconId: number | string }) {
+export function LoadSubjectData(props: {
+  subjectId: number | string
+  moduleTitle: string
+}) {
   const update = useRef(false)
-  const handleSetupdate = useCallback(() => {
-    update.current = false
-  }, [])
-  const { data, error, isLoading, revalidate } = useFetch<IconData>(
-    `/V1/icons/${props.iconId}/`,
+  // const handleSetupdate = useCallback(() => {
+  //   update.current = false
+  // }, [])
+  const { data, error, isLoading, revalidate } = useFetch<SubjectDetailsData>(
+    `/V1/subjects/${props.subjectId}/`,
   )
 
   useEffect(() => {
@@ -35,15 +39,15 @@ export function LoadIconData(props: { iconId: number | string }) {
       <div className="flex w-full gap-2 border border-blue-500 p-2 rounded-xl dark:bg-zinc-700 bg-white shadow-lg">
         <div className="gap-2 flex">
           {data && (
-            <EditIconButton
-              iconData={data}
+            <EditSubjectButton
+              subjectData={data}
               revalidate={() => {
                 update.current = true
                 revalidate()
               }}
             />
           )}
-          <CreateIconButton />
+          <CreateSubjectButton />
         </div>
         <BackButton />
       </div>
@@ -59,12 +63,27 @@ export function LoadIconData(props: { iconId: number | string }) {
       >
         {isLoading && <span>Carregando...</span>}
         {data && (
-          <div className="flex flex-col w-fit gap-2">
-            <span>Nome: {data.name}</span>
+          <div className="flex flex-col w-fit gap-2 flex-wrap">
             <div className="flex gap-1 w-fit">
               <span>Status:</span>
               <FormatStatus status={data.status} />
             </div>
+            <span>Nome: {data.name}</span>
+            <span className="flex gap-1 flex-wrap">
+              Setores:{' '}
+              {data.sectors.map((sector) => (
+                <Link
+                  key={sector[1]}
+                  title={sector[0]}
+                  href={`/ombudsman/${props.moduleTitle}/sectors/details/${sector[1]}`}
+                  className="flex max-w-[100px] bg-blue-500 py-1 px-2 rounded-xl"
+                >
+                  <span className="line-clamp-1 text-ellipsis">
+                    {sector[0]}
+                  </span>
+                </Link>
+              ))}
+            </span>
             <span>Criado em: {formatDatetime(data.created_at)}</span>
             <span>
               Última atualização:{' '}
@@ -75,12 +94,6 @@ export function LoadIconData(props: { iconId: number | string }) {
           </div>
         )}
       </Accordion>
-
-      <HistoricalIcon
-        revalidate={update.current}
-        iconId={Number(props.iconId)}
-        onRevalidate={handleSetupdate}
-      />
     </Fragment>
   )
 }

@@ -11,7 +11,6 @@ import { MdInfoOutline, MdSearch } from 'react-icons/md'
 
 // Local
 import { LoadingSpinner, FormatStatus, Tooltip } from '@/components'
-import { getAllClients } from '@/services'
 import { ClientData, TotalCount } from '@/@types'
 import { formatDate, updateQuery } from '@/utils'
 
@@ -42,8 +41,7 @@ export function ClientsTable({
 
   const { data, error, isLoading, revalidate } = useFetch<
     TotalCount<ClientData>
-  >(getAllClients(item, total, search, status))
-
+  >('/V1/institutions/', { item, total, search, status })
   const { push } = useRouter()
 
   useEffect(() => {

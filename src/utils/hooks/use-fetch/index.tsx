@@ -2,9 +2,11 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
 import { useDebounce } from '..'
+import { api } from '@/services'
 
 export function useFetch<T = unknown>(
-  serviceFuncion: Promise<T | Error>,
+  url: string,
+  params?: { [key: string]: string },
   onRevalidate?: () => void,
 ) {
   const { debounce } = useDebounce(100)
@@ -14,6 +16,7 @@ export function useFetch<T = unknown>(
   const [error, setError] = useState<Error>()
 
   const revalidate = useCallback(() => {
+    console.log('Executando')
     setUpdate(true)
     onRevalidate?.()
   }, [])
@@ -22,24 +25,19 @@ export function useFetch<T = unknown>(
     debounce(() => {
       if (update) {
         setIsLoading(true)
-        serviceFuncion
-          .then((res) => {
-            if (res instanceof Error) {
-              setError(res)
-            } else {
-              setData(res)
-            }
-          })
-          .catch((err) => {
-            setError(new Error(err))
-          })
+        api
+          .get(url, { params })
+          .then((res) => setData(res.data))
+          .catch((error) =>
+            setError(new Error((error as { message: string }).message)),
+          )
           .finally(() => {
-            setUpdate(() => false)
+            setUpdate(false)
             setIsLoading(false)
           })
       }
     })
   }, [update])
 
-  return { data, isLoading, error, revalidate }
+  return { data, setData, isLoading, error, revalidate }
 }
