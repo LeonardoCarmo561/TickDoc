@@ -4,4 +4,5 @@ export type TypologyData = {
   status: boolean
   created_at: string
   updated_at: string
+  institution_id: number
 }

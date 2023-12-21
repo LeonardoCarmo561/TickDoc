@@ -10,7 +10,7 @@ import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
 import { formatDatetime, updateQuery } from '@/utils'
 import { useRouter } from 'next/navigation'
-// import { CreateWorkFieldButton } from '../form-button/create-button'
+import { CreateTypologyButton } from '../form-button/create-button'
 import { useFetch } from '@/utils/hooks'
 import { TYPOLOGIES_URL } from '@/services'
 
@@ -81,7 +81,7 @@ export function TypologiesTable(props: {
             <MdSearch className="w-5 h-5" />
           </button>
         </div>
-        {/* <CreateWorkFieldButton /> */}
+        <CreateTypologyButton />
       </div>
 
       <div
