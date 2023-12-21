@@ -10,7 +10,7 @@ import { LoadingScreen } from '@/components/loading-screen'
 import { refreshToken } from '@/services'
 import { api } from '@/services/config'
 import { jwtDecode } from 'jwt-decode'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useLayoutEffect, useState } from 'react'
 
 export const AuthContext = createContext({} as AuthContextData)
 
@@ -28,7 +28,7 @@ export function AuthProvider(props: AuthProviderProps) {
       .catch((error) => console.error(error))
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setUpdatingToken(true)
     refreshToken()
       .then((result) => {
