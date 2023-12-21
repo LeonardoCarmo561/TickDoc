@@ -4,24 +4,21 @@
 import { useEffect, useMemo, useState } from 'react'
 
 // Local
-import { WorkFieldData } from '@/@types'
+import { TotalCount, WorkFieldData } from '@/@types'
 import { LoadingSpinner, Tooltip } from '@/components'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
 import { formatDatetime, updateQuery } from '@/utils'
 import { useRouter } from 'next/navigation'
-import { getAllWorkFields } from '@/services'
 import { CreateWorkFieldButton } from '../form-button/create-button'
+import { useFetch } from '@/utils/hooks'
+import { WORKFIELDS_URL } from '@/services'
 
 export function WorkFieldsTable(props: {
   queryParams: { [key: string]: string }
 }) {
   const { push } = useRouter()
-  const [workFields, setWorkFields] = useState<WorkFieldData[]>([])
   const [inputSearch, setInputSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [totalCount, setTotalCount] = useState(0)
-  const [update, setUpdate] = useState(true)
 
   const item = useMemo(() => {
     return String(props.queryParams.item || '0')
@@ -35,21 +32,27 @@ export function WorkFieldsTable(props: {
     return searchValue
   }, [props.queryParams])
 
+  const {
+    data: workFields,
+    error,
+    isLoading,
+    revalidate,
+  } = useFetch<TotalCount<WorkFieldData>>(WORKFIELDS_URL, {
+    item,
+    total,
+    search,
+  })
+
   useEffect(() => {
-    getAllWorkFields(item, total, search)
-      .then((res) => {
-        if (res instanceof Error) {
-          alert(res.message)
-        } else {
-          setWorkFields(res.results)
-          setTotalCount(res.count)
-        }
-      })
-      .finally(() => {
-        setUpdate(false)
-        setIsLoading(false)
-      })
-  }, [item, search, total, update])
+    revalidate()
+  }, [item, revalidate, search, total])
+
+  useEffect(() => {
+    if (error) {
+      const listError = new Error((error as { message: string }).message)
+      alert(listError.message)
+    }
+  }, [error])
 
   return (
     <div className="h-fit">
@@ -112,7 +115,7 @@ export function WorkFieldsTable(props: {
                 </td>
               </tr>
             )}
-            {workFields.map((row) => (
+            {workFields?.results.map((row) => (
               <tr key={row.id}>
                 <td align="center" className="py-3">
                   <Tooltip title="detalhes" position="rigth">
@@ -140,9 +143,10 @@ export function WorkFieldsTable(props: {
             ))}
           </tbody>
 
-          {((totalCount === 0 && !isLoading) || totalCount > 10) && (
+          {((workFields?.count === 0 && !isLoading) ||
+            (workFields && workFields.count > 10)) && (
             <tfoot>
-              {totalCount === 0 && !isLoading && (
+              {workFields.count === 0 && !isLoading && (
                 <tr>
                   <td className="py-3">
                     <span className="text-zinc-700 dark:text-zinc-200 px-2">
@@ -151,7 +155,7 @@ export function WorkFieldsTable(props: {
                   </td>
                 </tr>
               )}
-              {totalCount > 10 && (
+              {workFields && workFields.count > 10 && (
                 <tr>
                   <td colSpan={5} className="py-2">
                     <div className="flex flex-1 items-center justify-center">

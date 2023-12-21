@@ -4,24 +4,21 @@
 import { useEffect, useMemo, useState } from 'react'
 
 // Local
-import { SubjectData } from '@/@types'
+import { SubjectData, TotalCount } from '@/@types'
 import { FormatStatus, LoadingSpinner, Tooltip } from '@/components'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
 import { formatDatetime, updateQuery } from '@/utils'
 import { useRouter } from 'next/navigation'
-import { getAllSubjects } from '@/services/subjects-services'
 import { CreateSubjectButton } from '../form-button/create-button'
+import { useFetch } from '@/utils/hooks'
+import { SUBJECTS_URL } from '@/services'
 
 export function SubjectsTable(props: {
   queryParams: { [key: string]: string }
 }) {
   const { push } = useRouter()
-  const [subjects, setSubjects] = useState<SubjectData[]>([])
   const [inputSearch, setInputSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [totalCount, setTotalCount] = useState(0)
-  const [update, setUpdate] = useState(true)
 
   const item = useMemo(() => {
     return String(props.queryParams.item || '0')
@@ -35,21 +32,27 @@ export function SubjectsTable(props: {
     return searchValue
   }, [props.queryParams])
 
+  const {
+    data: subjects,
+    error,
+    isLoading,
+    revalidate,
+  } = useFetch<TotalCount<SubjectData>>(SUBJECTS_URL, {
+    item,
+    total,
+    search,
+  })
+
   useEffect(() => {
-    getAllSubjects(item, total, search)
-      .then((res) => {
-        if (res instanceof Error) {
-          alert(res.message)
-        } else {
-          setSubjects(res.results)
-          setTotalCount(res.count)
-        }
-      })
-      .finally(() => {
-        setUpdate(false)
-        setIsLoading(false)
-      })
-  }, [item, search, total, update])
+    revalidate()
+  }, [item, search, total, revalidate])
+
+  useEffect(() => {
+    if (error) {
+      const listError = new Error((error as { message: string }).message)
+      alert(listError.message)
+    }
+  }, [error])
 
   return (
     <div className="h-fit">
@@ -71,7 +74,7 @@ export function SubjectsTable(props: {
                 ['search'],
                 [inputSearch],
               )
-              push(`sectors?${currentQuery}`)
+              push(`subjects?${currentQuery}`)
             }}
             className="p-1 w-7 h-7 rounded-full hover:bg-zinc-500 hover:bg-opacity-30 transition-colors focus:bg-zinc-500 focus:bg-opacity-30 outline-none"
           >
@@ -118,7 +121,7 @@ export function SubjectsTable(props: {
                 </td>
               </tr>
             )}
-            {subjects.map((row) => (
+            {subjects?.results.map((row) => (
               <tr key={row.id}>
                 <td align="center" className="py-3">
                   <Tooltip title="detalhes" position="rigth">
@@ -165,9 +168,10 @@ export function SubjectsTable(props: {
             ))}
           </tbody>
 
-          {((totalCount === 0 && !isLoading) || totalCount > 10) && (
+          {((subjects?.count === 0 && !isLoading) ||
+            (subjects && subjects.count > 10)) && (
             <tfoot>
-              {totalCount === 0 && !isLoading && (
+              {subjects.count === 0 && !isLoading && (
                 <tr>
                   <td className="py-3">
                     <span className="text-zinc-700 dark:text-zinc-200 px-2">
@@ -176,7 +180,7 @@ export function SubjectsTable(props: {
                   </td>
                 </tr>
               )}
-              {totalCount > 10 && (
+              {subjects && subjects.count > 10 && (
                 <tr>
                   <td colSpan={5} className="py-2">
                     <div className="flex flex-1 items-center justify-center">
@@ -192,7 +196,7 @@ export function SubjectsTable(props: {
                             ['total'],
                             [e.target.value],
                           )
-                          push(`sectors?${currentQuery}`)
+                          push(`subjects?${currentQuery}`)
                         }}
                         className="p-2 border border-zinc-500 rounded-xl bg-inherit"
                       >

@@ -1,8 +1,8 @@
-import { WorkFieldData } from '@/@types'
+import { TotalCount, WorkFieldData } from '@/@types'
 import { Form } from '@/components'
 import { LoadingSpinner } from '@/components/loading-spinner'
-import { getAllWorkFields } from '@/services'
-import { useDebounce } from '@/utils/hooks'
+import { WORKFIELDS_URL } from '@/services'
+import { useDebounce, useFetch } from '@/utils/hooks'
 import { useEffect, useState } from 'react'
 import { MdCheck, MdExpandLess, MdExpandMore } from 'react-icons/md'
 
@@ -13,32 +13,36 @@ export function AutocompleteWorkfields(props: {
   value: number
 }) {
   const { debounce } = useDebounce(ONE_SECOND)
-  const [workFields, setWorkFields] = useState<WorkFieldData[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [selectedLabel, setSelectedLabel] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
+  const {
+    data: workFields,
+    error,
+    isLoading,
+    revalidate,
+  } = useFetch<TotalCount<WorkFieldData>>(WORKFIELDS_URL, {
+    item: '0',
+    total: '999999999',
+    search,
+  })
+
   useEffect(() => {
-    setIsLoading(true)
-    debounce(() => {
-      getAllWorkFields('0', '999999999', search)
-        .then((res) => {
-          if (res instanceof Error) {
-            alert('Erro ao carregar ramos de atividade')
-          } else {
-            setWorkFields(res.results)
-          }
-        })
-        .finally(() => setIsLoading(false))
-    })
-  }, [debounce, search])
+    revalidate()
+  }, [debounce, revalidate, search])
+
+  useEffect(() => {
+    if (error) {
+      alert('Erro ao carregar ramos de atividade')
+    }
+  }, [error])
 
   useEffect(() => {
     if (props.value && workFields && !search) {
       setSelectedLabel(
-        workFields.find((workField) => workField.id === props.value)?.name ||
-          '',
+        workFields.results.find((workField) => workField.id === props.value)
+          ?.name || '',
       )
     }
   }, [workFields, search, props.value])
@@ -96,13 +100,13 @@ export function AutocompleteWorkfields(props: {
           </div>
         )}
 
-        {workFields.length === 0 && !isLoading && (
+        {workFields?.count === 0 && !isLoading && (
           <div className="w-full relative h-10 items-center flex">
             <span className="px-2 w-full">Nenhuma opção encontrada</span>
           </div>
         )}
 
-        {workFields.map((option) => (
+        {workFields?.results.map((option) => (
           <li
             key={option.id}
             className="w-full relative h-10 flex items-center justify-between"

@@ -1,35 +1,13 @@
-import { TotalCount, WorkFieldData, WorkFieldsFormData } from '@/@types'
+import { WorkFieldData, WorkFieldsFormData } from '@/@types'
 import { api } from '../config'
 
-export async function getAllWorkFields(
-  item = '0',
-  total = '10',
-  search = '',
-): Promise<TotalCount<WorkFieldData> | Error> {
-  try {
-    const relativeUrl = '/V1/workfields/'
-
-    const { data } = await api.get(relativeUrl, {
-      params: {
-        item,
-        total,
-        search,
-      },
-    })
-
-    if (data) return data
-
-    return new Error('Erro ao carregar ramos de atividade')
-  } catch (error) {
-    return new Error((error as { message: string }).message)
-  }
-}
+export const WORKFIELDS_URL = '/V1/workfields/'
 
 export async function createWorkField(
   formData: WorkFieldsFormData,
 ): Promise<WorkFieldData | Error> {
   try {
-    const relativeUrl = '/V1/workfields/'
+    const relativeUrl = WORKFIELDS_URL
 
     const { data } = await api.post(relativeUrl, formData)
 
@@ -41,28 +19,12 @@ export async function createWorkField(
   }
 }
 
-export async function getWorkField(
-  id: number | string,
-): Promise<WorkFieldData | Error> {
-  try {
-    const relativeUrl = `/V1/workfields/${id}/`
-
-    const { data } = await api.get(relativeUrl)
-
-    if (data) return data
-
-    return new Error('Erro ao carregar instância')
-  } catch (error) {
-    return new Error((error as { message: string }).message)
-  }
-}
-
 export async function updateWorkField(
   id: number | string,
   formData: WorkFieldsFormData,
 ): Promise<WorkFieldData | Error> {
   try {
-    const relativeUrl = `/V1/workfields/${id}/`
+    const relativeUrl = `${WORKFIELDS_URL}${id}/`
 
     const { data } = await api.patch(relativeUrl, formData)
 

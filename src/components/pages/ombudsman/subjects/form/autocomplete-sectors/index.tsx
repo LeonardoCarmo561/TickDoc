@@ -1,8 +1,8 @@
-import { SectorData } from '@/@types'
+import { SectorData, TotalCount } from '@/@types'
 import { Form } from '@/components'
 import { LoadingSpinner } from '@/components/loading-spinner'
-import { getAllSectors } from '@/services'
-import { useDebounce } from '@/utils/hooks'
+import { SECTORS_URL } from '@/services'
+import { useDebounce, useFetch } from '@/utils/hooks'
 import { useEffect, useState } from 'react'
 import { MdCheck, MdExpandLess, MdExpandMore } from 'react-icons/md'
 
@@ -13,31 +13,35 @@ export function AutocompleteSectors(props: {
   value: number[]
 }) {
   const { debounce } = useDebounce(ONE_SECOND)
-  const [sectors, setSectors] = useState<SectorData[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [selectedLabel, setSelectedLabel] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
+  const {
+    data: sectors,
+    error,
+    isLoading,
+    revalidate,
+  } = useFetch<TotalCount<SectorData>>(SECTORS_URL, {
+    item: '0',
+    total: '999999999',
+    search,
+  })
+
   useEffect(() => {
-    setIsLoading(true)
-    debounce(() => {
-      getAllSectors('0', '999999999', search)
-        .then((res) => {
-          if (res instanceof Error) {
-            alert('Erro ao carregar ramos de atividade')
-          } else {
-            setSectors(res.results)
-          }
-        })
-        .finally(() => setIsLoading(false))
-    })
-  }, [debounce, search])
+    revalidate()
+  }, [debounce, revalidate, search])
+
+  useEffect(() => {
+    if (error) {
+      alert('Erro ao carregar setores')
+    }
+  }, [error])
 
   useEffect(() => {
     if (props.value && sectors && !search) {
       let label = ''
-      const selectedSectors = sectors.filter((sector) =>
+      const selectedSectors = sectors.results.filter((sector) =>
         props.value.includes(sector.id),
       )
       selectedSectors.map((sector) => {
@@ -116,13 +120,13 @@ export function AutocompleteSectors(props: {
           </div>
         )}
 
-        {sectors.length === 0 && !isLoading && (
+        {sectors?.count === 0 && !isLoading && (
           <div className="w-full relative h-10 items-center flex">
             <span className="px-2 w-full">Nenhuma opção encontrada</span>
           </div>
         )}
 
-        {sectors.map((option) => (
+        {sectors?.results.map((option) => (
           <li
             key={option.id}
             className="w-full relative h-10 flex items-center justify-between"

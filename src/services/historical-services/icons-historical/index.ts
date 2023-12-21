@@ -1,11 +1,11 @@
 import { HistoricalData } from '@/@types'
-import { api } from '@/services'
+import { ICONS_URL, api } from '@/services'
 
 export async function getIconHistorical(
   id: number | string,
 ): Promise<HistoricalData[] | Error> {
   try {
-    const relativeUrl = `/V1/icons/${id}/historical/`
+    const relativeUrl = `${ICONS_URL}${id}/historical/`
 
     const { data } = await api.get(relativeUrl)
 

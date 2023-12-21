@@ -1,8 +1,8 @@
-import { IconData } from '@/@types'
+import { IconData, TotalCount } from '@/@types'
 import { Form } from '@/components'
 import { LoadingSpinner } from '@/components/loading-spinner'
-import { getAllIcons } from '@/services'
-import { useDebounce } from '@/utils/hooks'
+import { ICONS_URL } from '@/services'
+import { useDebounce, useFetch } from '@/utils/hooks'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { MdCheck, MdExpandLess, MdExpandMore } from 'react-icons/md'
@@ -14,31 +14,35 @@ export function AutocompleteIcons(props: {
   value: number
 }) {
   const { debounce } = useDebounce(ONE_SECOND)
-  const [icons, setIcons] = useState<IconData[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [selectedLabel, setSelectedLabel] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
+  const {
+    data: icons,
+    error,
+    isLoading,
+    revalidate,
+  } = useFetch<TotalCount<IconData>>(ICONS_URL, {
+    item: '0',
+    total: '999999999',
+    search,
+  })
+
   useEffect(() => {
-    setIsLoading(true)
-    debounce(() => {
-      getAllIcons('0', '999999999', search)
-        .then((res) => {
-          if (res instanceof Error) {
-            alert('Erro ao carregar ícones')
-          } else {
-            setIcons(res.results)
-          }
-        })
-        .finally(() => setIsLoading(false))
-    })
-  }, [debounce, search])
+    revalidate()
+  }, [debounce, revalidate, search])
+
+  useEffect(() => {
+    if (error) {
+      alert('Erro ao carregar ícones')
+    }
+  }, [error])
 
   useEffect(() => {
     if (props.value && icons && !search) {
       setSelectedLabel(
-        icons.find((icon) => icon.id === props.value)?.name || '',
+        icons.results.find((icon) => icon.id === props.value)?.name || '',
       )
     }
   }, [icons, search, props.value])
@@ -94,13 +98,13 @@ export function AutocompleteIcons(props: {
           </div>
         )}
 
-        {icons.length === 0 && !isLoading && (
+        {icons?.count === 0 && !isLoading && (
           <div className="w-full relative h-10 items-center flex">
             <span className="px-2 w-full">Nenhuma opção encontrada</span>
           </div>
         )}
 
-        {icons.map((option) => (
+        {icons?.results.map((option) => (
           <li
             key={option.id}
             className="w-full relative h-14 flex items-center justify-between"

@@ -1,11 +1,11 @@
 import { HistoricalData } from '@/@types'
-import { api } from '@/services'
+import { GROUPINGS_URL, api } from '@/services'
 
 export async function getGroupingHistorical(
   id: number | string,
 ): Promise<HistoricalData[] | Error> {
   try {
-    const relativeUrl = `/V1/groupings/${id}/historical/`
+    const relativeUrl = `${GROUPINGS_URL}${id}/historical/`
 
     const { data } = await api.get(relativeUrl)
 

@@ -4,25 +4,22 @@
 import { useEffect, useMemo, useState } from 'react'
 
 // Local
-import { SectorData } from '@/@types'
+import { SectorData, TotalCount } from '@/@types'
 import { FormatStatus, LoadingSpinner, Tooltip } from '@/components'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
 import { Environment, formatDatetime, updateQuery } from '@/utils'
 import { useRouter } from 'next/navigation'
-import { getAllSectors } from '@/services'
 import Image from 'next/image'
 import { CreateSectordButton } from '../form-button/create-button'
+import { useFetch } from '@/utils/hooks'
+import { SECTORS_URL } from '@/services'
 
 export function SectorsTable(props: {
   queryParams: { [key: string]: string }
 }) {
   const { push } = useRouter()
-  const [sectors, setSectors] = useState<SectorData[]>([])
   const [inputSearch, setInputSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [totalCount, setTotalCount] = useState(0)
-  const [update, setUpdate] = useState(true)
 
   const item = useMemo(() => {
     return String(props.queryParams.item || '0')
@@ -36,21 +33,23 @@ export function SectorsTable(props: {
     return searchValue
   }, [props.queryParams])
 
+  const {
+    data: sectors,
+    error,
+    isLoading,
+    revalidate,
+  } = useFetch<TotalCount<SectorData>>(SECTORS_URL, { item, total, search })
+
   useEffect(() => {
-    getAllSectors(item, total, search)
-      .then((res) => {
-        if (res instanceof Error) {
-          alert(res.message)
-        } else {
-          setSectors(res.results)
-          setTotalCount(res.count)
-        }
-      })
-      .finally(() => {
-        setUpdate(false)
-        setIsLoading(false)
-      })
-  }, [item, search, total, update])
+    revalidate()
+  }, [item, revalidate, search, total])
+
+  useEffect(() => {
+    if (error) {
+      const listError = new Error((error as { message: string }).message)
+      alert(listError.message)
+    }
+  }, [error])
 
   return (
     <div className="h-fit">
@@ -122,7 +121,7 @@ export function SectorsTable(props: {
                 </td>
               </tr>
             )}
-            {sectors.map((row) => (
+            {sectors?.results.map((row) => (
               <tr key={row.id}>
                 <td align="center" className="py-3">
                   <Tooltip title="detalhes" position="rigth">
@@ -171,9 +170,10 @@ export function SectorsTable(props: {
             ))}
           </tbody>
 
-          {((totalCount === 0 && !isLoading) || totalCount > 10) && (
+          {((sectors?.count === 0 && !isLoading) ||
+            (sectors && sectors.count > 10)) && (
             <tfoot>
-              {totalCount === 0 && !isLoading && (
+              {sectors.count === 0 && !isLoading && (
                 <tr>
                   <td className="py-3">
                     <span className="text-zinc-700 dark:text-zinc-200 px-2">
@@ -182,7 +182,7 @@ export function SectorsTable(props: {
                   </td>
                 </tr>
               )}
-              {totalCount > 10 && (
+              {sectors && sectors.count > 10 && (
                 <tr>
                   <td colSpan={5} className="py-2">
                     <div className="flex flex-1 items-center justify-center">

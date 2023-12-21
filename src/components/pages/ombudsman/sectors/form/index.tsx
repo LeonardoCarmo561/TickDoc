@@ -5,7 +5,7 @@ import { sectorsFormSchema } from '@/utils/validation/ombudsman'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { MdCancel, MdSave } from 'react-icons/md'
-import { AutocompleteGroupings } from './autocomplete-icons'
+import { AutocompleteGroupings } from './autocomplete-groupings'
 import { BaseSyntheticEvent } from 'react'
 import { useAuthContext, useModuleContext } from '@/utils/hooks'
 

@@ -2,14 +2,14 @@ import { ManagersFormData } from '@/@types'
 import { api } from '..'
 import { AdminUserData } from '@/@types/admin-users-services'
 
-export const ADMIN_USER_URL = '/V1/adminusers/'
+export const ADMIN_USERS_URL = '/V1/adminusers/'
 
 export async function updateAdminUser(
   id: number | string,
   formData: ManagersFormData,
 ): Promise<AdminUserData | Error> {
   try {
-    const relativeUrl = `${ADMIN_USER_URL}${id}/`
+    const relativeUrl = `${ADMIN_USERS_URL}${id}/`
 
     const { data } = await api.patch(relativeUrl, formData)
 
@@ -25,7 +25,7 @@ export async function createAdminUser(
   formData: ManagersFormData,
 ): Promise<AdminUserData | Error> {
   try {
-    const relativeUrl = ADMIN_USER_URL
+    const relativeUrl = ADMIN_USERS_URL
 
     const { data } = await api.post(relativeUrl, formData)
 

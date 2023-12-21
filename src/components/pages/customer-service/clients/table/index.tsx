@@ -1,17 +1,17 @@
 'use client'
-import { ClientData } from '@/@types'
+import { ClientData, TotalCount } from '@/@types'
 import { LoadingSpinner } from '@/components/loading-spinner'
 import { Tooltip } from '@/components/tooltip'
-import { getAllClients } from '@/services/clients-services'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import { FormButton } from '../form-button'
+import { useFetch } from '@/utils/hooks'
+import { CLIENTS_URL } from '@/services'
 
 export function ClientsTable() {
   const searchParams = useSearchParams()
-  const [isLoading, setIsLoading] = useState(true)
   const item = useMemo(() => {
     return searchParams.get('item') || '0'
   }, [searchParams])
@@ -25,22 +25,28 @@ export function ClientsTable() {
     return searchParams.get('status') || ''
   }, [searchParams])
 
-  const [clients, setClients] = useState<ClientData[]>([])
+  const {
+    data: clients,
+    error,
+    isLoading,
+    revalidate,
+  } = useFetch<TotalCount<ClientData>>(CLIENTS_URL, {
+    item,
+    total,
+    status,
+    search,
+  })
+
   useEffect(() => {
-    const getClients = async () => {
-      setIsLoading(true)
-      const result = await getAllClients(item, total, search, status)
-      if (result instanceof Error) {
-        alert(result.message)
-      } else {
-        setClients(result.results)
-      }
+    revalidate()
+  }, [item, revalidate, search, status, total])
 
-      setIsLoading(false)
+  useEffect(() => {
+    if (error) {
+      const listError = new Error((error as { message: string }).message)
+      alert(listError.message)
     }
-
-    getClients()
-  }, [item, search, status, total])
+  }, [error])
 
   return (
     <>
@@ -101,7 +107,7 @@ export function ClientsTable() {
                 </td>
               </tr>
             )}
-            {clients.map((row) => (
+            {clients?.results.map((row) => (
               <tr key={row.id}>
                 <td align="center" className="py-3">
                   <Tooltip title="detalhes" position="rigth">

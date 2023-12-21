@@ -1,8 +1,8 @@
-import { GroupingData } from '@/@types'
+import { GroupingData, TotalCount } from '@/@types'
 import { Form } from '@/components'
 import { LoadingSpinner } from '@/components/loading-spinner'
-import { getAllGroupings } from '@/services'
-import { useDebounce } from '@/utils/hooks'
+import { GROUPINGS_URL } from '@/services'
+import { useDebounce, useFetch } from '@/utils/hooks'
 import { useEffect, useState } from 'react'
 import { MdCheck, MdExpandLess, MdExpandMore } from 'react-icons/md'
 
@@ -13,31 +13,36 @@ export function AutocompleteGroupings(props: {
   value: number
 }) {
   const { debounce } = useDebounce(ONE_SECOND)
-  const [groupings, setGroupings] = useState<GroupingData[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [selectedLabel, setSelectedLabel] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
+  const {
+    data: groupings,
+    error,
+    isLoading,
+    revalidate,
+  } = useFetch<TotalCount<GroupingData>>(GROUPINGS_URL, {
+    item: '0',
+    total: '999999999',
+    search,
+  })
+
   useEffect(() => {
-    setIsLoading(true)
-    debounce(() => {
-      getAllGroupings('0', '999999999', search)
-        .then((res) => {
-          if (res instanceof Error) {
-            alert('Erro ao carregar agrupamentos')
-          } else {
-            setGroupings(res.results)
-          }
-        })
-        .finally(() => setIsLoading(false))
-    })
-  }, [debounce, search])
+    revalidate()
+  }, [debounce, revalidate, search])
+
+  useEffect(() => {
+    if (error) {
+      const listError = new Error((error as { message: string }).message)
+      alert(listError.message)
+    }
+  }, [error])
 
   useEffect(() => {
     if (props.value && groupings && !search) {
       setSelectedLabel(
-        groupings.find((group) => group.id === props.value)?.name || '',
+        groupings.results.find((group) => group.id === props.value)?.name || '',
       )
     }
   }, [groupings, search, props.value])
@@ -93,13 +98,13 @@ export function AutocompleteGroupings(props: {
           </div>
         )}
 
-        {groupings.length === 0 && !isLoading && (
+        {groupings?.count === 0 && !isLoading && (
           <div className="w-full relative h-10 items-center flex">
             <span className="px-2 w-full">Nenhuma opção encontrada</span>
           </div>
         )}
 
-        {groupings.map((option) => (
+        {groupings?.results.map((option) => (
           <li
             key={option.id}
             className="w-full relative h-10 flex items-center justify-between"

@@ -7,22 +7,22 @@ import {
   FormatStatus,
 } from '@/components'
 import { useFetch } from '@/utils/hooks'
-import { Fragment, useEffect, useRef } from 'react'
+import { Fragment, useCallback, useEffect, useRef } from 'react'
 import { EditSubjectButton } from '../form-button/edit-button'
 import { CreateSubjectButton } from '../form-button/create-button'
 import { MdInfoOutline } from 'react-icons/md'
 import { formatDatetime } from '@/utils'
 import Link from 'next/link'
-// import { HistoricalSector } from '../historical-sectors'
+import { HistoricalSubject } from '../historical-subjects'
 
 export function LoadSubjectData(props: {
   subjectId: number | string
   moduleTitle: string
 }) {
   const update = useRef(false)
-  // const handleSetupdate = useCallback(() => {
-  //   update.current = false
-  // }, [])
+  const handleSetupdate = useCallback(() => {
+    update.current = false
+  }, [])
   const { data, error, isLoading, revalidate } = useFetch<SubjectDetailsData>(
     `/V1/subjects/${props.subjectId}/`,
   )
@@ -94,6 +94,12 @@ export function LoadSubjectData(props: {
           </div>
         )}
       </Accordion>
+
+      <HistoricalSubject
+        revalidate={update.current}
+        onRevalidate={handleSetupdate}
+        subjectId={Number(props.subjectId)}
+      />
     </Fragment>
   )
 }

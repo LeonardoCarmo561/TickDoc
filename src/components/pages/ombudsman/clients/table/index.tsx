@@ -45,6 +45,10 @@ export function ClientsTable({
   const { push } = useRouter()
 
   useEffect(() => {
+    revalidate()
+  }, [item, total, search, status, revalidate])
+
+  useEffect(() => {
     if (error) {
       alert(error.message)
     }
