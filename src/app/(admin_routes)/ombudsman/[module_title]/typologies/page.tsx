@@ -1,3 +1,5 @@
+import { TypologiesTable } from '@/components/pages/ombudsman/typologies'
+
 export default function TypologiesPage({
   searchParams,
 }: {

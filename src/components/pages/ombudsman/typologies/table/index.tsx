@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 // Local
-import { TotalCount, WorkFieldData } from '@/@types'
+import { TotalCount, TypologyData } from '@/@types'
 import { LoadingSpinner, Tooltip } from '@/components'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
@@ -12,9 +12,9 @@ import { formatDatetime, updateQuery } from '@/utils'
 import { useRouter } from 'next/navigation'
 // import { CreateWorkFieldButton } from '../form-button/create-button'
 import { useFetch } from '@/utils/hooks'
-import { WORKFIELDS_URL } from '@/services'
+import { TYPOLOGIES_URL } from '@/services'
 
-export function WorkFieldsTable(props: {
+export function TypologiesTable(props: {
   queryParams: { [key: string]: string }
 }) {
   const { push } = useRouter()
@@ -33,11 +33,11 @@ export function WorkFieldsTable(props: {
   }, [props.queryParams])
 
   const {
-    data: workFields,
+    data: typologies,
     error,
     isLoading,
     revalidate,
-  } = useFetch<TotalCount<WorkFieldData>>(WORKFIELDS_URL, {
+  } = useFetch<TotalCount<TypologyData>>(TYPOLOGIES_URL, {
     item,
     total,
     search,
@@ -74,7 +74,7 @@ export function WorkFieldsTable(props: {
                 ['search'],
                 [inputSearch],
               )
-              push(`workfields?${currentQuery}`)
+              push(`typologies?${currentQuery}`)
             }}
             className="p-1 w-7 h-7 rounded-full hover:bg-zinc-500 hover:bg-opacity-30 transition-colors focus:bg-zinc-500 focus:bg-opacity-30 outline-none"
           >
@@ -115,11 +115,11 @@ export function WorkFieldsTable(props: {
                 </td>
               </tr>
             )}
-            {workFields?.results.map((row) => (
+            {typologies?.results.map((row) => (
               <tr key={row.id}>
                 <td align="center" className="py-3">
                   <Tooltip title="detalhes" position="rigth">
-                    <Link href={`workfields/details/${row.id}`} tabIndex={-1}>
+                    <Link href={`typologies/details/${row.id}`} tabIndex={-1}>
                       <button className="text-2xl p-2 text-blue-500 focus:bg-blue-500 focus:bg-opacity-10 hover:bg-blue-500 hover:bg-opacity-10 rounded-full outline-none">
                         <MdInfoOutline />
                       </button>
@@ -143,10 +143,10 @@ export function WorkFieldsTable(props: {
             ))}
           </tbody>
 
-          {((workFields?.count === 0 && !isLoading) ||
-            (workFields && workFields.count > 10)) && (
+          {((typologies?.count === 0 && !isLoading) ||
+            (typologies && typologies.count > 10)) && (
             <tfoot>
-              {workFields.count === 0 && !isLoading && (
+              {typologies.count === 0 && !isLoading && (
                 <tr>
                   <td className="py-3">
                     <span className="text-zinc-700 dark:text-zinc-200 px-2">
@@ -155,7 +155,7 @@ export function WorkFieldsTable(props: {
                   </td>
                 </tr>
               )}
-              {workFields && workFields.count > 10 && (
+              {typologies && typologies.count > 10 && (
                 <tr>
                   <td colSpan={5} className="py-2">
                     <div className="flex flex-1 items-center justify-center">
@@ -171,7 +171,7 @@ export function WorkFieldsTable(props: {
                             ['total'],
                             [e.target.value],
                           )
-                          push(`workfields?${currentQuery}`)
+                          push(`typologies?${currentQuery}`)
                         }}
                         className="p-2 border border-zinc-500 rounded-xl bg-inherit"
                       >
