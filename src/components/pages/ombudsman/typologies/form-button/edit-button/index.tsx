@@ -3,13 +3,13 @@
 import { useState } from 'react'
 import { TypologiesForm } from '../../form'
 import { MdEdit } from 'react-icons/md'
-import { SubjectDetailsData } from '@/@types'
+import { TypologyData } from '@/@types'
 
 export function EditTypologyButton({
-  subjectData,
+  typologyData,
   revalidate,
 }: {
-  subjectData: SubjectDetailsData
+  typologyData: TypologyData
   revalidate?: () => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,12 +25,12 @@ export function EditTypologyButton({
         </span>
         EDITAR
       </button>
-      {subjectData && isOpen && (
+      {typologyData && isOpen && (
         <TypologiesForm
           open={isOpen}
           create={false}
           revalidate={revalidate}
-          typologyData={subjectData}
+          typologyData={typologyData}
           onClose={() => setIsOpen(false)}
         />
       )}
