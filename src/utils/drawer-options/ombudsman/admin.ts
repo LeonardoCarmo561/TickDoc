@@ -62,7 +62,7 @@ export function adminOptions(moduleTitle: string): DrawerOption[] {
       label: 'Tipologias',
     },
     {
-      href: `/ombudsman/${moduleTitle}/sectorsusers`,
+      href: `/ombudsman/${moduleTitle}/internalusers`,
       icon: MdGroup,
       label: 'Usuários Internos',
     },

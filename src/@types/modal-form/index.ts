@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { workFieldFormSchema } from '@/utils/validation/admin'
 import { ReactNode } from 'react'
-import { z } from 'zod'
 
 export type ModalFormProps = {
   onClose?: () => void
@@ -11,5 +9,3 @@ export type ModalFormProps = {
   handleSubmit: (e: any) => void
   children: ReactNode
 }
-
-export type WorkFieldsFormData = z.infer<typeof workFieldFormSchema>

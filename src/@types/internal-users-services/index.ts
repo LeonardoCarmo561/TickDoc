@@ -1,0 +1,34 @@
+export type InternalUserData = {
+  id: number
+  username: string
+  email: string
+  document_type: number
+  institution_id: number
+  data_manager: boolean
+  is_active: boolean
+  is_confirmed: boolean
+  updated_at: string
+  created_at: string
+  gender: number
+  sign_in_count: number
+  birth_date: string
+  modules: string[]
+  hr_manager: boolean
+  esic_manager: boolean
+  esic_auxiliary: boolean
+  compliance: boolean
+  compliance_auxiliary: boolean
+  online: boolean
+  unconfirmed_email?: string
+  password?: string
+  document_number?: string
+  ombudsman_profile?: number
+  ci_profile?: number
+  confirmed_at?: string
+  confirmation_token_sent_at?: string
+  confirmation_mail_token_sent_at?: string
+  reset_password_sent_at?: string
+  last_login?: string
+  last_internal_ip_signed?: string
+  profile_picture?: string
+}
