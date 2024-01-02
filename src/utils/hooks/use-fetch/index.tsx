@@ -16,7 +16,6 @@ export function useFetch<T = unknown>(
   const [error, setError] = useState<Error>()
 
   const revalidate = useCallback(() => {
-    console.log('Executando')
     setUpdate(true)
     onRevalidate?.()
   }, [])

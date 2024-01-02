@@ -76,7 +76,7 @@ export function LoadSubjectData(props: {
                   key={sector[1]}
                   title={sector[0]}
                   href={`/ombudsman/${props.moduleTitle}/sectors/details/${sector[1]}`}
-                  className="flex max-w-[100px] bg-blue-500 py-1 px-2 rounded-xl"
+                  className="flex min-w-fit bg-blue-500 py-1 px-2 rounded-xl"
                 >
                   <span className="line-clamp-1 text-ellipsis">
                     {sector[0]}

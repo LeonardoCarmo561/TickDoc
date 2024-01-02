@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 // Local
 import { TotalCount, TypologyData } from '@/@types'
-import { LoadingSpinner, Tooltip } from '@/components'
+import { FormatStatus, LoadingSpinner, Tooltip } from '@/components'
 import { MdInfoOutline, MdSearch } from 'react-icons/md'
 import Link from 'next/link'
 import { formatDatetime, updateQuery } from '@/utils'
@@ -138,6 +138,9 @@ export function TypologiesTable(props: {
                   {row.updated_at && row.updated_at !== row.created_at
                     ? formatDatetime(row.updated_at)
                     : 'Não houve atualizações'}
+                </td>
+                <td align="center" className="py-3 pr-2">
+                  <FormatStatus status={row.status} />
                 </td>
               </tr>
             ))}
