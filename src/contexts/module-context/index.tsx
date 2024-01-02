@@ -3,7 +3,7 @@ import { ModuleData } from '@/@types'
 import { LoadingScreen } from '@/components'
 import { useAuthContext } from '@/utils/hooks'
 import { usePathname } from 'next/navigation'
-import { ReactNode, createContext, useEffect, useState } from 'react'
+import { ReactNode, createContext, useLayoutEffect, useState } from 'react'
 
 export const ModuleContext = createContext({} as ModuleData | undefined)
 
@@ -18,7 +18,7 @@ export function ModuleProvider({
   const pathName = usePathname()
   const [module, setModule] = useState<ModuleData>()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const moduleType = pathName.split('/')[1]
     const findModule = user?.modules.find(
       (mdl) => mdl.type === moduleType && mdl.title === moduleTitle,
