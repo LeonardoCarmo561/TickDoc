@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export default function LoginAdminPages() {
   return (
     <main className="flex min-h-screen bg-gradient-to-br from-blue-300 to bg-blue-500 justify-center items-center">
+      <span>Teste</span>
       <AdminLoginForm />
     </main>
   )
